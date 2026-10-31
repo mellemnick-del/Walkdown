@@ -12,6 +12,7 @@ final class Audit {
     var scopeNotes: String = ""
     var checklistName: String = ""
     var statusRaw: String = AuditStatus.inProgress.rawValue
+    var kindRaw: String = AuditKind.onSite.rawValue
     var createdAt: Date = Date.now
 
     @Relationship(deleteRule: .cascade, inverse: \ControlResult.audit)
@@ -21,7 +22,7 @@ final class Audit {
     var findings: [Finding]? = []
 
     init(clientName: String, siteName: String = "", location: String = "", auditorName: String = "",
-         date: Date = .now, scopeNotes: String = "", checklistName: String) {
+         date: Date = .now, scopeNotes: String = "", checklistName: String, kind: AuditKind = .onSite) {
         self.clientName = clientName
         self.siteName = siteName
         self.location = location
@@ -29,11 +30,17 @@ final class Audit {
         self.date = date
         self.scopeNotes = scopeNotes
         self.checklistName = checklistName
+        self.kindRaw = kind.rawValue
     }
 
     var status: AuditStatus {
         get { AuditStatus(rawValue: statusRaw) ?? .inProgress }
         set { statusRaw = newValue.rawValue }
+    }
+
+    var kind: AuditKind {
+        get { AuditKind(rawValue: kindRaw) ?? .onSite }
+        set { kindRaw = newValue.rawValue }
     }
 
     /// "Client, Site" or just the client.

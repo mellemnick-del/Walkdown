@@ -6,6 +6,7 @@ extension TemplateLibrary {
     static let nistCSF = ChecklistTemplate(
         id: "nist-csf-2",
         name: "NIST CSF 2.0 (Categories)",
+        area: .general,
         summary: "The 22 categories of the NIST Cybersecurity Framework 2.0, grouped by its six functions.",
         source: "NIST Cybersecurity Framework 2.0",
         groups: [

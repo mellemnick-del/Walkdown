@@ -111,7 +111,7 @@ private struct AuditRow: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(audit.displayName)
                     .font(.headline)
-                Text(audit.checklistName)
+                Text(audit.kind == .selfAssessment ? "Self-Assessment: \(audit.checklistName)" : audit.checklistName)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 HStack(spacing: 8) {

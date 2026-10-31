@@ -16,15 +16,35 @@ An offline field audit companion for security auditors on iPhone and iPad. Pick 
 | **Report** | A PDF with a cover page, executive summary, score by area, findings with evidence photos, and every control result. Share with AirDrop, Mail, or Files. |
 | **Settings** | Your name and company for reports, plus an optional Face ID lock. |
 
-### Built-in checklists
+### Audit types
 
-| Checklist | Controls | Source and licensing |
-| --- | --- | --- |
-| Physical Security Walkdown | 23 | Written for Walkdown. |
-| NIST CSF 2.0 (Categories) | 22 | NIST Cybersecurity Framework 2.0, a US government work. Category IDs and names are NIST's; guidance text is Walkdown's own. |
-| HIPAA Security Rule | 18 | 45 CFR 164.308, 164.310, 164.312 (federal regulation). Guidance text is Walkdown's own. |
+- **On-Site Audit:** walk a client site and record what you see.
+- **Self-Assessment:** answer a checklist for your own organization or a client's. No site fields, and the report is titled "Security Self-Assessment".
 
-Not included on purpose: **CIS Controls** (licensed for non-commercial use with no derivatives) and **PCI DSS** (copyrighted by the PCI Security Standards Council). Add them only with permission.
+### Checklist library
+
+Checklists are grouped by audit area and searchable. Browse them from New Audit or Settings.
+
+| Area | Checklist | Controls | Source and licensing |
+| --- | --- | --- | --- |
+| General and IT Controls | Physical Security Walkdown | 23 | Walkdown original |
+| General and IT Controls | IT General Controls | 17 | Walkdown original |
+| General and IT Controls | NIST CSF 2.0 (Categories) | 22 | NIST, US government work |
+| Defense Contractors | CMMC Level 1 | 17 | FAR 52.204-21, shown with NIST 800-171 Rev 2 numbering |
+| Defense Contractors | CMMC Level 2 / NIST 800-171 | 110 | NIST SP 800-171 Rev 2, US government work |
+| Federal Systems | NIST 800-53 Rev 5 (Families) | 20 | NIST, US government work |
+| Healthcare | HIPAA Security Rule | 18 | 45 CFR 164.308, 164.310, 164.312 |
+| Payments | PCI DSS Readiness | 32 | Organized by the 12 PCI DSS v4.0.1 requirements, Walkdown's own wording |
+| Service Organizations | SOC 2 Readiness | 39 | Organized by the Trust Services Criteria categories, Walkdown's own wording |
+| Privacy | GDPR Essentials | 16 | Regulation (EU) 2016/679 |
+
+Guidance text in every checklist is Walkdown's own wording. Official names and IDs are used for reference only.
+
+**PCI DSS and SOC 2:** the standards are owned by the PCI Security Standards Council and the AICPA. Walkdown's checklists follow their structure with original questions, never the standards' text, and don't imply endorsement. Get a legal review before selling the app.
+
+**Not included:** ISO 27001, HITRUST, and CIS Controls (licensed content).
+
+**Coming next:** CJIS Security Policy (law enforcement) and IRS Publication 1075 (Federal Tax Information). These will be built from the current official documents, not from memory.
 
 ### Scoring
 
@@ -62,7 +82,9 @@ Walkdown/
 
 ## Roadmap
 
+- CJIS Security Policy and IRS Publication 1075 checklists
 - Custom checklist builder (create your own or copy a built-in one)
+- Full NIST 800-53 controls and state frameworks (for example, TX-RAMP)
 - Company logo on the report cover
 - Full NIST CSF 2.0 subcategories (106 controls)
 - Finding templates and a remediation tracker

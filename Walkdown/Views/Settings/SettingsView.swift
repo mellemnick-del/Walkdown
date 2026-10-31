@@ -29,13 +29,10 @@ struct SettingsView: View {
                     Text("Locks Walkdown whenever it goes to the background. All audit data stays on this device.")
                 }
                 Section("Checklists") {
-                    ForEach(TemplateLibrary.all) { template in
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(template.name)
-                            Text("\(template.itemCount) controls. Source: \(template.source)")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
+                    NavigationLink {
+                        ChecklistLibraryView()
+                    } label: {
+                        LabeledContent("Checklist Library", value: "\(TemplateLibrary.all.count)")
                     }
                 }
                 Section {

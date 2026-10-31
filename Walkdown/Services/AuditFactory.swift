@@ -5,9 +5,10 @@ enum AuditFactory {
     /// Creates an audit and copies every template item into it as a control.
     @discardableResult
     static func create(from template: ChecklistTemplate, clientName: String, siteName: String, location: String,
-                       auditorName: String, date: Date, scopeNotes: String, in context: ModelContext) -> Audit {
+                       auditorName: String, date: Date, scopeNotes: String, kind: AuditKind,
+                       in context: ModelContext) -> Audit {
         let audit = Audit(clientName: clientName, siteName: siteName, location: location, auditorName: auditorName,
-                          date: date, scopeNotes: scopeNotes, checklistName: template.name)
+                          date: date, scopeNotes: scopeNotes, checklistName: template.name, kind: kind)
         context.insert(audit)
         for (groupIndex, group) in template.groups.enumerated() {
             for (itemIndex, item) in group.items.enumerated() {

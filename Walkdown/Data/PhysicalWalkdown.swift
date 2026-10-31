@@ -5,6 +5,7 @@ extension TemplateLibrary {
     static let physicalWalkdown = ChecklistTemplate(
         id: "physical-walkdown",
         name: "Physical Security Walkdown",
+        area: .general,
         summary: "What you can see and test walking the site: entry, server rooms, desks, wireless, and disposal.",
         source: "Walkdown original checklist",
         groups: [

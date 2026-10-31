@@ -90,3 +90,24 @@ enum AuditStatus: String, Codable, CaseIterable, Identifiable {
         }
     }
 }
+
+/// Whether the audit is done on site or as a self-assessment.
+enum AuditKind: String, Codable, CaseIterable, Identifiable {
+    case onSite, selfAssessment
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .onSite: "On-Site Audit"
+        case .selfAssessment: "Self-Assessment"
+        }
+    }
+
+    var reportTitle: String {
+        switch self {
+        case .onSite: "Security Audit Report"
+        case .selfAssessment: "Security Self-Assessment"
+        }
+    }
+}

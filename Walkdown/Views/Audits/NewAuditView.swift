@@ -15,43 +15,57 @@ struct NewAuditView: View {
     @State private var date = Date.now
     @State private var scopeNotes = ""
     @State private var templateID = TemplateLibrary.all[0].id
+    @State private var kind: AuditKind = .onSite
+
+    private var template: ChecklistTemplate? { TemplateLibrary.template(id: templateID) }
 
     private var canCreate: Bool { !clientName.trimmingCharacters(in: .whitespaces).isEmpty }
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("Client") {
-                    TextField("Client name", text: $clientName)
-                        .textInputAutocapitalization(.words)
-                    TextField("Site (optional)", text: $siteName)
-                    TextField("Location (optional)", text: $location)
+                Section {
+                    Picker("Type", selection: $kind) {
+                        ForEach(AuditKind.allCases) { Text($0.label).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                } footer: {
+                    Text(kind == .onSite
+                         ? "Walk the site and record what you see."
+                         : "Answer the checklist for your own organization or a client's.")
                 }
-                Section("Audit") {
-                    TextField("Auditor", text: $auditorName)
-                    DatePicker("Date", selection: $date, displayedComponents: .date)
+                Section(kind == .onSite ? "Client" : "Organization") {
+                    TextField(kind == .onSite ? "Client name" : "Organization name", text: $clientName)
+                        .textInputAutocapitalization(.words)
+                    if kind == .onSite {
+                        TextField("Site (optional)", text: $siteName)
+                        TextField("Location (optional)", text: $location)
+                    }
                 }
                 Section("Checklist") {
-                    Picker("Checklist", selection: $templateID) {
-                        ForEach(TemplateLibrary.all) { template in
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(template.name)
-                                Text("\(template.itemCount) controls. \(template.summary)")
+                    NavigationLink {
+                        ChecklistLibraryView(selection: $templateID)
+                    } label: {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(template?.name ?? "Choose a checklist")
+                            if let template {
+                                Text("\(template.area.label). \(template.itemCount) controls.")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
-                            .tag(template.id)
                         }
                     }
-                    .pickerStyle(.inline)
-                    .labelsHidden()
+                }
+                Section(kind == .onSite ? "Audit" : "Assessment") {
+                    TextField(kind == .onSite ? "Auditor" : "Completed by", text: $auditorName)
+                    DatePicker("Date", selection: $date, displayedComponents: .date)
                 }
                 Section("Scope") {
                     TextField("What's in and out of scope?", text: $scopeNotes, axis: .vertical)
                         .lineLimit(3...8)
                 }
             }
-            .navigationTitle("New Audit")
+            .navigationTitle(kind == .onSite ? "New Audit" : "New Self-Assessment")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -68,15 +82,16 @@ struct NewAuditView: View {
     }
 
     private func create() {
-        guard let template = TemplateLibrary.template(id: templateID) else { return }
+        guard let template else { return }
         let audit = AuditFactory.create(
             from: template,
             clientName: clientName.trimmingCharacters(in: .whitespaces),
-            siteName: siteName.trimmingCharacters(in: .whitespaces),
-            location: location.trimmingCharacters(in: .whitespaces),
+            siteName: kind == .onSite ? siteName.trimmingCharacters(in: .whitespaces) : "",
+            location: kind == .onSite ? location.trimmingCharacters(in: .whitespaces) : "",
             auditorName: auditorName.trimmingCharacters(in: .whitespaces),
             date: date,
             scopeNotes: scopeNotes,
+            kind: kind,
             in: context
         )
         dismiss()

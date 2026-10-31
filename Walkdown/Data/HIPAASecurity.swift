@@ -5,6 +5,7 @@ extension TemplateLibrary {
     static let hipaaSecurity = ChecklistTemplate(
         id: "hipaa-security",
         name: "HIPAA Security Rule",
+        area: .healthcare,
         summary: "The administrative, physical, and technical safeguard standards of the HIPAA Security Rule.",
         source: "45 CFR 164.308, 164.310, 164.312",
         groups: [

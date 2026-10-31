@@ -22,7 +22,7 @@ enum ReportBuilder {
 
     private static func cover(_ audit: Audit, companyName: String, _ w: PDFWriter) {
         w.space(120)
-        w.text("Security Audit Report", font: .systemFont(ofSize: 30, weight: .bold))
+        w.text(audit.kind.reportTitle, font: .systemFont(ofSize: 30, weight: .bold))
         w.text(audit.displayName, font: .systemFont(ofSize: 20, weight: .medium), color: .darkGray, after: 24)
         var lines: [(String, String)] = [
             ("Date", audit.date.formatted(dateFormat)),
