@@ -9,6 +9,7 @@ enum ReportBuilder {
             summary(audit, w)
             findings(audit, w)
             controls(audit, w)
+            evidenceIndex(audit, w)
         }
         let safeName = audit.clientName.components(separatedBy: CharacterSet.alphanumerics.inverted)
             .filter { !$0.isEmpty }.joined(separator: "-")
@@ -126,8 +127,39 @@ enum ReportBuilder {
                    font: .systemFont(ofSize: 11, weight: .medium), color: statusColor(control.status), after: 2)
             if !control.notes.isEmpty {
                 w.body(control.notes, color: .darkGray)
-            } else {
+            }
+            let onFile = (control.lockerItems ?? []).map(\.title).filter { !$0.isEmpty }
+            if !onFile.isEmpty {
+                w.text("Evidence on file: \(onFile.joined(separator: "; "))", font: .italicSystemFont(ofSize: 10), color: .darkGray, after: 4)
+            }
+            if control.notes.isEmpty && onFile.isEmpty {
                 w.space(4)
+            }
+        }
+    }
+
+    /// Every locker document referenced by the audit, with type and expiration.
+    private static func evidenceIndex(_ audit: Audit, _ w: PDFWriter) {
+        var seen = Set<UUID>()
+        var items: [LockerItem] = []
+        for control in audit.sortedControls {
+            for item in control.lockerItems ?? [] where !seen.contains(item.id) {
+                seen.insert(item.id)
+                items.append(item)
+            }
+        }
+        guard !items.isEmpty else { return }
+        w.newPage()
+        w.title("Evidence Index")
+        for item in items.sorted(by: { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }) {
+            w.keepTogether(40)
+            w.text(item.title.isEmpty ? item.fileName : item.title, font: .systemFont(ofSize: 12, weight: .semibold), after: 2)
+            var meta = "\(item.kind.label)  |  \(item.fileName)"
+            if let expiry = item.expiryText { meta += "  |  \(expiry)" }
+            w.text(meta, font: .systemFont(ofSize: 10), color: item.isExpired ? .systemRed : .darkGray, after: 2)
+            let ids = (item.controls ?? []).filter { $0.audit?.id == audit.id }.map(\.controlID)
+            if !ids.isEmpty {
+                w.text("Supports: \(ids.joined(separator: ", "))", font: .systemFont(ofSize: 10), color: .darkGray, after: 8)
             }
         }
     }

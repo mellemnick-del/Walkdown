@@ -9,6 +9,6 @@ struct WalkdownApp: App {
                 RootView()
             }
         }
-        .modelContainer(for: [Audit.self, ControlResult.self, Evidence.self, Finding.self, RemediationTask.self])
+        .modelContainer(for: [Audit.self, ControlResult.self, Evidence.self, Finding.self, RemediationTask.self, LockerItem.self])
     }
 }

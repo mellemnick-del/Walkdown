@@ -67,6 +67,7 @@ struct TasksView: View {
                             .swipeActions(edge: .leading) {
                                 Button {
                                     task.state = task.isDone ? .open : .done
+                                    ReminderScheduler.schedule(task)
                                 } label: {
                                     Label(task.isDone ? "Reopen" : "Done",
                                           systemImage: task.isDone ? "arrow.uturn.backward" : "checkmark")
@@ -74,7 +75,10 @@ struct TasksView: View {
                                 .tint(task.isDone ? .orange : .green)
                             }
                             .swipeActions(edge: .trailing) {
-                                Button(role: .destructive) { context.delete(task) } label: {
+                                Button(role: .destructive) {
+                                    ReminderScheduler.cancel(task)
+                                    context.delete(task)
+                                } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
                             }

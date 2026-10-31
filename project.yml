@@ -15,6 +15,11 @@ targets:
     platform: iOS
     sources:
       - Walkdown
+    entitlements:
+      path: Walkdown/Walkdown.entitlements
+      properties:
+        # Files are encrypted and unreadable while the device is locked.
+        com.apple.developer.default-data-protection: NSFileProtectionComplete
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.nickmellem.walkdown

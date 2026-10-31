@@ -16,6 +16,7 @@ Everything stays on the device.
 | **Home** | Greeting, a score ring for your most active audit, open and overdue task counts, the next three tasks to work, other audits in progress, and quick actions (New Audit, Checklists, Get Help). |
 | **Audits** | All audits and self-assessments. |
 | **Tasks** | Remediation tasks grouped into Overdue, Due This Week, Later, and No Due Date. Swipe to complete. |
+| **Locker** | The Evidence Locker: policies, reports, screenshots, certificates, and scans, sorted into Expired, Expiring Soon, and Current. |
 | **Library** | Every checklist grouped by audit area, searchable, with a preview of each control. |
 
 ### Remediation
@@ -24,6 +25,18 @@ Everything stays on the device.
 - Suggested due dates: Critical 7 days, High 30, Medium 60, Low 90.
 - Each task has an owner, due date, status, and "how to fix it" notes pre-filled from the control guidance and audit notes.
 - Closing a task offers to mark its control as Pass, so the score climbs as gaps get fixed. It never changes the result on its own.
+
+### Evidence Locker
+
+- Import files (PDF, images, documents, spreadsheets), scan paper documents into a single PDF, or add photos and screenshots.
+- Each item has a type, topics, notes, and an optional expiration date. Reminders fire 30 days and 7 days before, and on the day it expires.
+- Link one item to controls in any audit. Topics (MFA, Encryption, Backups, and so on) suggest matching evidence on each control, so one document supports CMMC, SOC 2, HIPAA, and more.
+- Preview with Quick Look and share from the app.
+- Reports list "Evidence on file" under each control and add an Evidence Index appendix.
+
+### Reminders
+
+Local notifications at 9 AM for evidence expiration and task due dates. Nothing is sent to a server.
 
 ### Get Help
 
@@ -79,6 +92,7 @@ Pass counts as 1, Partial as 0.5, Fail as 0. N/A and Not Started are left out. T
 
 - No accounts, no servers, no analytics. Data is stored with SwiftData on the device.
 - Photos are resized to 2000 px and saved as JPEG to keep audits small.
+- Data protection is set to Complete, so stored files are encrypted and unreadable while the device is locked.
 - Reports are built on the device and only leave it when you share them.
 
 ## Building
@@ -107,9 +121,8 @@ Walkdown/
 
 ## Roadmap
 
-- Evidence Locker: documents and screenshots per control, expiration reminders, and reuse across frameworks
 - Learn: a plain-English guide for each framework (who needs it, cost, timeline, what "done" looks like)
-- Due date reminders for tasks
+
 - CJIS Security Policy and IRS Publication 1075 checklists
 - Custom checklist builder (create your own or copy a built-in one)
 - Full NIST 800-53 controls and state frameworks (for example, TX-RAMP)

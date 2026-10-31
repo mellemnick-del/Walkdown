@@ -4,7 +4,7 @@ import SwiftUI
 @Observable
 final class AppRouter {
     enum Tab: Hashable {
-        case home, audits, tasks, library
+        case home, audits, tasks, locker, library
     }
 
     var tab: Tab = .home

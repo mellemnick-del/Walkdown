@@ -25,6 +25,9 @@ final class ControlResult {
     @Relationship(deleteRule: .nullify, inverse: \RemediationTask.control)
     var tasks: [RemediationTask]? = []
 
+    /// Documents from the Evidence Locker linked to this control. The inverse is declared on LockerItem.
+    var lockerItems: [LockerItem]? = []
+
     init(controlID: String, title: String, guidance: String, groupName: String, groupOrder: Int, order: Int) {
         self.controlID = controlID
         self.title = title

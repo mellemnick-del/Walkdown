@@ -5,6 +5,7 @@ struct HomeView: View {
     @Environment(AppRouter.self) private var router
     @Query private var audits: [Audit]
     @Query(filter: #Predicate<RemediationTask> { $0.stateRaw != "done" }) private var openTasks: [RemediationTask]
+    @Query private var lockerItems: [LockerItem]
     @AppStorage(SettingsKeys.auditorName) private var name = ""
 
     @State private var showingNewAudit = false
@@ -42,6 +43,29 @@ struct HomeView: View {
                     }
 
                     StatsRow(openTasks: openTasks, audits: activeAudits)
+
+                    let needsAttention = lockerItems.filter { $0.isExpired || $0.isExpiringSoon }
+                    if !needsAttention.isEmpty {
+                        Button { router.tab = .locker } label: {
+                            Card {
+                                HStack(spacing: 12) {
+                                    Image(systemName: "calendar.badge.exclamationmark")
+                                        .font(.title2)
+                                        .foregroundStyle(.orange)
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text("\(needsAttention.count) evidence item\(needsAttention.count == 1 ? "" : "s") need attention")
+                                            .font(.subheadline.bold())
+                                        Text("Expired or expiring within 30 days")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    Spacer()
+                                    Image(systemName: "chevron.right").foregroundStyle(.tertiary)
+                                }
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    }
 
                     SectionTitle(title: "Next Up", actionLabel: openTasks.isEmpty ? nil : "See All") { router.tab = .tasks }
                     if nextUp.isEmpty {

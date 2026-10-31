@@ -13,6 +13,7 @@ struct ControlDetailView: View {
     @State private var selectedEvidence: Evidence?
     @State private var findingSheet: FindingSheet?
     @State private var showingHelp = false
+    @State private var showingLockerPicker = false
 
     private struct FindingSheet: Identifiable {
         let id = UUID()
@@ -73,6 +74,23 @@ struct ControlDetailView: View {
                 }
             }
 
+            Section {
+                ForEach(control.lockerItems ?? []) { item in
+                    NavigationLink {
+                        LockerItemDetailView(item: item)
+                    } label: {
+                        LockerRow(item: item)
+                    }
+                }
+                Button { showingLockerPicker = true } label: {
+                    Label("Attach from Locker", systemImage: "lock.doc")
+                }
+            } header: {
+                Text("Evidence Locker")
+            } footer: {
+                Text("Policies, reports, and documents you keep on file. One document can support controls in every audit.")
+            }
+
             Section("Findings") {
                 ForEach(control.findings ?? []) { finding in
                     Button { findingSheet = FindingSheet(finding: finding) } label: {
@@ -117,6 +135,7 @@ struct ControlDetailView: View {
                 .ignoresSafeArea()
         }
         .sheet(item: $selectedEvidence) { EvidenceDetailView(evidence: $0) }
+        .sheet(isPresented: $showingLockerPicker) { LockerPickerView(control: control) }
         .sheet(isPresented: $showingHelp) { GetHelpView(topic: "\(control.controlID) \(control.title)") }
         .sheet(item: $findingSheet) { sheet in
             FindingEditorView(audit: control.audit, control: control, finding: sheet.finding)

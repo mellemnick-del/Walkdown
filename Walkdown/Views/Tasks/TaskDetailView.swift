@@ -92,6 +92,7 @@ struct TaskDetailView: View {
             if isNew {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
+                        ReminderScheduler.cancel(task)
                         context.delete(task)
                         dismiss()
                     }
@@ -103,6 +104,9 @@ struct TaskDetailView: View {
             }
         }
         .interactiveDismissDisabled(isNew)
+        .onDisappear {
+            if task.modelContext != nil { ReminderScheduler.schedule(task) }
+        }
         .confirmationDialog("Mark the control as passing too?", isPresented: $askToPassControl, titleVisibility: .visible) {
             Button("Mark \(task.control?.controlID ?? "Control") as Pass") { task.control?.status = .pass }
             Button("Leave It As Is", role: .cancel) {}
@@ -111,6 +115,7 @@ struct TaskDetailView: View {
         }
         .confirmationDialog("Delete this task?", isPresented: $confirmingDelete, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {
+                ReminderScheduler.cancel(task)
                 context.delete(task)
                 dismiss()
             }

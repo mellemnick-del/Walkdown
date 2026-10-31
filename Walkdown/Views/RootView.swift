@@ -14,6 +14,9 @@ struct RootView: View {
             TasksView()
                 .tabItem { Label("Tasks", systemImage: "wrench.and.screwdriver") }
                 .tag(AppRouter.Tab.tasks)
+            LockerView()
+                .tabItem { Label("Locker", systemImage: "lock.doc") }
+                .tag(AppRouter.Tab.locker)
             NavigationStack {
                 ChecklistLibraryView()
             }

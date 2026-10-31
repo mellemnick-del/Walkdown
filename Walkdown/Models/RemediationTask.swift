@@ -26,6 +26,8 @@ final class RemediationTask {
     var stateRaw: String = TaskState.open.rawValue
     var createdAt: Date = Date.now
     var completedAt: Date?
+    /// Stable ID for the task's due date notification.
+    var reminderID: UUID = UUID()
 
     var audit: Audit?
     var control: ControlResult?

@@ -18,6 +18,7 @@ enum RemediationPlanner {
             context.insert(task)
             task.audit = audit
             task.control = control
+            ReminderScheduler.schedule(task)
             created += 1
         }
         return created
