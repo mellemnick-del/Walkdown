@@ -6,6 +6,7 @@ struct SettingsView: View {
     @AppStorage(SettingsKeys.companyName) private var companyName = ""
     @AppStorage(SettingsKeys.requireFaceID) private var requireFaceID = false
     @AppStorage(SettingsKeys.helpEmail) private var helpEmail = ""
+    @AppStorage(SettingsKeys.userRole) private var roleRaw = UserRole.organization.rawValue
 
     private var version: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -16,6 +17,9 @@ struct SettingsView: View {
             Form {
                 Section {
                     TextField("Your name", text: $auditorName)
+                    Picker("I use Walkdown for", selection: $roleRaw) {
+                        ForEach(UserRole.allCases) { Text($0.label).tag($0.rawValue) }
+                    }
                     NavigationLink {
                         BrandingView()
                     } label: {

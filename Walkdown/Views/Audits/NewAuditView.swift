@@ -9,6 +9,7 @@ struct NewAuditView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     @AppStorage(SettingsKeys.auditorName) private var defaultAuditor = ""
+    @AppStorage(SettingsKeys.userRole) private var roleRaw = UserRole.organization.rawValue
 
     @State private var clientName = ""
     @State private var siteName = ""
@@ -84,7 +85,7 @@ struct NewAuditView: View {
                 loaded = true
                 if auditorName.isEmpty { auditorName = defaultAuditor }
                 if let initialTemplateID { templateID = initialTemplateID }
-                if let initialKind { kind = initialKind }
+                kind = initialKind ?? (UserRole(rawValue: roleRaw) ?? .organization).defaultAuditKind
             }
         }
     }

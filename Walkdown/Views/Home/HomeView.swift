@@ -7,6 +7,9 @@ struct HomeView: View {
     @Query(filter: #Predicate<RemediationTask> { $0.stateRaw != "done" }) private var openTasks: [RemediationTask]
     @Query private var lockerItems: [LockerItem]
     @AppStorage(SettingsKeys.auditorName) private var name = ""
+    @AppStorage(SettingsKeys.userRole) private var roleRaw = UserRole.organization.rawValue
+
+    private var role: UserRole { UserRole(rawValue: roleRaw) ?? .organization }
 
     @State private var showingNewAudit = false
     @State private var showingSettings = false
@@ -39,7 +42,7 @@ struct HomeView: View {
                     if let focus = activeAudits.first {
                         FocusCard(audit: focus) { router.open(focus) }
                     } else {
-                        WelcomeCard { showingNewAudit = true }
+                        WelcomeCard(role: role) { showingNewAudit = true }
                     }
 
                     StatsRow(openTasks: openTasks, audits: activeAudits)
@@ -101,7 +104,8 @@ struct HomeView: View {
 
                     SectionTitle(title: "Start Something")
                     HStack(spacing: 12) {
-                        QuickAction(title: "New Audit", symbol: "plus.viewfinder") { showingNewAudit = true }
+                        QuickAction(title: role == .organization ? "Self-Assess" : "New Audit",
+                                    symbol: "plus.viewfinder") { showingNewAudit = true }
                         QuickAction(title: "Checklists", symbol: "books.vertical") { router.tab = .library }
                         QuickAction(title: "Get Help", symbol: "person.wave.2") { showingHelp = true }
                     }
@@ -161,6 +165,7 @@ private struct FocusCard: View {
 }
 
 private struct WelcomeCard: View {
+    let role: UserRole
     let start: () -> Void
 
     var body: some View {
@@ -169,12 +174,14 @@ private struct WelcomeCard: View {
                 Image(systemName: "shield.lefthalf.filled.badge.checkmark")
                     .font(.largeTitle)
                     .foregroundStyle(.tint)
-                Text("Know where you stand")
+                Text(role == .organization ? "Know where you stand" : "Your next audit starts here")
                     .font(.title3.bold())
-                Text("Run an on-site audit or a self-assessment against CMMC, HIPAA, PCI, SOC 2, NIST, and more. Walkdown scores it and turns every gap into a task.")
+                Text(role == .organization
+                     ? "Self-assess against CMMC, HIPAA, PCI, SOC 2, NIST, and more. Walkdown scores it and turns every gap into a task."
+                     : "Pick a checklist, walk the site, capture evidence, and hand your client a clean report with a remediation plan.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                Button("Start Your First Assessment", action: start)
+                Button(role == .organization ? "Start Your First Self-Assessment" : "Start Your First Audit", action: start)
                     .buttonStyle(.borderedProminent)
                     .padding(.top, 4)
             }

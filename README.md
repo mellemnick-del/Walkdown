@@ -9,6 +9,10 @@ A compliance and audit app for iPhone and iPad, built for two kinds of people:
 
 Everything stays on the device.
 
+## First launch
+
+A short welcome explains the app, then asks who it's for: **My Organization** or **I'm an Assessor**. The choice sets the default audit type (self-assessment or on-site) and the wording on Home. Every feature is available either way, and it can be changed in Settings.
+
 ## App structure
 
 | Tab | What it does |
