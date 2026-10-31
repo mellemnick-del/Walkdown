@@ -153,14 +153,21 @@ struct LockerRow: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(item.title.isEmpty ? item.fileName : item.title)
                     .lineLimit(1)
-                HStack(spacing: 8) {
-                    Text(item.kind.label)
-                    if let client = item.client { Text(client.name).lineLimit(1) }
+                Text(item.client.map { "\(item.kind.label) for \($0.name)" } ?? item.kind.label)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                HStack(spacing: 10) {
                     if let expiry = item.expiryText {
-                        Text(expiry).foregroundStyle(item.isExpired ? .red : item.isExpiringSoon ? .orange : .secondary)
+                        Label(expiry, systemImage: "calendar")
+                            .foregroundStyle(item.isExpired ? .red : item.isExpiringSoon ? .orange : .secondary)
+                            .lineLimit(1)
                     }
                     let linked = item.controls?.count ?? 0
-                    if linked > 0 { Label("\(linked)", systemImage: "link") }
+                    if linked > 0 {
+                        Label("\(linked) control\(linked == 1 ? "" : "s")", systemImage: "link")
+                            .lineLimit(1)
+                    }
                 }
                 .font(.caption)
                 .foregroundStyle(.secondary)

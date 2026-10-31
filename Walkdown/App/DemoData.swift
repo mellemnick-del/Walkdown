@@ -79,6 +79,11 @@ enum DemoData {
         addEvidence("Cyber Insurance Certificate", kind: .certificate, topics: [.continuity],
                     expiresIn: 26, client: nil, link: [], ids: [], context: context)
 
+        // Make the CMMC audit the most recent activity so Home features it.
+        for (index, control) in cmmc.sortedControls.enumerated() where control.status != .notStarted {
+            control.updatedAt = Calendar.current.date(byAdding: .second, value: index, to: .now) ?? .now
+        }
+
         try? context.save()
     }
 
