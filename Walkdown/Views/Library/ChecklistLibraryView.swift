@@ -75,16 +75,54 @@ private struct TemplateSummary: View {
     }
 }
 
-/// Read-only look at every control in a checklist.
+/// A framework's guide, a button to start, and every control in the checklist.
 struct TemplatePreviewView: View {
     let template: ChecklistTemplate
+    @Environment(AppRouter.self) private var router
+    @State private var startingKind: AuditKind?
 
     var body: some View {
         List {
             Section {
-                Text(template.summary)
-                LabeledContent("Source", value: template.source)
-                    .font(.caption)
+                VStack(alignment: .leading, spacing: 10) {
+                    Label(template.area.label, systemImage: template.area.symbol)
+                        .font(.caption.bold())
+                        .foregroundStyle(.secondary)
+                    Text(template.summary)
+                    Text("\(template.itemCount) controls. Source: \(template.source)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    HStack {
+                        Button("Self-Assess") { startingKind = .selfAssessment }
+                            .buttonStyle(.borderedProminent)
+                        Button("On-Site Audit") { startingKind = .onSite }
+                            .buttonStyle(.bordered)
+                    }
+                    .padding(.top, 4)
+                }
+                .padding(.vertical, 4)
+            }
+
+            if let guide = FrameworkGuides.guide(for: template.id) {
+                Section("What It Is") { Text(guide.whatItIs) }
+                Section("Who Needs It") { Text(guide.whoNeedsIt) }
+                Section("How It's Assessed") { Text(guide.howAssessed) }
+                Section {
+                    ForEach(Array(guide.firstSteps.enumerated()), id: \.offset) { index, step in
+                        HStack(alignment: .top, spacing: 10) {
+                            Text("\(index + 1)")
+                                .font(.caption.bold())
+                                .frame(width: 22, height: 22)
+                                .background(Color.accentColor.opacity(0.15), in: Circle())
+                                .foregroundStyle(.tint)
+                            Text(step)
+                        }
+                    }
+                } header: {
+                    Text("First Steps")
+                } footer: {
+                    Text("General guidance, not legal advice. Confirm requirements with the official source.")
+                }
             }
             ForEach(template.groups, id: \.name) { group in
                 Section(group.name) {
@@ -101,5 +139,8 @@ struct TemplatePreviewView: View {
         }
         .navigationTitle(template.name)
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $startingKind) { kind in
+            NewAuditView(initialTemplateID: template.id, initialKind: kind) { audit in router.open(audit) }
+        }
     }
 }

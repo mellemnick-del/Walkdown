@@ -16,11 +16,15 @@ struct SettingsView: View {
             Form {
                 Section {
                     TextField("Your name", text: $auditorName)
-                    TextField("Company", text: $companyName)
+                    NavigationLink {
+                        BrandingView()
+                    } label: {
+                        LabeledContent("Branding", value: companyName.isEmpty ? "Not set" : companyName)
+                    }
                 } header: {
-                    Text("Reports")
+                    Text("You and Your Organization")
                 } footer: {
-                    Text("Your name fills in new audits. Your company appears on report cover pages.")
+                    Text("Your name fills in new audits. Branding adds your company name, logo, and color to the app and reports.")
                 }
                 Section {
                     TextField("help@example.com", text: $helpEmail)

@@ -17,7 +17,7 @@ Everything stays on the device.
 | **Audits** | All audits and self-assessments. |
 | **Tasks** | Remediation tasks grouped into Overdue, Due This Week, Later, and No Due Date. Swipe to complete. |
 | **Locker** | The Evidence Locker: policies, reports, screenshots, certificates, and scans, sorted into Expired, Expiring Soon, and Current. |
-| **Library** | Every checklist grouped by audit area, searchable, with a preview of each control. |
+| **Library** | Every checklist grouped by audit area and searchable. Each one opens to a plain-English guide (what it is, who needs it, how it's assessed, first steps), Self-Assess and On-Site Audit buttons, and every control. |
 
 ### Remediation
 
@@ -33,6 +33,10 @@ Everything stays on the device.
 - Link one item to controls in any audit. Topics (MFA, Encryption, Backups, and so on) suggest matching evidence on each control, so one document supports CMMC, SOC 2, HIPAA, and more.
 - Preview with Quick Look and share from the app.
 - Reports list "Evidence on file" under each control and add an Evidence Index appendix.
+
+### Branding (white-label foundation)
+
+Settings > Branding sets a company name, logo, and brand color. The color tints the whole app and report headings, and the logo goes on report covers. This is the base for paid white-label plans: one App Store app that an organization brands from inside, which fits Apple's rules on template apps (guideline 4.2.6). Pricing and how branding gets unlocked are still to be decided.
 
 ### Reminders
 
@@ -121,7 +125,7 @@ Walkdown/
 
 ## Roadmap
 
-- Learn: a plain-English guide for each framework (who needs it, cost, timeline, what "done" looks like)
+- Paid plans: unlock branding for organizations (StoreKit subscriptions)
 
 - CJIS Security Policy and IRS Publication 1075 checklists
 - Custom checklist builder (create your own or copy a built-in one)

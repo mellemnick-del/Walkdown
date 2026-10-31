@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RootView: View {
     @State private var router = AppRouter()
+    @AppStorage(Branding.colorKey) private var brandHex = Branding.defaultHex
 
     var body: some View {
         TabView(selection: $router.tab) {
@@ -24,5 +25,6 @@ struct RootView: View {
             .tag(AppRouter.Tab.library)
         }
         .environment(router)
+        .tint(Color(uiColor: Branding.uiColor(hex: brandHex)))
     }
 }

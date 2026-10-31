@@ -2,6 +2,8 @@ import SwiftUI
 import SwiftData
 
 struct NewAuditView: View {
+    var initialTemplateID: String?
+    var initialKind: AuditKind?
     var onCreate: (Audit) -> Void
 
     @Environment(\.dismiss) private var dismiss
@@ -16,6 +18,7 @@ struct NewAuditView: View {
     @State private var scopeNotes = ""
     @State private var templateID = TemplateLibrary.all[0].id
     @State private var kind: AuditKind = .onSite
+    @State private var loaded = false
 
     private var template: ChecklistTemplate? { TemplateLibrary.template(id: templateID) }
 
@@ -76,7 +79,12 @@ struct NewAuditView: View {
                 }
             }
             .onAppear {
+                // Runs once. onAppear fires again when returning from the checklist picker.
+                guard !loaded else { return }
+                loaded = true
                 if auditorName.isEmpty { auditorName = defaultAuditor }
+                if let initialTemplateID { templateID = initialTemplateID }
+                if let initialKind { kind = initialKind }
             }
         }
     }

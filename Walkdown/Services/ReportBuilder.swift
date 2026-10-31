@@ -3,7 +3,7 @@ import UIKit
 /// Builds the audit report as a US Letter PDF.
 enum ReportBuilder {
     static func makePDF(for audit: Audit, companyName: String) throws -> URL {
-        let writer = PDFWriter(footer: "\(audit.displayName)  |  Confidential")
+        let writer = PDFWriter(footer: "\(audit.displayName)  |  Confidential", accent: Branding.currentUIColor)
         let data = writer.render { w in
             cover(audit, companyName: companyName, w)
             summary(audit, w)
@@ -22,8 +22,14 @@ enum ReportBuilder {
     private static let dateFormat: Date.FormatStyle = .dateTime.month(.wide).day().year()
 
     private static func cover(_ audit: Audit, companyName: String, _ w: PDFWriter) {
-        w.space(120)
-        w.text(audit.kind.reportTitle, font: .systemFont(ofSize: 30, weight: .bold))
+        if let logo = Branding.loadLogo() {
+            w.space(40)
+            w.image(logo, maxHeight: 70)
+            w.space(30)
+        } else {
+            w.space(120)
+        }
+        w.text(audit.kind.reportTitle, font: .systemFont(ofSize: 30, weight: .bold), color: w.accent)
         w.text(audit.displayName, font: .systemFont(ofSize: 20, weight: .medium), color: .darkGray, after: 24)
         var lines: [(String, String)] = [
             ("Date", audit.date.formatted(dateFormat)),
@@ -179,12 +185,14 @@ final class PDFWriter {
     private let pageRect = CGRect(x: 0, y: 0, width: 612, height: 792)
     private let margin: CGFloat = 54
     private let footer: String
+    let accent: UIColor
     private var context: UIGraphicsPDFRendererContext?
     private var y: CGFloat = 0
     private var pageNumber = 0
 
-    init(footer: String) {
+    init(footer: String, accent: UIColor = .black) {
         self.footer = footer
+        self.accent = accent
     }
 
     private var contentWidth: CGFloat { pageRect.width - margin * 2 }
@@ -215,7 +223,7 @@ final class PDFWriter {
 
     func space(_ height: CGFloat) { y += height }
 
-    func title(_ string: String) { text(string, font: .systemFont(ofSize: 22, weight: .bold), after: 14) }
+    func title(_ string: String) { text(string, font: .systemFont(ofSize: 22, weight: .bold), color: accent, after: 14) }
     func heading(_ string: String) { text(string, font: .systemFont(ofSize: 14, weight: .semibold), after: 6) }
     func subheading(_ string: String) {
         text(string.uppercased(), font: .systemFont(ofSize: 9, weight: .semibold), color: .gray, after: 2)
