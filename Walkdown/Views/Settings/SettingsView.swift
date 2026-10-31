@@ -5,6 +5,7 @@ struct SettingsView: View {
     @AppStorage(SettingsKeys.auditorName) private var auditorName = ""
     @AppStorage(SettingsKeys.companyName) private var companyName = ""
     @AppStorage(SettingsKeys.requireFaceID) private var requireFaceID = false
+    @AppStorage(SettingsKeys.helpEmail) private var helpEmail = ""
 
     private var version: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -20,6 +21,16 @@ struct SettingsView: View {
                     Text("Reports")
                 } footer: {
                     Text("Your name fills in new audits. Your company appears on report cover pages.")
+                }
+                Section {
+                    TextField("help@example.com", text: $helpEmail)
+                        .keyboardType(.emailAddress)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                } header: {
+                    Text("Get Help Contact")
+                } footer: {
+                    Text("Where \"Email for Help\" requests go. Leave blank to show official resources only.")
                 }
                 Section {
                     Toggle("Require Face ID", isOn: $requireFaceID)

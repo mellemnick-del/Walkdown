@@ -6,3 +6,7 @@ enum SettingsKeys {
     static let companyName = "companyName"
     static let requireFaceID = "requireFaceID"
 }
+
+extension SettingsKeys {
+    static let helpEmail = "helpEmail"
+}

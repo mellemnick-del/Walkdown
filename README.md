@@ -1,10 +1,35 @@
 # Walkdown (working title)
 
-**Walk the site. Leave with the report.**
+**Know where you stand. Know what to fix next.**
 
-An offline field audit companion for security auditors on iPhone and iPad. Pick a checklist, work through each control on site, capture photo and document evidence, write up findings, and export a clean PDF report. Everything stays on the device.
+A compliance and audit app for iPhone and iPad, built for two kinds of people:
 
-## What's in v1
+- **Organizations** that want to get compliant: self-assess, see a score, and work a remediation plan.
+- **Assessors and auditors** who go on site: run the audit, capture evidence, and hand over a clean report.
+
+Everything stays on the device.
+
+## App structure
+
+| Tab | What it does |
+| --- | --- |
+| **Home** | Greeting, a score ring for your most active audit, open and overdue task counts, the next three tasks to work, other audits in progress, and quick actions (New Audit, Checklists, Get Help). |
+| **Audits** | All audits and self-assessments. |
+| **Tasks** | Remediation tasks grouped into Overdue, Due This Week, Later, and No Due Date. Swipe to complete. |
+| **Library** | Every checklist grouped by audit area, searchable, with a preview of each control. |
+
+### Remediation
+
+- **Build Remediation Plan** (in an audit's menu) turns every Fail or Partial control into a task. Priority comes from the worst linked finding, or Fail = High and Partial = Medium.
+- Suggested due dates: Critical 7 days, High 30, Medium 60, Low 90.
+- Each task has an owner, due date, status, and "how to fix it" notes pre-filled from the control guidance and audit notes.
+- Closing a task offers to mark its control as Pass, so the score climbs as gaps get fixed. It never changes the result on its own.
+
+### Get Help
+
+"Talk to an expert" is available from Home, any audit, and any control. Requests go to the contact email set in Settings, with the topic filled in. Official resources (CISA, NIST, CMMC, HHS, PCI SSC) are always listed.
+
+## Audit screens
 
 | Screen | What it does |
 | --- | --- |
@@ -73,15 +98,18 @@ Set your team under Signing & Capabilities. The bundle ID is `com.nickmellem.wal
 ```
 Walkdown/
   App/        App entry and settings keys
-  Models/     SwiftData models: Audit, ControlResult, Evidence, Finding
+  Models/     SwiftData models: Audit, ControlResult, Evidence, Finding, RemediationTask
   Data/       Built-in checklist templates
   Services/   Audit creation, image handling, PDF report, Face ID lock
-  Views/      Audits, Workspace, Findings, Report, Settings
+  Views/      Home, Audits, Workspace, Findings, Tasks, Library, Help, Report, Settings
   Resources/  Assets and privacy manifest
 ```
 
 ## Roadmap
 
+- Evidence Locker: documents and screenshots per control, expiration reminders, and reuse across frameworks
+- Learn: a plain-English guide for each framework (who needs it, cost, timeline, what "done" looks like)
+- Due date reminders for tasks
 - CJIS Security Policy and IRS Publication 1075 checklists
 - Custom checklist builder (create your own or copy a built-in one)
 - Full NIST 800-53 controls and state frameworks (for example, TX-RAMP)

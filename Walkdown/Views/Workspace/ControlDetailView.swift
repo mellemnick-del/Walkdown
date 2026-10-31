@@ -12,6 +12,7 @@ struct ControlDetailView: View {
     @State private var showingScanner = false
     @State private var selectedEvidence: Evidence?
     @State private var findingSheet: FindingSheet?
+    @State private var showingHelp = false
 
     private struct FindingSheet: Identifiable {
         let id = UUID()
@@ -86,6 +87,20 @@ struct ControlDetailView: View {
                     Label("Create Finding", systemImage: "exclamationmark.triangle")
                 }
             }
+
+            Section("Remediation") {
+                ForEach((control.tasks ?? []).sorted(by: RemediationTask.nextUp)) { task in
+                    NavigationLink {
+                        TaskDetailView(task: task)
+                    } label: {
+                        TaskRow(task: task)
+                    }
+                }
+                if control.status == .fail || control.status == .partial {
+                    Button(action: addTask) { Label("Add Task", systemImage: "wrench.and.screwdriver") }
+                }
+                Button { showingHelp = true } label: { Label("Get Help With This Control", systemImage: "person.wave.2") }
+            }
         }
         .navigationTitle(control.controlID)
         .navigationBarTitleDisplayMode(.inline)
@@ -102,9 +117,23 @@ struct ControlDetailView: View {
                 .ignoresSafeArea()
         }
         .sheet(item: $selectedEvidence) { EvidenceDetailView(evidence: $0) }
+        .sheet(isPresented: $showingHelp) { GetHelpView(topic: "\(control.controlID) \(control.title)") }
         .sheet(item: $findingSheet) { sheet in
             FindingEditorView(audit: control.audit, control: control, finding: sheet.finding)
         }
+    }
+
+    private func addTask() {
+        let priority = RemediationPlanner.suggestedPriority(for: control)
+        let task = RemediationTask(
+            title: "Fix: \(control.title)",
+            detail: control.notes.isEmpty ? "Goal: \(control.guidance)" : "Goal: \(control.guidance)\n\nWhat the audit found: \(control.notes)",
+            dueDate: Calendar.current.date(byAdding: .day, value: priority.suggestedDays, to: .now),
+            priority: priority
+        )
+        context.insert(task)
+        task.audit = control.audit
+        task.control = control
     }
 
     private func importPhotos(_ items: [PhotosPickerItem]) async {

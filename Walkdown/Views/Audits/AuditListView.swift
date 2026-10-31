@@ -3,6 +3,7 @@ import SwiftData
 
 struct AuditListView: View {
     @Environment(\.modelContext) private var context
+    @Environment(AppRouter.self) private var router
     @Query(sort: \Audit.date, order: .reverse) private var audits: [Audit]
     @State private var filter: AuditStatus = .inProgress
     @State private var path = NavigationPath()
@@ -65,6 +66,13 @@ struct AuditListView: View {
                 }
             }
             .sheet(isPresented: $showingSettings) { SettingsView() }
+            .onChange(of: router.auditToOpen, initial: true) { _, audit in
+                guard let audit else { return }
+                filter = audit.status
+                path = NavigationPath()
+                path.append(audit)
+                router.auditToOpen = nil
+            }
             .confirmationDialog("Delete this audit?", isPresented: Binding(
                 get: { auditToDelete != nil },
                 set: { if !$0 { auditToDelete = nil } }

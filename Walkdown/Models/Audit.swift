@@ -21,6 +21,9 @@ final class Audit {
     @Relationship(deleteRule: .cascade, inverse: \Finding.audit)
     var findings: [Finding]? = []
 
+    @Relationship(deleteRule: .cascade, inverse: \RemediationTask.audit)
+    var tasks: [RemediationTask]? = []
+
     init(clientName: String, siteName: String = "", location: String = "", auditorName: String = "",
          date: Date = .now, scopeNotes: String = "", checklistName: String, kind: AuditKind = .onSite) {
         self.clientName = clientName
@@ -54,6 +57,15 @@ final class Audit {
 
     var sortedFindings: [Finding] {
         (findings ?? []).sorted { ($0.severity.rank, $0.createdAt) < ($1.severity.rank, $1.createdAt) }
+    }
+
+    var openTasks: [RemediationTask] {
+        (tasks ?? []).filter { !$0.isDone }.sorted(by: RemediationTask.nextUp)
+    }
+
+    /// Most recent change to any control, used to pick the audit shown on Home.
+    var lastActivity: Date {
+        (controls ?? []).map(\.updatedAt).max() ?? createdAt
     }
 
     var totalCount: Int { controls?.count ?? 0 }

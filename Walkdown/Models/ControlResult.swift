@@ -22,6 +22,9 @@ final class ControlResult {
     @Relationship(deleteRule: .nullify, inverse: \Finding.control)
     var findings: [Finding]? = []
 
+    @Relationship(deleteRule: .nullify, inverse: \RemediationTask.control)
+    var tasks: [RemediationTask]? = []
+
     init(controlID: String, title: String, guidance: String, groupName: String, groupOrder: Int, order: Int) {
         self.controlID = controlID
         self.title = title

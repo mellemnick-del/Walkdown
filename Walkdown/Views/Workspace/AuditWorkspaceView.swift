@@ -4,6 +4,9 @@ struct AuditWorkspaceView: View {
     @Bindable var audit: Audit
     @State private var filter: ControlFilter = .all
     @State private var showingInfo = false
+    @State private var showingHelp = false
+    @State private var planMessage: String?
+    @Environment(\.modelContext) private var context
 
     enum ControlFilter: String, CaseIterable, Identifiable {
         case all, open, issues
@@ -83,6 +86,11 @@ struct AuditWorkspaceView: View {
                           : "line.3.horizontal.decrease.circle.fill")
                 }
                 Menu {
+                    Button(action: buildPlan) {
+                        Label("Build Remediation Plan", systemImage: "wrench.and.screwdriver")
+                    }
+                    Button { showingHelp = true } label: { Label("Get Help", systemImage: "person.wave.2") }
+                    Divider()
                     Button { showingInfo = true } label: { Label("Audit Details", systemImage: "info.circle") }
                     if audit.status == .inProgress {
                         Button { audit.status = .complete } label: {
@@ -114,6 +122,22 @@ struct AuditWorkspaceView: View {
             }
         }
         .sheet(isPresented: $showingInfo) { AuditInfoView(audit: audit) }
+        .sheet(isPresented: $showingHelp) { GetHelpView(topic: audit.checklistName) }
+        .alert("Remediation Plan", isPresented: Binding(
+            get: { planMessage != nil },
+            set: { if !$0 { planMessage = nil } }
+        )) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(planMessage ?? "")
+        }
+    }
+
+    private func buildPlan() {
+        let created = RemediationPlanner.buildPlan(for: audit, in: context)
+        planMessage = created == 0
+            ? "Every failed or partial control already has an open task."
+            : "Created \(created) task\(created == 1 ? "" : "s") from failed and partial controls. Find them in the Tasks tab."
     }
 }
 
@@ -126,6 +150,13 @@ private struct ProgressHeader: View {
                 Text("\(audit.answeredCount) of \(audit.totalCount) controls done")
                     .font(.subheadline.weight(.semibold))
                 Spacer()
+                let openTasks = audit.openTasks.count
+                if openTasks > 0 {
+                    Label("\(openTasks)", systemImage: "wrench.and.screwdriver")
+                        .font(.caption.bold())
+                        .foregroundStyle(.secondary)
+                        .accessibilityLabel("\(openTasks) open tasks")
+                }
                 if audit.status != .inProgress {
                     Text(audit.status.label)
                         .font(.caption.bold())

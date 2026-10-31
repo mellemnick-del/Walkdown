@@ -6,9 +6,9 @@ struct WalkdownApp: App {
     var body: some Scene {
         WindowGroup {
             LockGate {
-                AuditListView()
+                RootView()
             }
         }
-        .modelContainer(for: [Audit.self, ControlResult.self, Evidence.self, Finding.self])
+        .modelContainer(for: [Audit.self, ControlResult.self, Evidence.self, Finding.self, RemediationTask.self])
     }
 }
