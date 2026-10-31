@@ -16,7 +16,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Show Xcode version
         run: xcodebuild -version
@@ -38,8 +38,14 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             2>&1 | tee build.log
 
-      - name: Summarize errors
-        if: failure()
+      - name: Summarize errors and warnings
+        if: always()
         run: |
-          echo "## Compiler errors" >> "$GITHUB_STEP_SUMMARY"
-          grep -E "error:" build.log | sort -u | head -100 | tee -a "$GITHUB_STEP_SUMMARY" || true
+          errors=$(grep -E "\.swift:[0-9]+:[0-9]+: error:" build.log | sed -E 's#^.*/Walkdown/Walkdown/##' | sort -u || true)
+          warnings=$(grep -E "\.swift:[0-9]+:[0-9]+: warning:" build.log | sed -E 's#^.*/Walkdown/Walkdown/##' | sort -u || true)
+          {
+            echo "## Swift errors: $(printf '%s' "$errors" | grep -c . || true)"
+            printf '%s\n' "$errors"
+            echo "## Swift warnings: $(printf '%s' "$warnings" | grep -c . || true)"
+            printf '%s\n' "$warnings"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
