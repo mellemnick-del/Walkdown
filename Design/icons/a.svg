@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Concept A: Double Check. Two check marks join into a W. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16346B"/><stop offset="1" stop-color="#0A1730"/>
+    </linearGradient>
+    <linearGradient id="check" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#4FD1A5"/><stop offset="1" stop-color="#7EE8C4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="104">
+    <path d="M222 470 L367 680 L512 470" stroke="#FFFFFF"/>
+    <path d="M512 470 L657 680 L812 330" stroke="url(#check)"/>
+  </g>
+</svg>

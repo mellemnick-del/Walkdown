@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Concept A, tinted appearance: grayscale on black, the system applies the tint -->
+  <rect width="1024" height="1024" fill="#000000"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="104">
+    <path d="M222 470 L367 680 L512 470" stroke="#9A9A9A"/>
+    <path d="M512 470 L657 680 L812 330" stroke="#FFFFFF"/>
+  </g>
+</svg>

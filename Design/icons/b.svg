@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Concept B: The Walkdown. A dotted route across the site ends at a verified check. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1B3F80"/><stop offset="1" stop-color="#0A1730"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <path d="M190 840 C 300 840, 300 680, 420 660 S 520 560, 540 520" fill="none"
+        stroke="#9DB8E8" stroke-width="44" stroke-linecap="round" stroke-dasharray="0 74"/>
+  <circle cx="650" cy="390" r="190" fill="#4FD1A5"/>
+  <path d="M565 395 L627 458 L742 330" fill="none" stroke="#FFFFFF" stroke-width="62"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

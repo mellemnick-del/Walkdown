@@ -147,4 +147,4 @@ Walkdown/
 - Finding templates and a remediation tracker
 - Compare a client's audits year over year
 - iCloud sync and team audits
-- App icon
+

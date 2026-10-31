@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Concept C: Verified Shield. A clean shield with a check. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2E6BC7"/><stop offset="1" stop-color="#0F2C5C"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#DCE7F7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <path d="M512 190 L770 290 V500 C770 680 655 790 512 845 C369 790 254 680 254 500 V290 Z" fill="url(#shield)"/>
+  <path d="M400 520 L478 600 L630 438" fill="none" stroke="#2E6BC7" stroke-width="70"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
