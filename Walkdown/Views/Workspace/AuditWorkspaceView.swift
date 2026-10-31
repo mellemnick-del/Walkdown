@@ -166,12 +166,16 @@ private struct ProgressHeader: View {
             ProgressView(value: audit.progress)
             HStack(spacing: 12) {
                 ForEach(ControlStatus.answerable) { status in
-                    Label("\(audit.count(status))", systemImage: status.symbol)
-                        .foregroundStyle(status.color)
-                        .monospacedDigit()
-                        .lineLimit(1)
-                        .fixedSize()
-                        .accessibilityLabel("\(audit.count(status)) \(status.label)")
+                    HStack(spacing: 4) {
+                        Image(systemName: status.symbol)
+                        Text("\(audit.count(status))")
+                            .monospacedDigit()
+                    }
+                    .foregroundStyle(status.color)
+                    .lineLimit(1)
+                    .fixedSize()
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("\(audit.count(status)) \(status.label)")
                 }
                 Spacer(minLength: 8)
                 if let score = audit.score {
