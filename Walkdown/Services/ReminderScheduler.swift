@@ -5,7 +5,11 @@ import UserNotifications
 enum ReminderScheduler {
     private static var center: UNUserNotificationCenter { .current() }
 
+    /// Turned off for demo data so screenshots never show a permission prompt.
+    static var isEnabled = true
+
     static func requestPermissionIfNeeded() {
+        guard isEnabled else { return }
         center.getNotificationSettings { settings in
             guard settings.authorizationStatus == .notDetermined else { return }
             center.requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
@@ -16,6 +20,7 @@ enum ReminderScheduler {
 
     /// Reminds 30 days before, 7 days before, and on the expiration date, at 9 AM.
     static func schedule(_ item: LockerItem) {
+        guard isEnabled else { return }
         cancel(item)
         guard let expiresAt = item.expiresAt else { return }
         requestPermissionIfNeeded()
@@ -36,6 +41,7 @@ enum ReminderScheduler {
     // MARK: Tasks
 
     static func schedule(_ task: RemediationTask) {
+        guard isEnabled else { return }
         let id = taskID(task)
         center.removePendingNotificationRequests(withIdentifiers: [id])
         guard let due = task.dueDate, !task.isDone, !task.title.isEmpty else { return }

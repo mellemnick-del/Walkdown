@@ -1,0 +1,77 @@
+name: Screenshots
+
+# Runs the app with demo data in an iPhone simulator, captures each main screen,
+# and pushes the images to the "screenshots" branch.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  screenshots:
+    runs-on: macos-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install XcodeGen and generate project
+        run: |
+          brew install xcodegen
+          xcodegen generate
+
+      - name: Build for simulator
+        run: |
+          set -o pipefail
+          xcodebuild build -project Walkdown.xcodeproj -target Walkdown -sdk iphonesimulator \
+            -configuration Debug CODE_SIGNING_ALLOWED=NO 2>&1 | tail -5
+
+      - name: Boot an iPhone simulator
+        run: |
+          UDID=$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          devices = json.load(sys.stdin)["devices"]
+          phones = [d for runtime, ds in devices.items() if "iOS" in runtime for d in ds
+                    if d["name"].startswith("iPhone") and "Pro" in d["name"] and "Max" not in d["name"]]
+          phones = phones or [d for runtime, ds in devices.items() if "iOS" in runtime for d in ds if d["name"].startswith("iPhone")]
+          print(phones[-1]["udid"])
+          ')
+          echo "UDID=$UDID" >> "$GITHUB_ENV"
+          xcrun simctl boot "$UDID"
+          xcrun simctl bootstatus "$UDID" -b
+          xcrun simctl status_bar "$UDID" override --time "9:41" --batteryState charged --batteryLevel 100 --cellularBars 4 --wifiBars 3
+          xcrun simctl install "$UDID" build/Debug-iphonesimulator/Walkdown.app
+          xcrun simctl list devices | grep "$UDID"
+
+      - name: Capture screens
+        run: |
+          mkdir -p shots
+          capture() {
+            xcrun simctl terminate "$UDID" com.nickmellem.walkdown || true
+            xcrun simctl launch "$UDID" com.nickmellem.walkdown -demo -screen "$2"
+            sleep 8
+            xcrun simctl io "$UDID" screenshot "shots/$1.png"
+          }
+          xcrun simctl ui "$UDID" appearance light
+          capture 1-home home
+          capture 2-workspace workspace
+          capture 3-tasks tasks
+          capture 4-locker locker
+          capture 5-audits audits
+          capture 6-library library
+          xcrun simctl ui "$UDID" appearance dark
+          capture 7-home-dark home
+          ls -la shots
+
+      - name: Push screenshots branch
+        run: |
+          cp -R shots /tmp/shots
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan screenshots
+          git rm -rf --quiet .
+          git clean -fdx --quiet
+          cp /tmp/shots/*.png .
+          git add *.png
+          git commit -m "Screenshots from ${GITHUB_SHA::7}"
+          git push -f origin screenshots
