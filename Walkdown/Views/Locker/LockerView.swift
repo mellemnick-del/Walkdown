@@ -155,6 +155,7 @@ struct LockerRow: View {
                     .lineLimit(1)
                 HStack(spacing: 8) {
                     Text(item.kind.label)
+                    if let client = item.client { Text(client.name).lineLimit(1) }
                     if let expiry = item.expiryText {
                         Text(expiry).foregroundStyle(item.isExpired ? .red : item.isExpiringSoon ? .orange : .secondary)
                     }

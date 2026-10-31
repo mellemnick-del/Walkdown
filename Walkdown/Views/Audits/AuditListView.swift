@@ -53,7 +53,11 @@ struct AuditListView: View {
             .navigationDestination(for: Audit.self) { AuditWorkspaceView(audit: $0) }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button { showingSettings = true } label: { Label("Settings", systemImage: "gearshape") }
+                    NavigationLink {
+                        ClientsView()
+                    } label: {
+                        Label("Clients", systemImage: "person.2")
+                    }
                 }
                 ToolbarItem(placement: .primaryAction) {
                     Button { showingNewAudit = true } label: { Label("New Audit", systemImage: "plus") }

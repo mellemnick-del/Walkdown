@@ -10,8 +10,11 @@ struct LockerPickerView: View {
 
     private var suggestedTopics: Set<EvidenceTopic> { EvidenceTopic.suggested(for: control) }
 
+    /// Only evidence for this audit's client (or your own organization's when there's no client).
     private var visible: [LockerItem] {
-        searchText.isEmpty ? items : items.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
+        let clientID = control.audit?.client?.id
+        let scoped = items.filter { $0.client?.id == clientID }
+        return searchText.isEmpty ? scoped : scoped.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
     }
 
     var body: some View {
@@ -23,6 +26,10 @@ struct LockerPickerView: View {
                 if items.isEmpty {
                     ContentUnavailableView("No Evidence Yet", systemImage: "lock.doc",
                                            description: Text("Add documents in the Locker tab, then attach them here."))
+                        .listRowBackground(Color.clear)
+                } else if visible.isEmpty && searchText.isEmpty {
+                    ContentUnavailableView("No Evidence for This Client", systemImage: "lock.doc",
+                                           description: Text("Add evidence in the Locker tab and set Belongs to \(control.audit?.client?.name ?? "My Organization")."))
                         .listRowBackground(Color.clear)
                 }
                 if !suggested.isEmpty {

@@ -13,6 +13,9 @@ final class Audit {
     var checklistName: String = ""
     var statusRaw: String = AuditStatus.inProgress.rawValue
     var kindRaw: String = AuditKind.onSite.rawValue
+
+    /// The client organization this audit is for, if any. The inverse is declared on Client.
+    var client: Client?
     var createdAt: Date = Date.now
 
     @Relationship(deleteRule: .cascade, inverse: \ControlResult.audit)

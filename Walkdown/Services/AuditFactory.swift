@@ -6,10 +6,11 @@ enum AuditFactory {
     @discardableResult
     static func create(from template: ChecklistTemplate, clientName: String, siteName: String, location: String,
                        auditorName: String, date: Date, scopeNotes: String, kind: AuditKind,
-                       in context: ModelContext) -> Audit {
+                       client: Client? = nil, in context: ModelContext) -> Audit {
         let audit = Audit(clientName: clientName, siteName: siteName, location: location, auditorName: auditorName,
                           date: date, scopeNotes: scopeNotes, checklistName: template.name, kind: kind)
         context.insert(audit)
+        audit.client = client
         for (groupIndex, group) in template.groups.enumerated() {
             for (itemIndex, item) in group.items.enumerated() {
                 let control = ControlResult(controlID: item.id, title: item.title, guidance: item.guidance,

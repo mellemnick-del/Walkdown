@@ -23,6 +23,13 @@ A short welcome explains the app, then asks who it's for: **My Organization** or
 | **Locker** | The Evidence Locker: policies, reports, screenshots, certificates, and scans, sorted into Expired, Expiring Soon, and Current. |
 | **Library** | Every checklist grouped by audit area and searchable. Each one opens to a plain-English guide (what it is, who needs it, how it's assessed, first steps), Self-Assess and On-Site Audit buttons, and every control. |
 
+### Clients (for assessors and MSPs)
+
+- Audits tab > Clients: add the organizations you audit or manage, with industry, contact, and notes.
+- Each client shows its latest score, audits, open tasks, and evidence, with a "New Audit for" shortcut.
+- New audits and evidence can be assigned to a client. When attaching evidence to a control, only that client's evidence is offered, so one client's documents never appear in another client's audit.
+- Clients map to synced client organizations once accounts are added. See [docs/ACCOUNTS_PLAN.md](docs/ACCOUNTS_PLAN.md).
+
 ### Remediation
 
 - **Build Remediation Plan** (in an audit's menu) turns every Fail or Partial control into a task. Priority comes from the worst linked finding, or Fail = High and Partial = Medium.
@@ -120,7 +127,7 @@ Set your team under Signing & Capabilities. The bundle ID is `com.nickmellem.wal
 ```
 Walkdown/
   App/        App entry and settings keys
-  Models/     SwiftData models: Audit, ControlResult, Evidence, Finding, RemediationTask
+  Models/     SwiftData models: Audit, ControlResult, Evidence, Finding, RemediationTask, LockerItem, Client
   Data/       Built-in checklist templates
   Services/   Audit creation, image handling, PDF report, Face ID lock
   Views/      Home, Audits, Workspace, Findings, Tasks, Library, Help, Report, Settings
@@ -129,6 +136,7 @@ Walkdown/
 
 ## Roadmap
 
+- Accounts, organizations, roles, and MSP client management with cloud sync. Decisions so far are in [docs/ACCOUNTS_PLAN.md](docs/ACCOUNTS_PLAN.md).
 - Paid plans: unlock branding for organizations (StoreKit subscriptions)
 
 - CJIS Security Policy and IRS Publication 1075 checklists

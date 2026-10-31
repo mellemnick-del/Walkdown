@@ -108,6 +108,9 @@ final class LockerItem {
     var addedAt: Date = Date.now
     var expiresAt: Date?
 
+    /// The client this evidence belongs to. Nil means it's your own organization's evidence.
+    var client: Client?
+
     @Relationship(deleteRule: .nullify, inverse: \ControlResult.lockerItems)
     var controls: [ControlResult]? = []
 

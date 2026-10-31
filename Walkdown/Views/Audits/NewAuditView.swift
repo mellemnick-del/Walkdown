@@ -4,6 +4,7 @@ import SwiftData
 struct NewAuditView: View {
     var initialTemplateID: String?
     var initialKind: AuditKind?
+    var initialClient: Client?
     var onCreate: (Audit) -> Void
 
     @Environment(\.dismiss) private var dismiss
@@ -20,6 +21,11 @@ struct NewAuditView: View {
     @State private var templateID = TemplateLibrary.all[0].id
     @State private var kind: AuditKind = .onSite
     @State private var loaded = false
+    @State private var clientID: UUID?
+    @State private var showingNewClient = false
+    @Query(sort: \Client.name) private var clients: [Client]
+
+    private var selectedClient: Client? { clients.first { $0.id == clientID } }
 
     private var template: ChecklistTemplate? { TemplateLibrary.template(id: templateID) }
 
@@ -39,6 +45,15 @@ struct NewAuditView: View {
                          : "Answer the checklist for your own organization or a client's.")
                 }
                 Section(kind == .onSite ? "Client" : "Organization") {
+                    if !clients.isEmpty {
+                        Picker("Client", selection: $clientID) {
+                            Text("None").tag(UUID?.none)
+                            ForEach(clients) { Text($0.name).tag(UUID?.some($0.id)) }
+                        }
+                    }
+                    Button { showingNewClient = true } label: {
+                        Label("New Client", systemImage: "person.badge.plus")
+                    }
                     TextField(kind == .onSite ? "Client name" : "Organization name", text: $clientName)
                         .textInputAutocapitalization(.words)
                     if kind == .onSite {
@@ -79,12 +94,24 @@ struct NewAuditView: View {
                     Button("Create", action: create).disabled(!canCreate)
                 }
             }
+            .onChange(of: clientID) { _, _ in
+                if let selectedClient { clientName = selectedClient.name }
+            }
+            .sheet(isPresented: $showingNewClient) {
+                NavigationStack {
+                    ClientEditorView(client: nil) { client in clientID = client.id }
+                }
+            }
             .onAppear {
                 // Runs once. onAppear fires again when returning from the checklist picker.
                 guard !loaded else { return }
                 loaded = true
                 if auditorName.isEmpty { auditorName = defaultAuditor }
                 if let initialTemplateID { templateID = initialTemplateID }
+                if let initialClient {
+                    clientID = initialClient.id
+                    clientName = initialClient.name
+                }
                 kind = initialKind ?? (UserRole(rawValue: roleRaw) ?? .organization).defaultAuditKind
             }
         }
@@ -101,6 +128,7 @@ struct NewAuditView: View {
             date: date,
             scopeNotes: scopeNotes,
             kind: kind,
+            client: selectedClient,
             in: context
         )
         dismiss()

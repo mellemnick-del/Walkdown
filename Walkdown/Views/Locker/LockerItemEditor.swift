@@ -9,6 +9,7 @@ struct LockerItemEditor: View {
     var onSave: ((LockerItem) -> Void)?
     /// Topics to pre-select, for example from the control being worked on.
     var suggestedTopics: Set<EvidenceTopic> = []
+    var initialClient: Client?
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
@@ -20,6 +21,8 @@ struct LockerItemEditor: View {
     @State private var expiresAt = Calendar.current.date(byAdding: .year, value: 1, to: .now) ?? .now
     @State private var notes = ""
     @State private var loaded = false
+    @State private var clientID: UUID?
+    @Query(sort: \Client.name) private var clients: [Client]
 
     var body: some View {
         Form {
@@ -30,6 +33,17 @@ struct LockerItemEditor: View {
                 }
                 if let name = newImport?.fileName ?? item?.fileName, !name.isEmpty {
                     LabeledContent("File", value: name)
+                }
+            }
+
+            if !clients.isEmpty {
+                Section {
+                    Picker("Belongs to", selection: $clientID) {
+                        Text("My Organization").tag(UUID?.none)
+                        ForEach(clients) { Text($0.name).tag(UUID?.some($0.id)) }
+                    }
+                } footer: {
+                    Text("Client evidence is only suggested in that client's audits.")
                 }
             }
 
@@ -85,6 +99,7 @@ struct LockerItemEditor: View {
         guard !loaded else { return }
         loaded = true
         if let item {
+            clientID = item.client?.id
             title = item.title
             kind = item.kind
             topics = item.topics
@@ -97,6 +112,7 @@ struct LockerItemEditor: View {
             title = newImport.suggestedTitle
             kind = newImport.contentType.conforms(to: .image) ? .screenshot : .other
             topics = suggestedTopics
+            clientID = initialClient?.id
         }
     }
 
@@ -116,6 +132,7 @@ struct LockerItemEditor: View {
         target.topics = topics
         target.notes = notes
         target.expiresAt = hasExpiry ? expiresAt : nil
+        target.client = clients.first { $0.id == clientID }
         ReminderScheduler.schedule(target)
         onSave?(target)
         dismiss()
