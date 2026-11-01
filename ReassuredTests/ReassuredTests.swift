@@ -38,8 +38,9 @@ struct TemplateTests {
         #expect(TemplateLibrary.cmmcLevel1.itemCount == 17)
     }
 
-    @Test(arguments: TemplateLibrary.all)
-    func controlIDsAreUniqueWithinEachChecklist(template: ChecklistTemplate) {
+    @Test(arguments: TemplateLibrary.all.map(\.id))
+    func controlIDsAreUniqueWithinEachChecklist(templateID: String) throws {
+        let template = try #require(TemplateLibrary.template(id: templateID))
         let ids = template.groups.flatMap(\.items).map(\.id)
         #expect(Set(ids).count == ids.count, "Duplicate control ID in \(template.name)")
     }

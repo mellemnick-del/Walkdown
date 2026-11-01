@@ -21,6 +21,11 @@ enum ReassuredMigrationPlan: SchemaMigrationPlan {
 enum ReassuredStore {
     /// Opens the database. `inMemory` is for demo data and tests, and never touches saved audits.
     static func makeContainer(inMemory: Bool = false) throws -> ModelContainer {
+        if !inMemory {
+            // Create the storage folder up front so the first launch doesn't have to recover from a missing path.
+            let folder = URL.applicationSupportDirectory
+            try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        }
         let schema = Schema(versionedSchema: ReassuredSchemaV1.self)
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
         return try ModelContainer(for: schema, migrationPlan: ReassuredMigrationPlan.self,
