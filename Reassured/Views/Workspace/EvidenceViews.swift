@@ -28,6 +28,7 @@ struct EvidenceDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     @State private var confirmingDelete = false
+    @State private var markingUp = false
 
     var body: some View {
         NavigationStack {
@@ -37,6 +38,15 @@ struct EvidenceDetailView: View {
                         .resizable()
                         .scaledToFit()
                         .listRowInsets(EdgeInsets())
+                }
+                if UIImage(data: evidence.imageData) != nil {
+                    Section {
+                        Button { markingUp = true } label: {
+                            Label("Mark Up", systemImage: "pencil.tip.crop.circle")
+                        }
+                    } footer: {
+                        Text("Circle or point out what matters. The marked-up copy is saved as a new photo, and the original is kept as-is.")
+                    }
                 }
                 Section("Caption") {
                     TextField("Describe what this shows", text: $evidence.caption, axis: .vertical)
@@ -51,6 +61,16 @@ struct EvidenceDetailView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
+                }
+            }
+            .fullScreenCover(isPresented: $markingUp) {
+                if let image = UIImage(data: evidence.imageData) {
+                    MarkupView(image: image) { marked in
+                        guard let data = ImageTools.jpegData(from: marked, quality: 0.8) else { return }
+                        let copy = Evidence(imageData: data, caption: evidence.caption.isEmpty ? "Marked up" : "\(evidence.caption) (marked up)")
+                        context.insert(copy)
+                        copy.control = evidence.control
+                    }
                 }
             }
             .confirmationDialog("Delete this photo?", isPresented: $confirmingDelete, titleVisibility: .visible) {

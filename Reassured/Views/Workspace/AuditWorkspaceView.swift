@@ -9,6 +9,7 @@ struct AuditWorkspaceView: View {
     @State private var planMessage: String?
     @State private var celebrating = false
     @State private var exportURL: URL?
+    @State private var walking = false
     @Environment(\.modelContext) private var context
 
     enum ControlFilter: String, CaseIterable, Identifiable {
@@ -55,6 +56,16 @@ struct AuditWorkspaceView: View {
         List {
             Section {
                 ProgressHeader(audit: audit)
+                Button { walking = true } label: {
+                    HStack {
+                        Label(audit.answeredCount == 0 ? "Start Walk Mode" : "Continue in Walk Mode", systemImage: "figure.walk")
+                            .font(.headline)
+                        Spacer()
+                        Text("One control at a time")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
 
             if groups.isEmpty {
@@ -132,6 +143,7 @@ struct AuditWorkspaceView: View {
             }
         }
         .sheet(isPresented: $showingInfo) { AuditInfoView(audit: audit) }
+        .fullScreenCover(isPresented: $walking) { WalkModeView(audit: audit) }
         .overlay {
             if celebrating {
                 CompletionCelebration(score: audit.score) { celebrating = false }
