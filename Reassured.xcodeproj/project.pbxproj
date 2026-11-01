@@ -55,14 +55,18 @@
 		AABC4466A84B0842424F9681 /* FindingsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07D0B249DE0802CCB0E3FA /* FindingsListView.swift */; };
 		ADCFE23CA0016C213A0DD9AC /* EvidenceImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9D6C258EEF0D23FD10D3D4 /* EvidenceImporter.swift */; };
 		AF1215FC4DC60185CD8CAC3F /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E73993D03514780A0592B /* TaskDetailView.swift */; };
+		B00B7CF5094F60331E982ACD /* ReassuredTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D203D9B2A78179263EBC3EC /* ReassuredTests.swift */; };
 		B1B28606BB6532605AE64011 /* BrandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019E1DBAF41F73EB0CC1FC63 /* BrandingView.swift */; };
+		B4778333E7337441EE44C1CF /* Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46EDF937C18120AC81ED5E9 /* Schema.swift */; };
 		B8BC630A4D2F412A2E229BC4 /* NISTCSF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1F202798A2C91DE23D38DB /* NISTCSF.swift */; };
 		BED9A9D21E6FF86A8679EC7A /* LockerItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C30350A8D0079D398F5F4D3 /* LockerItemDetailView.swift */; };
 		BEDF339290AF6F0CE0205A97 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A89DB2F670AD6234EEC31A5 /* AppRouter.swift */; };
 		C21D299FD416972BAEE18016 /* PCIDSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2C2EC219831859F8CFBC82 /* PCIDSS.swift */; };
+		C5769D23D15F1177C23E66A2 /* BackupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB2DFF6E409B6E1E8A909CAC /* BackupService.swift */; };
 		D4E0968A3B76867AB21A1170 /* LockGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D334CCD4BF39026D641BCABD /* LockGate.swift */; };
 		D6FD3AFEA41999879DF90272 /* CMMC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C585A7423B8E734FF28F26C7 /* CMMC.swift */; };
 		D895D3A7D1FA9617E4F31A55 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3747231435EFBB3714A845FB /* Assets.xcassets */; };
+		D94F37E934B392C9B9980490 /* BackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7375321A8E9AD2DAAA1A698 /* BackupView.swift */; };
 		E5DD48F047564A72FB9F8841 /* AuditFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89496B62E8A57F8B94CAC3E2 /* AuditFactory.swift */; };
 		E8C3092B9844B669E69D0E63 /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E49AE1CA2E4F853FC9AD2AE /* TasksView.swift */; };
 		EA7FA1A1EFC1E6A858411901 /* SOC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22A0013EA2B61A85C8E9E87 /* SOC2.swift */; };
@@ -73,9 +77,20 @@
 		FF400355EDEEBA9646CCCEFE /* GetHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B33CE21DFA360E1FCFC8683 /* GetHelpView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		8DEBDAD7250A6615D8EBD216 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9AB4763729778DC86D87D47D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F2DDA710C11AD6FB6D83EB1F;
+			remoteInfo = Reassured;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		019E1DBAF41F73EB0CC1FC63 /* BrandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandingView.swift; sourceTree = "<group>"; };
 		08FDDDEED10FF4B0B076DD6E /* AuditListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuditListView.swift; sourceTree = "<group>"; };
+		1517EA66FD5A54DB735DE21E /* ReassuredTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ReassuredTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		19054FF4232C2F50A3767C65 /* Finding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finding.swift; sourceTree = "<group>"; };
 		1979E6CF27A5E11C2BC157C4 /* Reassured.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Reassured.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F01D906844BE563A9D59734 /* Evidence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Evidence.swift; sourceTree = "<group>"; };
@@ -89,6 +104,7 @@
 		4E6DCAA5CB796A79A98C4DAC /* Branding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Branding.swift; sourceTree = "<group>"; };
 		512BDDDA4D46EE644563D9AE /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
 		5A89DB2F670AD6234EEC31A5 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		5D203D9B2A78179263EBC3EC /* ReassuredTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReassuredTests.swift; sourceTree = "<group>"; };
 		60B9F9CA1E0C08D6D0E1C61B /* ProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRing.swift; sourceTree = "<group>"; };
 		648194689CFF03E926828AB1 /* LockerPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockerPickerView.swift; sourceTree = "<group>"; };
 		6ABC3FDB59FFE1737E8D078A /* LockerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockerView.swift; sourceTree = "<group>"; };
@@ -112,6 +128,7 @@
 		A22A0013EA2B61A85C8E9E87 /* SOC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOC2.swift; sourceTree = "<group>"; };
 		AAE6B4DFA2E996885C28E1B9 /* FindingEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindingEditorView.swift; sourceTree = "<group>"; };
 		B25270F870362892A1A045D1 /* ReportBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportBuilder.swift; sourceTree = "<group>"; };
+		B46EDF937C18120AC81ED5E9 /* Schema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schema.swift; sourceTree = "<group>"; };
 		B57D25404961F302085B5D54 /* AuditWorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuditWorkspaceView.swift; sourceTree = "<group>"; };
 		B6B393650016B3EF6CA5E14D /* ChecklistTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistTemplate.swift; sourceTree = "<group>"; };
 		B6F755FBC199AAD67B063456 /* RemediationTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemediationTask.swift; sourceTree = "<group>"; };
@@ -128,6 +145,7 @@
 		D061D3FBCEC554E79E2F2DC0 /* DemoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoData.swift; sourceTree = "<group>"; };
 		D17A6D0CEE7EB4330A149997 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D334CCD4BF39026D641BCABD /* LockGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockGate.swift; sourceTree = "<group>"; };
+		D7375321A8E9AD2DAAA1A698 /* BackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupView.swift; sourceTree = "<group>"; };
 		DA9D6C258EEF0D23FD10D3D4 /* EvidenceImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvidenceImporter.swift; sourceTree = "<group>"; };
 		DAD91F5088E95CF927A46D57 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		DD1E98CE55304515A0916BC7 /* CaptureControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureControllers.swift; sourceTree = "<group>"; };
@@ -140,6 +158,7 @@
 		F04C74137073DE429FD0BE97 /* ControlDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlDetailView.swift; sourceTree = "<group>"; };
 		F875A8D5C06060A178A6A868 /* ReminderScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderScheduler.swift; sourceTree = "<group>"; };
 		FA531F698C066F1C9E653561 /* OpeningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningView.swift; sourceTree = "<group>"; };
+		FB2DFF6E409B6E1E8A909CAC /* BackupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupService.swift; sourceTree = "<group>"; };
 		FCB349370C02C673D68016E4 /* StatusBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBadge.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -159,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				89496B62E8A57F8B94CAC3E2 /* AuditFactory.swift */,
+				FB2DFF6E409B6E1E8A909CAC /* BackupService.swift */,
 				4E6DCAA5CB796A79A98C4DAC /* Branding.swift */,
 				DA9D6C258EEF0D23FD10D3D4 /* EvidenceImporter.swift */,
 				CAF2B4A214AE733C12EF92BC /* ImageTools.swift */,
@@ -189,6 +209,7 @@
 		116BC7A314B3F08F87CB1810 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				D7375321A8E9AD2DAAA1A698 /* BackupView.swift */,
 				019E1DBAF41F73EB0CC1FC63 /* BrandingView.swift */,
 				D17A6D0CEE7EB4330A149997 /* SettingsView.swift */,
 			);
@@ -207,6 +228,7 @@
 			isa = PBXGroup;
 			children = (
 				1979E6CF27A5E11C2BC157C4 /* Reassured.app */,
+				1517EA66FD5A54DB735DE21E /* ReassuredTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -278,8 +300,17 @@
 				19054FF4232C2F50A3767C65 /* Finding.swift */,
 				BCC6331AC8169E4953530072 /* LockerItem.swift */,
 				B6F755FBC199AAD67B063456 /* RemediationTask.swift */,
+				B46EDF937C18120AC81ED5E9 /* Schema.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		66CDAEE6D42FE95075974F81 /* ReassuredTests */ = {
+			isa = PBXGroup;
+			children = (
+				5D203D9B2A78179263EBC3EC /* ReassuredTests.swift */,
+			);
+			path = ReassuredTests;
 			sourceTree = "<group>";
 		};
 		732D23D28A56A4CFCEEEC01F /* Components */ = {
@@ -389,6 +420,7 @@
 			isa = PBXGroup;
 			children = (
 				0F5312572CEA9892FD231D80 /* Reassured */,
+				66CDAEE6D42FE95075974F81 /* ReassuredTests */,
 				2F9ED1D89465AA8494D149FB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -396,6 +428,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		19F81BB145B691895A533DC4 /* ReassuredTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C4D71A862CE2A4B8B3069153 /* Build configuration list for PBXNativeTarget "ReassuredTests" */;
+			buildPhases = (
+				293D68403CDC891A66A40D3D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				87F25ED4F0D946A0DD329E1D /* PBXTargetDependency */,
+			);
+			name = ReassuredTests;
+			packageProductDependencies = (
+			);
+			productName = ReassuredTests;
+			productReference = 1517EA66FD5A54DB735DE21E /* ReassuredTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F2DDA710C11AD6FB6D83EB1F /* Reassured */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 49D094FF4736EA52083A6834 /* Build configuration list for PBXNativeTarget "Reassured" */;
@@ -443,6 +493,7 @@
 			projectRoot = "";
 			targets = (
 				F2DDA710C11AD6FB6D83EB1F /* Reassured */,
+				19F81BB145B691895A533DC4 /* ReassuredTests */,
 			);
 		};
 /* End PBXProject section */
@@ -460,6 +511,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		293D68403CDC891A66A40D3D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B00B7CF5094F60331E982ACD /* ReassuredTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CEEF13184F72AE916AE681FF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -470,6 +529,8 @@
 				46D9CFDEA40FE37E6B224C49 /* AuditInfoView.swift in Sources */,
 				73082B2B2CE6F59B0B415803 /* AuditListView.swift in Sources */,
 				1B0696F488E9EF0C2D9EA1C1 /* AuditWorkspaceView.swift in Sources */,
+				C5769D23D15F1177C23E66A2 /* BackupService.swift in Sources */,
+				D94F37E934B392C9B9980490 /* BackupView.swift in Sources */,
 				72C7A306E515410BF3BD5243 /* Branding.swift in Sources */,
 				B1B28606BB6532605AE64011 /* BrandingView.swift in Sources */,
 				D6FD3AFEA41999879DF90272 /* CMMC.swift in Sources */,
@@ -520,6 +581,7 @@
 				06936D84615A8C63EDB9801E /* ReportView.swift in Sources */,
 				21486D80887347A1432D7BE1 /* RootView.swift in Sources */,
 				EA7FA1A1EFC1E6A858411901 /* SOC2.swift in Sources */,
+				B4778333E7337441EE44C1CF /* Schema.swift in Sources */,
 				EB56771D7F7CE62A9BDAE3D3 /* SettingsKeys.swift in Sources */,
 				188A056F3C0EFFB8D2A49088 /* SettingsView.swift in Sources */,
 				81E1B26F43BB8FE0AD412D44 /* StatusBadge.swift in Sources */,
@@ -531,7 +593,32 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		87F25ED4F0D946A0DD329E1D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F2DDA710C11AD6FB6D83EB1F /* Reassured */;
+			targetProxy = 8DEBDAD7250A6615D8EBD216 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		3DAA060C8E8A8E7C0BACA50A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.nickmellem.reassured.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Reassured.app/Reassured";
+			};
+			name = Debug;
+		};
 		B79BC58220D6FB1FFF02F51B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -682,6 +769,23 @@
 			};
 			name = Release;
 		};
+		CE08E39B98522AD8E02465BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.nickmellem.reassured.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Reassured.app/Reassured";
+			};
+			name = Release;
+		};
 		DEB451E0730E6C534098472D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -726,6 +830,15 @@
 			buildConfigurations = (
 				B79BC58220D6FB1FFF02F51B /* Debug */,
 				C757B0489A392BC384D99431 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C4D71A862CE2A4B8B3069153 /* Build configuration list for PBXNativeTarget "ReassuredTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3DAA060C8E8A8E7C0BACA50A /* Debug */,
+				CE08E39B98522AD8E02465BF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
