@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- E1. New Day, refined: bigger sun, cleaner reflection, bolder check. -->
+  <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0F2C5C"/><stop offset=".45" stop-color="#2F7F8C"/><stop offset=".66" stop-color="#F2C46D"/></linearGradient><clipPath id="above"><rect width="1024" height="660"/></clipPath>
+    <clipPath id="below"><rect y="660" width="1024" height="364"/></clipPath></defs>
+  <rect width="1024" height="1024" fill="url(#sky)"/>
+  <circle cx="512" cy="660" r="280" fill="#FFF1CC" clip-path="url(#above)"/>
+  <rect y="660" width="1024" height="364" fill="#0A1730"/>
+  <g stroke="#FFF1CC" stroke-linecap="round" opacity=".5">
+    <path d="M300 730 H724" stroke-width="26"/><path d="M370 800 H654" stroke-width="22"/><path d="M440 865 H584" stroke-width="18"/>
+  </g>
+  <path d="M385 530 L475 620 L650 435" fill="none" stroke="#0F2C5C" stroke-width="76" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

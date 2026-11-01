@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Concept C: Exhale. A soft rounded shield, calm mint glow, and a check. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1B3F80"/><stop offset="1" stop-color="#0A1730"/>
+    </linearGradient>
+    <radialGradient id="glow" cx=".5" cy=".45" r=".5">
+      <stop offset="0" stop-color="#4FD1A5" stop-opacity=".45"/><stop offset="1" stop-color="#4FD1A5" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="shield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8EEDCB"/><stop offset="1" stop-color="#4FD1A5"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <circle cx="512" cy="480" r="420" fill="url(#glow)"/>
+  <path d="M512 210 C 600 262 690 286 770 292 C 770 560 690 730 512 820 C 334 730 254 560 254 292 C 334 286 424 262 512 210 Z" fill="url(#shield)"/>
+  <path d="M408 512 L484 588 L626 438" fill="none" stroke="#0A1730" stroke-width="66" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

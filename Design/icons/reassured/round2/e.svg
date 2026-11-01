@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- E. New Day: the sun comes up with a check on it. The calm morning after the audit. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0F2C5C"/><stop offset=".45" stop-color="#2F7F8C"/><stop offset=".66" stop-color="#F2C46D"/>
+    </linearGradient>
+    <clipPath id="above"><rect width="1024" height="680"/></clipPath>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#sky)"/>
+  <circle cx="512" cy="680" r="250" fill="#FFF1CC" clip-path="url(#above)"/>
+  <rect y="680" width="1024" height="344" fill="#0A1730"/>
+  <path d="M398 560 L478 640 L640 470" fill="none" stroke="#0F2C5C" stroke-width="64" stroke-linecap="round" stroke-linejoin="round"/>
+  <g stroke="#4FD1A5" stroke-width="22" stroke-linecap="round" opacity=".55">
+    <path d="M330 790 H694"/><path d="M410 880 H614"/>
+  </g>
+</svg>

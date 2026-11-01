@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- EF2. Held Sun with check: the cradled sunrise carries the check. -->
+  <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0F2C5C"/><stop offset=".7" stop-color="#245F7F"/><stop offset="1" stop-color="#C98A4B"/></linearGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF1CC"/><stop offset="1" stop-color="#FFD98A"/></linearGradient></defs>
+  <rect width="1024" height="1024" fill="url(#sky)"/>
+  <circle cx="512" cy="490" r="190" fill="url(#sun)"/>
+  <path d="M432 492 L490 550 L600 430" fill="none" stroke="#0F2C5C" stroke-width="54" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M220 470 C 220 740 375 840 512 840 C 649 840 804 740 804 470" fill="none" stroke="#FFFFFF" stroke-width="72" stroke-linecap="round"/>
+</svg>

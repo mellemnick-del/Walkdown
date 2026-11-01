@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="190 290 644 580" width="644" height="580">
+  <!-- Reassured mark without background, for the launch screen and onboarding -->
+  <defs><linearGradient id="sun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF1CC"/><stop offset="1" stop-color="#FFD98A"/></linearGradient></defs>
+  <circle cx="512" cy="500" r="170" fill="url(#sun)"/>
+  <path d="M230 470 C 230 730 380 830 512 830 C 644 830 794 730 794 470" fill="none" stroke="#FFFFFF" stroke-width="76" stroke-linecap="round"/>
+</svg>

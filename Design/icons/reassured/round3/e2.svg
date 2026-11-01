@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- E2. New Day in brand colors: a mint sun with a white check. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0F2C5C"/><stop offset=".7" stop-color="#1F5E85"/></linearGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9AF0D2"/><stop offset="1" stop-color="#4FD1A5"/></linearGradient>
+    <clipPath id="above"><rect width="1024" height="660"/></clipPath></defs>
+  <rect width="1024" height="1024" fill="url(#sky)"/>
+  <circle cx="512" cy="660" r="280" fill="url(#sun)" clip-path="url(#above)"/>
+  <rect y="660" width="1024" height="364" fill="#0A1730"/>
+  <g stroke="#4FD1A5" stroke-linecap="round" opacity=".55">
+    <path d="M300 730 H724" stroke-width="26"/><path d="M370 800 H654" stroke-width="22"/><path d="M440 865 H584" stroke-width="18"/>
+  </g>
+  <path d="M385 530 L475 620 L650 435" fill="none" stroke="#FFFFFF" stroke-width="76" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

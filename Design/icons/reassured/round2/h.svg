@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- H. All Clear: a message bubble with a check. Someone telling you "you're good." -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2FBF8F"/><stop offset="1" stop-color="#1B6E8C"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <path d="M300 250 H724 A 110 110 0 0 1 834 360 V600 A 110 110 0 0 1 724 710 H470 L330 820 L350 710 H300 A 110 110 0 0 1 190 600 V360 A 110 110 0 0 1 300 250 Z" fill="#FFFFFF"/>
+  <path d="M380 480 L470 570 L650 390" fill="none" stroke="#0F2C5C" stroke-width="74" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

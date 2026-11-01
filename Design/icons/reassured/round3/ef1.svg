@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- EF1. Held Sun: the rising sun, cradled. A new day, and someone has your back. -->
+  <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0F2C5C"/><stop offset=".7" stop-color="#245F7F"/><stop offset="1" stop-color="#C98A4B"/></linearGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF1CC"/><stop offset="1" stop-color="#FFD98A"/></linearGradient></defs>
+  <rect width="1024" height="1024" fill="url(#sky)"/>
+  <circle cx="512" cy="500" r="170" fill="url(#sun)"/>
+  <path d="M230 470 C 230 730 380 830 512 830 C 644 830 794 730 794 470" fill="none" stroke="#FFFFFF" stroke-width="76" stroke-linecap="round"/>
+</svg>

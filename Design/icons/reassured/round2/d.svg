@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- D. Steady Pulse: a jittery heartbeat settles, then becomes a check. Stress turning into calm. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16346B"/><stop offset="1" stop-color="#0A1730"/></linearGradient>
+    <linearGradient id="mint" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#4FD1A5"/><stop offset="1" stop-color="#8EEDCB"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <path d="M150 560 H290 L340 430 L400 660 L450 520 H520" fill="none" stroke="#FFFFFF" stroke-width="58" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M520 520 L610 610 L860 350" fill="none" stroke="url(#mint)" stroke-width="74" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
