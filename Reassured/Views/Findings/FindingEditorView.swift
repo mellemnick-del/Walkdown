@@ -43,6 +43,7 @@ struct FindingEditorView: View {
                         .lineLimit(3...10)
                 }
             }
+            .calmBackground()
             .navigationTitle(finding == nil ? "New Finding" : "Edit Finding")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

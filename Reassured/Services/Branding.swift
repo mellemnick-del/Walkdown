@@ -5,7 +5,7 @@ import UIKit
 /// This is the foundation for white-label plans, where a paying organization brands the app and its reports.
 enum Branding {
     static let colorKey = "brandColorHex"
-    static let defaultHex = "2E6BC7"
+    static let defaultHex = "1F6F8B"
 
     private static var logoURL: URL? {
         guard let folder = try? FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask,

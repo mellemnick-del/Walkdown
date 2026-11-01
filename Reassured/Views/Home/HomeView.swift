@@ -31,13 +31,31 @@ struct HomeView: View {
         return first.isEmpty ? part : "\(part), \(first)"
     }
 
+    private var greetingSymbol: String {
+        let hour = Calendar.current.component(.hour, from: .now)
+        return hour < 12 ? "sunrise.fill" : hour < 17 ? "sun.max.fill" : "moon.stars.fill"
+    }
+
+    private var subtitle: String {
+        let overdue = openTasks.filter(\.isOverdue).count
+        if activeAudits.isEmpty && openTasks.isEmpty { return "Let's see where you stand." }
+        if overdue > 0 { return "A few things need you today. You've got this." }
+        if openTasks.isEmpty { return "Everything's on track. Nice work." }
+        return "Here's where you stand today."
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text(greeting)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Label(greeting, systemImage: greetingSymbol)
+                            .font(.headline)
+                            .foregroundStyle(Theme.adaptive(light: UIColor(red: 0.059, green: 0.173, blue: 0.361, alpha: 1), dark: .white))
+                        Text(subtitle)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
 
                     if let focus = activeAudits.first {
                         FocusCard(audit: focus) { router.open(focus) }
@@ -54,7 +72,7 @@ struct HomeView: View {
                                 HStack(spacing: 12) {
                                     Image(systemName: "calendar.badge.exclamationmark")
                                         .font(.title2)
-                                        .foregroundStyle(.orange)
+                                        .foregroundStyle(Theme.calmAmber)
                                     VStack(alignment: .leading, spacing: 2) {
                                         Text("\(needsAttention.count) evidence item\(needsAttention.count == 1 ? "" : "s") need attention")
                                             .font(.subheadline.bold())
@@ -112,7 +130,7 @@ struct HomeView: View {
                 }
                 .padding()
             }
-            .background(Color(.systemGroupedBackground))
+            .calmBackground()
             .navigationTitle("Reassured")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -137,28 +155,33 @@ private struct FocusCard: View {
 
     var body: some View {
         Button(action: open) {
-            Card {
-                HStack(spacing: 20) {
-                    ScoreRing(score: audit.score, size: 110)
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(audit.kind.label.uppercased())
-                            .font(.caption2.bold())
-                            .foregroundStyle(.secondary)
-                        Text(audit.displayName)
-                            .font(.title3.bold())
-                            .lineLimit(2)
-                        Text(audit.checklistName)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(1)
-                        ProgressView(value: audit.progress)
-                            .padding(.top, 4)
-                        Text("\(audit.answeredCount) of \(audit.totalCount) controls done")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
+            HStack(spacing: 20) {
+                ScoreRing(score: audit.score, size: 112, onDark: true)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(audit.kind.label.uppercased())
+                        .font(.caption2.bold())
+                        .tracking(0.8)
+                        .foregroundStyle(.white.opacity(0.7))
+                    Text(audit.displayName)
+                        .font(.title3.bold())
+                        .foregroundStyle(.white)
+                        .lineLimit(2)
+                    Text(audit.checklistName)
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.8))
+                        .lineLimit(1)
+                    ProgressView(value: audit.progress)
+                        .tint(Theme.sunrise)
+                        .padding(.top, 4)
+                    Text("\(audit.answeredCount) of \(audit.totalCount) controls done")
+                        .font(.caption)
+                        .foregroundStyle(.white.opacity(0.75))
                 }
             }
+            .padding(18)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Theme.dusk, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .shadow(color: Theme.navy.opacity(0.25), radius: 12, y: 6)
         }
         .buttonStyle(.plain)
     }
@@ -169,23 +192,29 @@ private struct WelcomeCard: View {
     let start: () -> Void
 
     var body: some View {
-        Card {
-            VStack(alignment: .leading, spacing: 10) {
-                Image(systemName: "shield.lefthalf.filled.badge.checkmark")
-                    .font(.largeTitle)
-                    .foregroundStyle(.tint)
-                Text(role == .organization ? "Know where you stand" : "Your next audit starts here")
-                    .font(.title3.bold())
-                Text(role == .organization
-                     ? "Self-assess against CMMC, HIPAA, PCI, SOC 2, NIST, and more. Reassured scores it and turns every gap into a task."
-                     : "Pick a checklist, walk the site, capture evidence, and hand your client a clean report with a remediation plan.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                Button(role == .organization ? "Start Your First Self-Assessment" : "Start Your First Audit", action: start)
-                    .buttonStyle(.borderedProminent)
-                    .padding(.top, 4)
+        VStack(alignment: .leading, spacing: 10) {
+            ReassuredMark(size: 64)
+            Text(role == .organization ? "Know where you stand" : "Your next audit starts here")
+                .font(.title3.bold())
+                .foregroundStyle(.white)
+            Text(role == .organization
+                 ? "Self-assess against CMMC, HIPAA, PCI, SOC 2, NIST, and more. Reassured scores it and turns every gap into a task."
+                 : "Pick a checklist, walk the site, capture evidence, and hand your client a clean report with a remediation plan.")
+                .font(.subheadline)
+                .foregroundStyle(.white.opacity(0.85))
+            Button(action: start) {
+                Text(role == .organization ? "Start Your First Self-Assessment" : "Start Your First Audit")
+                    .font(.subheadline.bold())
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    .background(Theme.sunrise, in: Capsule())
+                    .foregroundStyle(Theme.deepNavy)
             }
+            .padding(.top, 4)
         }
+        .padding(20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Theme.dusk, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
     }
 }
 
@@ -198,7 +227,7 @@ private struct StatsRow: View {
         let remaining = audits.reduce(0) { $0 + ($1.totalCount - $1.answeredCount) }
         HStack(spacing: 12) {
             Stat(value: openTasks.count, label: "Open Tasks", color: .accentColor)
-            Stat(value: overdue, label: "Overdue", color: overdue > 0 ? .red : .secondary)
+            Stat(value: overdue, label: "Overdue", color: overdue > 0 ? Theme.calmCoral : .secondary)
             Stat(value: remaining, label: "Controls Left", color: .secondary)
         }
     }

@@ -30,7 +30,7 @@ struct LockerItemDetailView: View {
                     if let expiry = item.expiryText {
                         Label(expiry, systemImage: "calendar.badge.clock")
                             .font(.subheadline)
-                            .foregroundStyle(item.isExpired ? .red : item.isExpiringSoon ? .orange : .secondary)
+                            .foregroundStyle(item.isExpired ? Theme.calmCoral : item.isExpiringSoon ? Theme.calmAmber : .secondary)
                     }
                 }
                 .padding(.vertical, 4)
@@ -79,6 +79,7 @@ struct LockerItemDetailView: View {
                 Button("Delete Evidence", role: .destructive) { confirmingDelete = true }
             }
         }
+        .calmBackground()
         .navigationTitle("Evidence")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

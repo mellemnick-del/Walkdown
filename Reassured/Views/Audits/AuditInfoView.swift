@@ -23,6 +23,7 @@ struct AuditInfoView: View {
                         .lineLimit(3...8)
                 }
             }
+            .calmBackground()
             .navigationTitle("Audit Details")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

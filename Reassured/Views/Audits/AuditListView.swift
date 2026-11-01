@@ -49,6 +49,7 @@ struct AuditListView: View {
                     }
                 }
             }
+            .calmBackground()
             .navigationTitle("Reassured")
             .navigationDestination(for: Audit.self) { AuditWorkspaceView(audit: $0) }
             .toolbar {
@@ -131,7 +132,7 @@ private struct AuditRow: View {
                     Text("\(audit.answeredCount) of \(audit.totalCount) done")
                     let failCount = audit.count(.fail)
                     if failCount > 0 {
-                        Text("\(failCount) failed").foregroundStyle(.red)
+                        Text("\(failCount) failed").foregroundStyle(Theme.calmCoral)
                     }
                 }
                 .font(.caption)

@@ -86,6 +86,7 @@ struct TaskDetailView: View {
                 }
             }
         }
+        .calmBackground()
         .navigationTitle(isNew ? "New Task" : "Task")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

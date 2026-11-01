@@ -6,6 +6,7 @@ struct ReassuredApp: App {
     private let container: ModelContainer
 
     init() {
+        Theme.applyNavigationStyle()
         let schema = Schema([Audit.self, ControlResult.self, Evidence.self, Finding.self,
                              RemediationTask.self, LockerItem.self, Client.self])
         #if DEBUG

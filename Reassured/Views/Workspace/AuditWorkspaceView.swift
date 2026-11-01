@@ -7,6 +7,7 @@ struct AuditWorkspaceView: View {
     @State private var showingInfo = false
     @State private var showingHelp = false
     @State private var planMessage: String?
+    @State private var celebrating = false
     @Environment(\.modelContext) private var context
 
     enum ControlFilter: String, CaseIterable, Identifiable {
@@ -62,7 +63,7 @@ struct AuditWorkspaceView: View {
             }
 
             ForEach(groups) { group in
-                Section(group.name) {
+                Section {
                     ForEach(group.controls) { control in
                         NavigationLink {
                             ControlDetailView(control: control)
@@ -70,9 +71,12 @@ struct AuditWorkspaceView: View {
                             ControlRow(control: control)
                         }
                     }
+                } header: {
+                    AreaHeader(name: group.name, controls: audit.sortedControls.filter { $0.groupName == group.name })
                 }
             }
         }
+        .calmBackground()
         .navigationTitle(audit.displayName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -94,7 +98,10 @@ struct AuditWorkspaceView: View {
                     Divider()
                     Button { showingInfo = true } label: { Label("Audit Details", systemImage: "info.circle") }
                     if audit.status == .inProgress {
-                        Button { audit.status = .complete } label: {
+                        Button {
+                            audit.status = .complete
+                            celebrating = true
+                        } label: {
                             Label("Mark Complete", systemImage: "checkmark.seal")
                         }
                     } else {
@@ -123,6 +130,14 @@ struct AuditWorkspaceView: View {
             }
         }
         .sheet(isPresented: $showingInfo) { AuditInfoView(audit: audit) }
+        .overlay {
+            if celebrating {
+                CompletionCelebration(score: audit.score) { celebrating = false }
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.3), value: celebrating)
+        .sensoryFeedback(.success, trigger: celebrating) { _, new in new }
         .sheet(isPresented: $showingHelp) { GetHelpView(topic: audit.checklistName) }
         .alert("Remediation Plan", isPresented: Binding(
             get: { planMessage != nil },
@@ -217,5 +232,72 @@ private struct ControlRow: View {
             }
         }
         .padding(.vertical, 2)
+    }
+}
+
+/// Area name with a small progress bar and count, used as each section's header.
+private struct AreaHeader: View {
+    let name: String
+    let controls: [ControlResult]
+
+    var body: some View {
+        let done = controls.filter { $0.status != .notStarted }.count
+        let progress = controls.isEmpty ? 0 : Double(done) / Double(controls.count)
+        HStack(spacing: 10) {
+            Text(name)
+            Spacer(minLength: 8)
+            Capsule()
+                .fill(Color.secondary.opacity(0.2))
+                .frame(width: 54, height: 5)
+                .overlay(alignment: .leading) {
+                    Capsule()
+                        .fill(progress >= 1 ? Theme.calmGreen : Color.accentColor)
+                        .frame(width: 54 * progress, height: 5)
+                }
+            Text("\(done)/\(controls.count)")
+                .monospacedDigit()
+                .fixedSize()
+        }
+    }
+}
+
+/// A short, calm celebration when an audit is marked complete.
+private struct CompletionCelebration: View {
+    let score: Double?
+    let dismiss: () -> Void
+    @State private var rise = false
+
+    var body: some View {
+        ZStack {
+            Theme.dusk.opacity(0.96).ignoresSafeArea()
+            VStack(spacing: 18) {
+                ReassuredMark(size: 140)
+                    .offset(y: rise ? 0 : 40)
+                    .opacity(rise ? 1 : 0)
+                Text("Audit complete")
+                    .font(.title.bold())
+                    .foregroundStyle(.white)
+                if let score {
+                    Text("Final score \(Int((score * 100).rounded()))%")
+                        .font(.headline)
+                        .foregroundStyle(Theme.sunrise)
+                }
+                Text("Build the remediation plan and share the report when you're ready.")
+                    .font(.subheadline)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.white.opacity(0.8))
+                    .padding(.horizontal, 40)
+            }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture(perform: dismiss)
+        .onAppear {
+            withAnimation(.spring(response: 0.8, dampingFraction: 0.75)) { rise = true }
+        }
+        .task {
+            try? await Task.sleep(for: .seconds(2.6))
+            dismiss()
+        }
+        .accessibilityAddTraits(.isModal)
     }
 }

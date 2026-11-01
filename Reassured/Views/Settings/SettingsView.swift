@@ -58,6 +58,7 @@ struct SettingsView: View {
                     LabeledContent("Version", value: version)
                 }
             }
+            .calmBackground()
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

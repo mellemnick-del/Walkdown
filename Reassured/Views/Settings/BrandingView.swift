@@ -50,6 +50,7 @@ struct BrandingView: View {
                 Text("Used for buttons and highlights in the app, and for headings in reports.")
             }
         }
+        .calmBackground()
         .navigationTitle("Branding")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { logo = Branding.loadLogo() }

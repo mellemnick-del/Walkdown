@@ -71,6 +71,7 @@ struct GetHelpView: View {
                     }
                 }
             }
+            .calmBackground()
             .navigationTitle("Get Help")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

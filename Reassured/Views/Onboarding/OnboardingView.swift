@@ -15,22 +15,21 @@ struct OnboardingView: View {
         }
         .tabViewStyle(.page(indexDisplayMode: .always))
         .indexViewStyle(.page(backgroundDisplayMode: .always))
-        .background(Color(.systemGroupedBackground))
+        .background(Theme.canvas.ignoresSafeArea())
         .interactiveDismissDisabled()
     }
 
     private var welcome: some View {
         VStack(spacing: 20) {
             Spacer()
-            Image(systemName: "shield.lefthalf.filled.badge.checkmark")
-                .font(.system(size: 72))
-                .foregroundStyle(.tint)
+            ReassuredMark(size: 150)
             Text("Reassured")
-                .font(.largeTitle.bold())
+                .font(.system(size: 40, weight: .bold, design: .rounded))
+                .foregroundStyle(.white)
             Text("Know where you stand.\nKnow what to fix next.")
                 .font(.title3)
                 .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.white.opacity(0.85))
             VStack(alignment: .leading, spacing: 14) {
                 Feature(symbol: "checklist", text: "Audit against CMMC, HIPAA, PCI, SOC 2, NIST, and more")
                 Feature(symbol: "wrench.and.screwdriver", text: "Turn every gap into a prioritized task")
@@ -38,15 +37,20 @@ struct OnboardingView: View {
                 Feature(symbol: "lock.shield", text: "Everything stays on your device")
             }
             .padding(.top, 12)
+            .foregroundStyle(.white)
             Spacer()
             Button { withAnimation { page = 1 } } label: {
-                Text("Get Started").frame(maxWidth: .infinity)
+                Text("Get Started")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(Theme.sunrise, in: Capsule())
+                    .foregroundStyle(Theme.deepNavy)
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
             .padding(.bottom, 48)
         }
         .padding(.horizontal, 24)
+        .background(Theme.dusk.ignoresSafeArea())
     }
 
     private var rolePicker: some View {
@@ -120,7 +124,7 @@ private struct Feature: View {
         HStack(spacing: 14) {
             Image(systemName: symbol)
                 .font(.title3)
-                .foregroundStyle(.tint)
+                .foregroundStyle(Theme.sunrise)
                 .frame(width: 30)
             Text(text)
         }

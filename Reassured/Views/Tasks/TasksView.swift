@@ -72,7 +72,7 @@ struct TasksView: View {
                                     Label(task.isDone ? "Reopen" : "Done",
                                           systemImage: task.isDone ? "arrow.uturn.backward" : "checkmark")
                                 }
-                                .tint(task.isDone ? .orange : .green)
+                                .tint(task.isDone ? Theme.calmAmber : Theme.calmGreen)
                             }
                             .swipeActions(edge: .trailing) {
                                 Button(role: .destructive) {
@@ -86,6 +86,7 @@ struct TasksView: View {
                     }
                 }
             }
+            .calmBackground()
             .navigationTitle("Tasks")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -114,7 +115,7 @@ struct TaskRow: View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: task.isDone ? "checkmark.circle.fill" : "circle")
                 .font(.title3)
-                .foregroundStyle(task.isDone ? Color.green : task.priority.color)
+                .foregroundStyle(task.isDone ? Theme.calmGreen : task.priority.color)
             VStack(alignment: .leading, spacing: 3) {
                 Text(task.title.isEmpty ? "Untitled task" : task.title)
                     .font(.body)
@@ -125,7 +126,7 @@ struct TaskRow: View {
                     if let due = task.dueDate {
                         Text(task.isOverdue ? "Overdue \(due.formatted(.dateTime.month().day()))"
                                             : "Due \(due.formatted(.dateTime.month().day()))")
-                            .foregroundStyle(task.isOverdue ? .red : .secondary)
+                            .foregroundStyle(task.isOverdue ? Theme.calmCoral : .secondary)
                     }
                     if !task.owner.isEmpty {
                         Label(task.owner, systemImage: "person").labelStyle(.titleAndIcon)

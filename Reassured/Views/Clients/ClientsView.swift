@@ -39,6 +39,7 @@ struct ClientsView: View {
             }
         }
         .searchable(text: $searchText, prompt: "Search clients")
+        .calmBackground()
         .navigationTitle("Clients")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -116,6 +117,7 @@ struct ClientEditorView: View {
                     .lineLimit(2...8)
             }
         }
+        .calmBackground()
         .navigationTitle(client == nil ? "New Client" : "Edit Client")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

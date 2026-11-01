@@ -48,6 +48,7 @@ struct LockerPickerView: View {
                 }
             }
             .searchable(text: $searchText)
+            .calmBackground()
             .navigationTitle("Attach Evidence")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

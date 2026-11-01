@@ -41,6 +41,7 @@ struct FindingsListView: View {
                 }
             }
         }
+        .calmBackground()
         .navigationTitle("Findings")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {

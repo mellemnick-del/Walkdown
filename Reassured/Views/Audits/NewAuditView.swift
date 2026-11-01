@@ -84,6 +84,7 @@ struct NewAuditView: View {
                         .lineLimit(3...8)
                 }
             }
+            .calmBackground()
             .navigationTitle(kind == .onSite ? "New Audit" : "New Self-Assessment")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

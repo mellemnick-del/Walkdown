@@ -51,6 +51,7 @@ struct LockerView: View {
                 section(expired.isEmpty && expiring.isEmpty ? "All Evidence" : "Current", current)
             }
             .searchable(text: $searchText, prompt: "Search evidence")
+            .calmBackground()
             .navigationTitle("Evidence Locker")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -160,7 +161,7 @@ struct LockerRow: View {
                 HStack(spacing: 10) {
                     if let expiry = item.expiryText {
                         Label(expiry, systemImage: "calendar")
-                            .foregroundStyle(item.isExpired ? .red : item.isExpiringSoon ? .orange : .secondary)
+                            .foregroundStyle(item.isExpired ? Theme.calmCoral : item.isExpiringSoon ? Theme.calmAmber : .secondary)
                             .lineLimit(1)
                     }
                     let linked = item.controls?.count ?? 0

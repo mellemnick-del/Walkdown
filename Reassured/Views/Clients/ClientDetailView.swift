@@ -79,6 +79,7 @@ struct ClientDetailView: View {
                 Section("Notes") { Text(client.notes) }
             }
         }
+        .calmBackground()
         .navigationTitle(client.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

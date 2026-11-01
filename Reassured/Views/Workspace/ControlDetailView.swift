@@ -120,6 +120,7 @@ struct ControlDetailView: View {
                 Button { showingHelp = true } label: { Label("Get Help With This Control", systemImage: "person.wave.2") }
             }
         }
+        .calmBackground()
         .navigationTitle(control.controlID)
         .navigationBarTitleDisplayMode(.inline)
         .onChange(of: photoItems) { _, items in
@@ -203,6 +204,12 @@ private struct StatusPicker: View {
                 .accessibilityAddTraits(selected ? .isSelected : [])
             }
         }
-        .sensoryFeedback(.selection, trigger: status)
+        .sensoryFeedback(trigger: status) { _, new in
+            switch new {
+            case .pass: .success
+            case .fail: .warning
+            default: .selection
+            }
+        }
     }
 }

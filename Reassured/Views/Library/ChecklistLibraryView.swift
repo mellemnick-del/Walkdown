@@ -31,6 +31,7 @@ struct ChecklistLibraryView: View {
             }
         }
         .searchable(text: $searchText, prompt: "Search checklists")
+        .calmBackground()
         .navigationTitle("Checklists")
     }
 
@@ -137,6 +138,7 @@ struct TemplatePreviewView: View {
                 }
             }
         }
+        .calmBackground()
         .navigationTitle(template.name)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $startingKind) { kind in

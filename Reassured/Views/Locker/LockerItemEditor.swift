@@ -81,6 +81,7 @@ struct LockerItemEditor: View {
                     .lineLimit(2...8)
             }
         }
+        .calmBackground()
         .navigationTitle(item == nil ? "Add Evidence" : "Edit Evidence")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

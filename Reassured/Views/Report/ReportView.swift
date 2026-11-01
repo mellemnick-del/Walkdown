@@ -1,4 +1,5 @@
 import SwiftUI
+import Charts
 
 struct ReportView: View {
     let audit: Audit
@@ -20,7 +21,29 @@ struct ReportView: View {
                     Label("\(audit.totalCount - audit.answeredCount) controls are still not started. They'll show as Not Started in the report.",
                           systemImage: "exclamationmark.circle")
                         .font(.subheadline)
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(Theme.calmAmber)
+                }
+            }
+
+            let areas = areaScores
+            if !areas.isEmpty {
+                Section("Score by Area") {
+                    Chart(areas, id: \.name) { area in
+                        BarMark(
+                            x: .value("Score", area.score * 100),
+                            y: .value("Area", area.name)
+                        )
+                        .foregroundStyle(area.score >= 0.8 ? Theme.calmGreen : area.score >= 0.5 ? Theme.calmAmber : Theme.calmCoral)
+                        .annotation(position: .trailing) {
+                            Text("\(Int((area.score * 100).rounded()))%")
+                                .font(.caption2.bold())
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .chartXScale(domain: 0...100)
+                    .chartXAxis(.hidden)
+                    .frame(height: CGFloat(areas.count) * 34 + 10)
+                    .padding(.vertical, 6)
                 }
             }
 
@@ -48,7 +71,7 @@ struct ReportView: View {
                         Label("Share PDF Report", systemImage: "square.and.arrow.up")
                     }
                 } else if let errorMessage {
-                    Text(errorMessage).foregroundStyle(.red)
+                    Text(errorMessage).foregroundStyle(Theme.calmCoral)
                 } else {
                     HStack {
                         ProgressView()
@@ -59,8 +82,21 @@ struct ReportView: View {
                 Text("The report is created on this device. Nothing is uploaded unless you share it.")
             }
         }
+        .calmBackground()
         .navigationTitle("Report")
         .task { build() }
+    }
+
+    /// Score per area, in checklist order, for areas with at least one scored control.
+    private var areaScores: [(name: String, score: Double)] {
+        var names: [String] = []
+        for control in audit.sortedControls where !names.contains(control.groupName) {
+            names.append(control.groupName)
+        }
+        return names.compactMap { name in
+            let controls = audit.sortedControls.filter { $0.groupName == name }
+            return ComplianceScore.score(for: controls).map { (name: name, score: $0) }
+        }
     }
 
     private func build() {

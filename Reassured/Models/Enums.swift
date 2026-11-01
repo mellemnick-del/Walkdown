@@ -32,9 +32,9 @@ enum ControlStatus: String, Codable, CaseIterable, Identifiable {
     var color: Color {
         switch self {
         case .notStarted: .secondary
-        case .pass: .green
-        case .partial: .orange
-        case .fail: .red
+        case .pass: Theme.calmGreen
+        case .partial: Theme.calmAmber
+        case .fail: Theme.calmCoral
         case .notApplicable: .gray
         }
     }
@@ -59,10 +59,10 @@ enum Severity: String, Codable, CaseIterable, Identifiable {
 
     var color: Color {
         switch self {
-        case .critical: .purple
-        case .high: .red
-        case .medium: .orange
-        case .low: .blue
+        case .critical: Theme.calmPlum
+        case .high: Theme.calmCoral
+        case .medium: Theme.calmAmber
+        case .low: Theme.calmBlue
         }
     }
 
