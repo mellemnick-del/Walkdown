@@ -66,7 +66,10 @@ private struct TemplateSummary: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text(template.name).font(.body.weight(.medium))
+            HStack(spacing: 6) {
+                Text(template.name).font(.body.weight(.medium))
+                if template.isReadinessLevel { ReadinessBadge() }
+            }
             Text("\(template.itemCount) controls. \(template.summary)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -93,6 +96,12 @@ struct TemplatePreviewView: View {
                     Text("\(template.itemCount) controls. Source: \(template.source)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                    if template.isReadinessLevel {
+                        Label("Readiness level: a summary for gap checks and preparation, not a substitute for the full standard in a formal assessment.",
+                              systemImage: "info.circle")
+                            .font(.caption)
+                            .foregroundStyle(Theme.calmAmber)
+                    }
                     HStack {
                         Button("Self-Assess") { startingKind = .selfAssessment }
                             .buttonStyle(.borderedProminent)
@@ -144,5 +153,17 @@ struct TemplatePreviewView: View {
         .sheet(item: $startingKind) { kind in
             NewAuditView(initialTemplateID: template.id, initialKind: kind) { audit in router.open(audit) }
         }
+    }
+}
+
+/// Small label for summary checklists.
+struct ReadinessBadge: View {
+    var body: some View {
+        Text("Readiness")
+            .font(.caption2.bold())
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(Theme.calmAmber.opacity(0.15), in: Capsule())
+            .foregroundStyle(Theme.calmAmber)
     }
 }

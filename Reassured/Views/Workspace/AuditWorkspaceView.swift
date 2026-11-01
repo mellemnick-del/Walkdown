@@ -8,6 +8,7 @@ struct AuditWorkspaceView: View {
     @State private var showingHelp = false
     @State private var planMessage: String?
     @State private var celebrating = false
+    @State private var exportURL: URL?
     @Environment(\.modelContext) private var context
 
     enum ControlFilter: String, CaseIterable, Identifiable {
@@ -95,6 +96,7 @@ struct AuditWorkspaceView: View {
                         Label("Build Remediation Plan", systemImage: "wrench.and.screwdriver")
                     }
                     Button { showingHelp = true } label: { Label("Get Help", systemImage: "person.wave.2") }
+                    Button(action: exportAudit) { Label("Export Audit", systemImage: "square.and.arrow.up") }
                     Divider()
                     Button { showingInfo = true } label: { Label("Audit Details", systemImage: "info.circle") }
                     if audit.status == .inProgress {
@@ -139,6 +141,10 @@ struct AuditWorkspaceView: View {
         .animation(.easeInOut(duration: 0.3), value: celebrating)
         .sensoryFeedback(.success, trigger: celebrating) { _, new in new }
         .sheet(isPresented: $showingHelp) { GetHelpView(topic: audit.checklistName) }
+        .sheet(item: Binding(get: { exportURL.map(ExportedFile.init) }, set: { if $0 == nil { exportURL = nil } })) { file in
+            ExportSheet(url: file.url)
+                .presentationDetents([.medium])
+        }
         .alert("Remediation Plan", isPresented: Binding(
             get: { planMessage != nil },
             set: { if !$0 { planMessage = nil } }
@@ -147,6 +153,10 @@ struct AuditWorkspaceView: View {
         } message: {
             Text(planMessage ?? "")
         }
+    }
+
+    private func exportAudit() {
+        exportURL = try? BackupService.writeFile(BackupService.makeBackup(of: audit), name: audit.displayName)
     }
 
     private func buildPlan() {
@@ -299,5 +309,36 @@ private struct CompletionCelebration: View {
             dismiss()
         }
         .accessibilityAddTraits(.isModal)
+    }
+}
+
+private struct ExportedFile: Identifiable {
+    let url: URL
+    var id: URL { url }
+}
+
+/// Shown after exporting one audit, so it can be shared or saved.
+private struct ExportSheet: View {
+    let url: URL
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "doc.badge.arrow.up")
+                .font(.system(size: 44))
+                .foregroundStyle(.tint)
+            Text("Audit Exported").font(.title3.bold())
+            Text("The file includes results, notes, photos, findings, tasks, and linked evidence. Open it in Reassured on another device with Settings > Backup and Restore.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+            ShareLink(item: url) {
+                Label("Share or Save", systemImage: "square.and.arrow.up")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            Button("Done") { dismiss() }
+        }
+        .padding(24)
     }
 }

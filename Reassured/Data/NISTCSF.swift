@@ -66,6 +66,7 @@ extension TemplateLibrary {
                 TemplateItem(id: "RC.CO", title: "Incident Recovery Communication",
                              guidance: "Recovery progress is communicated to stakeholders and the public as needed."),
             ]),
-        ]
+        ],
+        isReadinessLevel: true
     )
 }

@@ -43,6 +43,8 @@ struct ChecklistTemplate: Identifiable, Hashable {
     let summary: String
     let source: String
     let groups: [TemplateGroup]
+    /// True for summary checklists meant for readiness and gap checks, not a formal assessment.
+    var isReadinessLevel = false
 
     var itemCount: Int { groups.reduce(0) { $0 + $1.items.count } }
 }

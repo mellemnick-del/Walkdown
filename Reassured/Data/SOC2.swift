@@ -76,6 +76,7 @@ extension TemplateLibrary {
                 TemplateItem("P.b", "Can people access or delete their data?", "There's a process for data subject requests."),
                 TemplateItem("P.c", "Is personal data kept only as long as needed?", "Retention periods are defined and enforced."),
             ]),
-        ]
+        ],
+        isReadinessLevel: true
     )
 }

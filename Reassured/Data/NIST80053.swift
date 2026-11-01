@@ -36,6 +36,7 @@ extension TemplateLibrary {
                 TemplateItem("SC", "System and Communications Protection", "Boundaries are protected, data is encrypted in transit and at rest, and keys are managed."),
                 TemplateItem("SI", "System and Information Integrity", "Flaws are remediated, malware is blocked, and systems are monitored."),
             ]),
-        ]
+        ],
+        isReadinessLevel: true
     )
 }

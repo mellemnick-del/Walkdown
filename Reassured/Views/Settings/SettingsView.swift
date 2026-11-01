@@ -47,6 +47,17 @@ struct SettingsView: View {
                 } footer: {
                     Text("Locks Reassured whenever it goes to the background. All audit data stays on this device.")
                 }
+                Section {
+                    NavigationLink {
+                        BackupView()
+                    } label: {
+                        Label("Backup and Restore", systemImage: "externaldrive")
+                    }
+                } header: {
+                    Text("Your Data")
+                } footer: {
+                    Text("Everything is stored only on this device. Back up regularly.")
+                }
                 Section("Checklists") {
                     NavigationLink {
                         ChecklistLibraryView()

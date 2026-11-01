@@ -41,3 +41,31 @@ targets:
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+
+  ReassuredTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - ReassuredTests
+    dependencies:
+      - target: Reassured
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1,2"
+        PRODUCT_BUNDLE_IDENTIFIER: com.nickmellem.reassured.tests
+
+schemes:
+  Reassured:
+    build:
+      targets:
+        Reassured: all
+        ReassuredTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - ReassuredTests
+    archive:
+      config: Release

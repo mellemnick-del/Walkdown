@@ -46,7 +46,12 @@ enum ReportBuilder {
             w.heading("Scope")
             w.body(audit.scopeNotes)
         }
+        w.space(24)
+        w.subheading("About This Report")
+        w.body(disclaimer, color: .gray)
     }
+
+    static let disclaimer = "This report records the assessor's observations and the information provided on the date shown. It is not a certification, attestation, or legal opinion, and it does not guarantee compliance with any law, regulation, or standard. Readiness-level checklists summarize their source standards and do not replace a formal assessment against the full text."
 
     private static func summary(_ audit: Audit, _ w: PDFWriter) {
         w.newPage()

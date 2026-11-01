@@ -55,6 +55,7 @@ extension TemplateLibrary {
                 TemplateItem("Req 12.d", "Staff are trained", "Security awareness training is completed at hire and annually."),
                 TemplateItem("Req 12.e", "Incident response plan is ready", "An incident response plan covers card data compromise and is tested."),
             ]),
-        ]
+        ],
+        isReadinessLevel: true
     )
 }

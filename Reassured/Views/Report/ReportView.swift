@@ -79,7 +79,7 @@ struct ReportView: View {
                     }
                 }
             } footer: {
-                Text("The report is created on this device. Nothing is uploaded unless you share it.")
+                Text("The report is created on this device. Nothing is uploaded unless you share it.\n\n\(ReportBuilder.disclaimer)")
             }
         }
         .calmBackground()
