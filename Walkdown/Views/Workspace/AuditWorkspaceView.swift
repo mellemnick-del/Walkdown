@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct AuditWorkspaceView: View {
     @Bindable var audit: Audit
