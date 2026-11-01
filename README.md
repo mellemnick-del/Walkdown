@@ -1,4 +1,4 @@
-# Walkdown (working title)
+# Reassured
 
 **Know where you stand. Know what to fix next.**
 
@@ -80,20 +80,20 @@ Checklists are grouped by audit area and searchable. Browse them from New Audit 
 
 | Area | Checklist | Controls | Source and licensing |
 | --- | --- | --- | --- |
-| General and IT Controls | Physical Security Walkdown | 23 | Walkdown original |
-| General and IT Controls | IT General Controls | 17 | Walkdown original |
+| General and IT Controls | Physical Security Walkdown | 23 | Reassured original |
+| General and IT Controls | IT General Controls | 17 | Reassured original |
 | General and IT Controls | NIST CSF 2.0 (Categories) | 22 | NIST, US government work |
 | Defense Contractors | CMMC Level 1 | 17 | FAR 52.204-21, shown with NIST 800-171 Rev 2 numbering |
 | Defense Contractors | CMMC Level 2 / NIST 800-171 | 110 | NIST SP 800-171 Rev 2, US government work |
 | Federal Systems | NIST 800-53 Rev 5 (Families) | 20 | NIST, US government work |
 | Healthcare | HIPAA Security Rule | 18 | 45 CFR 164.308, 164.310, 164.312 |
-| Payments | PCI DSS Readiness | 32 | Organized by the 12 PCI DSS v4.0.1 requirements, Walkdown's own wording |
-| Service Organizations | SOC 2 Readiness | 39 | Organized by the Trust Services Criteria categories, Walkdown's own wording |
+| Payments | PCI DSS Readiness | 32 | Organized by the 12 PCI DSS v4.0.1 requirements, Reassured's own wording |
+| Service Organizations | SOC 2 Readiness | 39 | Organized by the Trust Services Criteria categories, Reassured's own wording |
 | Privacy | GDPR Essentials | 16 | Regulation (EU) 2016/679 |
 
-Guidance text in every checklist is Walkdown's own wording. Official names and IDs are used for reference only.
+Guidance text in every checklist is Reassured's own wording. Official names and IDs are used for reference only.
 
-**PCI DSS and SOC 2:** the standards are owned by the PCI Security Standards Council and the AICPA. Walkdown's checklists follow their structure with original questions, never the standards' text, and don't imply endorsement. Get a legal review before selling the app.
+**PCI DSS and SOC 2:** the standards are owned by the PCI Security Standards Council and the AICPA. Reassured's checklists follow their structure with original questions, never the standards' text, and don't imply endorsement. Get a legal review before selling the app.
 
 **Not included:** ISO 27001, HITRUST, and CIS Controls (licensed content).
 
@@ -117,15 +117,15 @@ Requires Xcode 15 or later and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 ```sh
 brew install xcodegen
 xcodegen generate
-open Walkdown.xcodeproj
+open Reassured.xcodeproj
 ```
 
-Set your team under Signing & Capabilities. The bundle ID is `com.nickmellem.walkdown` and can be changed in `project.yml` before the first upload.
+Set your team under Signing & Capabilities. The bundle ID is `com.nickmellem.reassured` and can be changed in `project.yml` before the first upload.
 
 ## Project layout
 
 ```
-Walkdown/
+Reassured/
   App/        App entry and settings keys
   Models/     SwiftData models: Audit, ControlResult, Evidence, Finding, RemediationTask, LockerItem, Client
   Data/       Built-in checklist templates

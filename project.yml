@@ -1,5 +1,5 @@
 # Generate the Xcode project with: xcodegen generate
-name: Walkdown
+name: Reassured
 options:
   bundleIdPrefix: com.nickmellem
   deploymentTarget:
@@ -10,29 +10,29 @@ settings:
     MARKETING_VERSION: "1.0.0"
     CURRENT_PROJECT_VERSION: "1"
 targets:
-  Walkdown:
+  Reassured:
     type: application
     platform: iOS
     sources:
-      - Walkdown
+      - Reassured
     entitlements:
-      path: Walkdown/Walkdown.entitlements
+      path: Reassured/Reassured.entitlements
       properties:
         # Files are encrypted and unreadable while the device is locked.
         com.apple.developer.default-data-protection: NSFileProtectionComplete
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.nickmellem.walkdown
+        PRODUCT_BUNDLE_IDENTIFIER: com.nickmellem.reassured
         DEVELOPMENT_TEAM: ""
         TARGETED_DEVICE_FAMILY: "1,2"
         GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: Walkdown
+        INFOPLIST_KEY_CFBundleDisplayName: Reassured
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
-        INFOPLIST_KEY_NSCameraUsageDescription: "Walkdown uses the camera to capture audit evidence and scan documents."
-        INFOPLIST_KEY_NSFaceIDUsageDescription: "Walkdown uses Face ID to keep your audit data locked."
+        INFOPLIST_KEY_NSCameraUsageDescription: "Reassured uses the camera to capture audit evidence and scan documents."
+        INFOPLIST_KEY_NSFaceIDUsageDescription: "Reassured uses Face ID to keep your audit data locked."
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor

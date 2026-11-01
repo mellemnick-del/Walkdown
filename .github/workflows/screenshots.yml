@@ -23,7 +23,7 @@ jobs:
       - name: Build for simulator
         run: |
           set -o pipefail
-          xcodebuild build -project Walkdown.xcodeproj -target Walkdown -sdk iphonesimulator \
+          xcodebuild build -project Reassured.xcodeproj -target Reassured -sdk iphonesimulator \
             -configuration Debug CODE_SIGNING_ALLOWED=NO 2>&1 | tail -5
 
       - name: Boot an iPhone simulator
@@ -40,15 +40,15 @@ jobs:
           xcrun simctl boot "$UDID"
           xcrun simctl bootstatus "$UDID" -b
           xcrun simctl status_bar "$UDID" override --time "9:41" --batteryState charged --batteryLevel 100 --cellularBars 4 --wifiBars 3
-          xcrun simctl install "$UDID" build/Debug-iphonesimulator/Walkdown.app
+          xcrun simctl install "$UDID" build/Debug-iphonesimulator/Reassured.app
           xcrun simctl list devices | grep "$UDID"
 
       - name: Capture screens
         run: |
           mkdir -p shots
           capture() {
-            xcrun simctl terminate "$UDID" com.nickmellem.walkdown || true
-            xcrun simctl launch "$UDID" com.nickmellem.walkdown -demo -screen "$2"
+            xcrun simctl terminate "$UDID" com.nickmellem.reassured || true
+            xcrun simctl launch "$UDID" com.nickmellem.reassured -demo -screen "$2"
             sleep 8
             xcrun simctl io "$UDID" screenshot "shots/$1.png"
           }
