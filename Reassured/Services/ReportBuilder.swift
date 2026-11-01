@@ -2,11 +2,11 @@ import UIKit
 
 /// Builds the audit report as a US Letter PDF.
 enum ReportBuilder {
-    static func makePDF(for audit: Audit, companyName: String) throws -> URL {
+    static func makePDF(for audit: Audit, companyName: String, summary: String = "") throws -> URL {
         let writer = PDFWriter(footer: "\(audit.displayName)  |  Confidential", accent: Branding.currentUIColor)
         let data = writer.render { w in
             cover(audit, companyName: companyName, w)
-            summary(audit, w)
+            summarySection(audit, narrative: summary, w)
             findings(audit, w)
             controls(audit, w)
             evidenceIndex(audit, w)
@@ -53,9 +53,13 @@ enum ReportBuilder {
 
     static let disclaimer = "This report records the assessor's observations and the information provided on the date shown. It is not a certification, attestation, or legal opinion, and it does not guarantee compliance with any law, regulation, or standard. Readiness-level checklists summarize their source standards and do not replace a formal assessment against the full text."
 
-    private static func summary(_ audit: Audit, _ w: PDFWriter) {
+    private static func summarySection(_ audit: Audit, narrative: String, _ w: PDFWriter) {
         w.newPage()
         w.title("Executive Summary")
+        if !narrative.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            w.body(narrative)
+            w.space(6)
+        }
         if let score = audit.score {
             w.text("Overall score: \(Int((score * 100).rounded()))%", font: .systemFont(ofSize: 18, weight: .semibold))
         } else {

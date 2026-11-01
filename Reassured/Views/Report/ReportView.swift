@@ -6,6 +6,8 @@ struct ReportView: View {
     @AppStorage(SettingsKeys.companyName) private var companyName = ""
     @State private var pdfURL: URL?
     @State private var errorMessage: String?
+    @State private var summary = ""
+    @State private var writingSummary = false
 
     var body: some View {
         List {
@@ -22,6 +24,28 @@ struct ReportView: View {
                           systemImage: "exclamationmark.circle")
                         .font(.subheadline)
                         .foregroundStyle(Theme.calmAmber)
+                }
+            }
+
+            if AuditWriter.isAvailable || !summary.isEmpty {
+                Section {
+                    TextField("A short overview for the client", text: $summary, axis: .vertical)
+                        .lineLimit(4...14)
+                    if AuditWriter.isAvailable {
+                        Button {
+                            Task { await writeSummary() }
+                        } label: {
+                            HStack {
+                                Label(summary.isEmpty ? "Write with Apple Intelligence" : "Rewrite with Apple Intelligence", systemImage: "sparkles")
+                                if writingSummary { Spacer(); ProgressView() }
+                            }
+                        }
+                        .disabled(writingSummary)
+                    }
+                } header: {
+                    Text("Executive Summary")
+                } footer: {
+                    Text("Appears at the top of the report summary. Written on this iPhone; review it before sharing.")
                 }
             }
 
@@ -84,7 +108,17 @@ struct ReportView: View {
         }
         .calmBackground()
         .navigationTitle("Report")
-        .task { build() }
+        .task {
+            summary = AuditWriter.savedSummary(for: audit)
+            build()
+        }
+        .task(id: summary) {
+            // Wait for typing to pause before saving and rebuilding the PDF.
+            try? await Task.sleep(for: .milliseconds(800))
+            guard !Task.isCancelled else { return }
+            AuditWriter.saveSummary(summary, for: audit)
+            build()
+        }
     }
 
     /// Score per area, in checklist order, for areas with at least one scored control.
@@ -99,9 +133,15 @@ struct ReportView: View {
         }
     }
 
+    private func writeSummary() async {
+        writingSummary = true
+        defer { writingSummary = false }
+        if let text = await AuditWriter.executiveSummary(for: audit) { summary = text }
+    }
+
     private func build() {
         do {
-            pdfURL = try ReportBuilder.makePDF(for: audit, companyName: companyName)
+            pdfURL = try ReportBuilder.makePDF(for: audit, companyName: companyName, summary: summary)
         } catch {
             errorMessage = "Couldn't build the report: \(error.localizedDescription)"
         }

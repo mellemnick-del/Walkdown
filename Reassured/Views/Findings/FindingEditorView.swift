@@ -15,6 +15,7 @@ struct FindingEditorView: View {
     @State private var detail = ""
     @State private var recommendation = ""
     @State private var loaded = false
+    @State private var drafting = false
 
     private var canSave: Bool { !title.trimmingCharacters(in: .whitespaces).isEmpty }
 
@@ -32,6 +33,21 @@ struct FindingEditorView: View {
                     Section("Control") {
                         Text("\(control.controlID)  \(control.title)")
                             .font(.subheadline)
+                    }
+                }
+                if AuditWriter.isAvailable, let control {
+                    Section {
+                        Button {
+                            Task { await draft(from: control) }
+                        } label: {
+                            HStack {
+                                Label(drafting ? "Writing" : "Write with Apple Intelligence", systemImage: "sparkles")
+                                if drafting { Spacer(); ProgressView() }
+                            }
+                        }
+                        .disabled(drafting)
+                    } footer: {
+                        Text("Drafts the finding from this control and your notes, on this iPhone. Nothing is sent anywhere. Review it before sharing.")
                     }
                 }
                 Section("Details") {
@@ -72,6 +88,16 @@ struct FindingEditorView: View {
             detail = control.notes
             severity = control.status == .partial ? .low : .medium
         }
+    }
+
+    private func draft(from control: ControlResult) async {
+        drafting = true
+        defer { drafting = false }
+        guard let draft = await AuditWriter.draftFinding(for: control, framework: control.audit?.checklistName ?? "") else { return }
+        title = draft.title
+        detail = draft.detail
+        recommendation = draft.recommendation
+        severity = draft.severity
     }
 
     private func save() {
