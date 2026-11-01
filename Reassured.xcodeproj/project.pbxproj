@@ -18,6 +18,7 @@
 		1EFFB063F8841DDA90BBC83B /* PhysicalWalkdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652211A21A2E8E737890F76 /* PhysicalWalkdown.swift */; };
 		204CBDECFF90B2F20D39A4E0 /* NewAuditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BDC15308BC99FB83542F71 /* NewAuditView.swift */; };
 		21486D80887347A1432D7BE1 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD91F5088E95CF927A46D57 /* RootView.swift */; };
+		2387E97A7042233D067D97B7 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F26FC4509C9A7D2027A34C /* Theme.swift */; };
 		23D0B7DF7E1B74FBAB84B807 /* LockerItemEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5FA029442D1214F2550398 /* LockerItemEditor.swift */; };
 		25E2825E8AD59CFDDF140111 /* Evidence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F01D906844BE563A9D59734 /* Evidence.swift */; };
 		27FEAA431CD88240E6004B9A /* ChecklistTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B393650016B3EF6CA5E14D /* ChecklistTemplate.swift */; };
@@ -79,6 +80,7 @@
 		26F0F31C00A8588F71ABF97F /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		2C1F202798A2C91DE23D38DB /* NISTCSF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NISTCSF.swift; sourceTree = "<group>"; };
 		3747231435EFBB3714A845FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		426E23C425D055959639AD12 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		492D4986719B2841BF74E0FF /* Audit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audit.swift; sourceTree = "<group>"; };
 		49F58C3D54D4B6FDFF072988 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		4D87AD862F32AAF1CC271C6B /* ReassuredApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReassuredApp.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 		B57D25404961F302085B5D54 /* AuditWorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuditWorkspaceView.swift; sourceTree = "<group>"; };
 		B6B393650016B3EF6CA5E14D /* ChecklistTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistTemplate.swift; sourceTree = "<group>"; };
 		B6F755FBC199AAD67B063456 /* RemediationTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemediationTask.swift; sourceTree = "<group>"; };
+		B9F26FC4509C9A7D2027A34C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		BCC6331AC8169E4953530072 /* LockerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockerItem.swift; sourceTree = "<group>"; };
 		BF07D0B249DE0802CCB0E3FA /* FindingsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindingsListView.swift; sourceTree = "<group>"; };
 		C059D19BB35326C5F23EE785 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -166,9 +169,11 @@
 		0F5312572CEA9892FD231D80 /* Reassured */ = {
 			isa = PBXGroup;
 			children = (
+				426E23C425D055959639AD12 /* Info.plist */,
 				CC63BD9F5CE248C204AAF8B4 /* Reassured.entitlements */,
 				043B68FD79A03B647A06341B /* App */,
 				EBFB2732B39F74F1FEA1A983 /* Data */,
+				2DFDB200DEA76F973E2068B5 /* Design */,
 				5D3690C6388A836726FF0488 /* Models */,
 				C8CAA43E301AB2E4F370459F /* Resources */,
 				05A2E86AF7BF2EC665FF83C4 /* Services */,
@@ -184,6 +189,14 @@
 				D17A6D0CEE7EB4330A149997 /* SettingsView.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		2DFDB200DEA76F973E2068B5 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				B9F26FC4509C9A7D2027A34C /* Theme.swift */,
+			);
+			path = Design;
 			sourceTree = "<group>";
 		};
 		2F9ED1D89465AA8494D149FB /* Products */ = {
@@ -504,6 +517,7 @@
 				81E1B26F43BB8FE0AD412D44 /* StatusBadge.swift in Sources */,
 				AF1215FC4DC60185CD8CAC3F /* TaskDetailView.swift in Sources */,
 				E8C3092B9844B669E69D0E63 /* TasksView.swift in Sources */,
+				2387E97A7042233D067D97B7 /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -642,12 +656,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Reassured/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Reassured;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Reassured uses the camera to capture audit evidence and scan documents.";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Reassured uses Face ID to keep your audit data locked.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -669,12 +683,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Reassured/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Reassured;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Reassured uses the camera to capture audit evidence and scan documents.";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Reassured uses Face ID to keep your audit data locked.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
