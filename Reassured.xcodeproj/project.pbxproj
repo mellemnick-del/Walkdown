@@ -34,6 +34,7 @@
 		484ED03E7269C87DE722FFDD /* CaptureControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1E98CE55304515A0916BC7 /* CaptureControllers.swift */; };
 		4BC0CA38910CFD4E9988B932 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8346B6260CE4DF2B4C8E23D3 /* OnboardingView.swift */; };
 		5765E09F5AD0E665310C5052 /* FontPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E9DFC09DBD7C0F2B58D21A /* FontPreviewView.swift */; };
+		5D71D121ADD31CDA9678FD5E /* WalkModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14DEC0C58586B5C8B2DE34C /* WalkModeView.swift */; };
 		639C4932708DCB85A0A02F8F /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960046AC26B2665C99B6E273 /* Client.swift */; };
 		647228CD3FD78327B3CD3402 /* ChecklistLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58968A298B0BDD155A270A2 /* ChecklistLibraryView.swift */; };
 		648D986CF9790F18238C31C9 /* RemediationTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F755FBC199AAD67B063456 /* RemediationTask.swift */; };
@@ -52,6 +53,7 @@
 		A02C7CF6EF6197BF3D993870 /* OpeningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA531F698C066F1C9E653561 /* OpeningView.swift */; };
 		A22DB6C023D7AD88A955CE92 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 49F58C3D54D4B6FDFF072988 /* PrivacyInfo.xcprivacy */; };
 		A2F0C06AF78CEBF001F2FC0E /* FindingEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE6B4DFA2E996885C28E1B9 /* FindingEditorView.swift */; };
+		A703C02CAC5A57B33BC193C8 /* MarkupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C2A0D69896365948B57188 /* MarkupView.swift */; };
 		AABC4466A84B0842424F9681 /* FindingsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07D0B249DE0802CCB0E3FA /* FindingsListView.swift */; };
 		ADCFE23CA0016C213A0DD9AC /* EvidenceImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9D6C258EEF0D23FD10D3D4 /* EvidenceImporter.swift */; };
 		AF1215FC4DC60185CD8CAC3F /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E73993D03514780A0592B /* TaskDetailView.swift */; };
@@ -113,6 +115,7 @@
 		750D419A90A3D68E4AA4B8F0 /* EvidenceViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvidenceViews.swift; sourceTree = "<group>"; };
 		7B5FA029442D1214F2550398 /* LockerItemEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockerItemEditor.swift; sourceTree = "<group>"; };
 		8346B6260CE4DF2B4C8E23D3 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		84C2A0D69896365948B57188 /* MarkupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupView.swift; sourceTree = "<group>"; };
 		8652211A21A2E8E737890F76 /* PhysicalWalkdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicalWalkdown.swift; sourceTree = "<group>"; };
 		8738D314554C339C38D0830A /* HIPAASecurity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIPAASecurity.swift; sourceTree = "<group>"; };
 		89496B62E8A57F8B94CAC3E2 /* AuditFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuditFactory.swift; sourceTree = "<group>"; };
@@ -127,6 +130,7 @@
 		960046AC26B2665C99B6E273 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		A22A0013EA2B61A85C8E9E87 /* SOC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOC2.swift; sourceTree = "<group>"; };
 		AAE6B4DFA2E996885C28E1B9 /* FindingEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindingEditorView.swift; sourceTree = "<group>"; };
+		B14DEC0C58586B5C8B2DE34C /* WalkModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkModeView.swift; sourceTree = "<group>"; };
 		B25270F870362892A1A045D1 /* ReportBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportBuilder.swift; sourceTree = "<group>"; };
 		B46EDF937C18120AC81ED5E9 /* Schema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schema.swift; sourceTree = "<group>"; };
 		B57D25404961F302085B5D54 /* AuditWorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuditWorkspaceView.swift; sourceTree = "<group>"; };
@@ -258,6 +262,7 @@
 				475BD3612CBBBA5EE8297121 /* Report */,
 				116BC7A314B3F08F87CB1810 /* Settings */,
 				416887245E3FBE98AFDA9064 /* Tasks */,
+				648E797C56BF783D193BFA1F /* Walk */,
 				78AE6D01626A7C604378470C /* Workspace */,
 			);
 			path = Views;
@@ -305,6 +310,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		648E797C56BF783D193BFA1F /* Walk */ = {
+			isa = PBXGroup;
+			children = (
+				B14DEC0C58586B5C8B2DE34C /* WalkModeView.swift */,
+			);
+			path = Walk;
+			sourceTree = "<group>";
+		};
 		66CDAEE6D42FE95075974F81 /* ReassuredTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -340,6 +353,7 @@
 				DD1E98CE55304515A0916BC7 /* CaptureControllers.swift */,
 				F04C74137073DE429FD0BE97 /* ControlDetailView.swift */,
 				750D419A90A3D68E4AA4B8F0 /* EvidenceViews.swift */,
+				84C2A0D69896365948B57188 /* MarkupView.swift */,
 			);
 			path = Workspace;
 			sourceTree = "<group>";
@@ -565,6 +579,7 @@
 				23D0B7DF7E1B74FBAB84B807 /* LockerItemEditor.swift in Sources */,
 				0DBFE04BE352618B26AC0F58 /* LockerPickerView.swift in Sources */,
 				355730AC0027F391CB945896 /* LockerView.swift in Sources */,
+				A703C02CAC5A57B33BC193C8 /* MarkupView.swift in Sources */,
 				F274CCC9D0177AD8620BCB38 /* NIST80053.swift in Sources */,
 				B8BC630A4D2F412A2E229BC4 /* NISTCSF.swift in Sources */,
 				204CBDECFF90B2F20D39A4E0 /* NewAuditView.swift in Sources */,
@@ -588,6 +603,7 @@
 				AF1215FC4DC60185CD8CAC3F /* TaskDetailView.swift in Sources */,
 				E8C3092B9844B669E69D0E63 /* TasksView.swift in Sources */,
 				2387E97A7042233D067D97B7 /* Theme.swift in Sources */,
+				5D71D121ADD31CDA9678FD5E /* WalkModeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
