@@ -59,6 +59,7 @@ jobs:
           capture 4-locker locker
           capture 5-audits audits
           capture 6-library library
+          capture 8-fonts fonts
           xcrun simctl ui "$UDID" appearance dark
           capture 7-home-dark home
           ls -la shots

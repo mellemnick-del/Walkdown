@@ -25,6 +25,10 @@ enum Theme {
 /// The Reassured mark (the cradled sun), drawn in SwiftUI so it stays sharp at any size.
 struct ReassuredMark: View {
     var size: CGFloat = 120
+    /// 0 is the sun below the cradle and faded out, 1 is fully risen. Used by the opening animation.
+    var sunProgress: Double = 1
+    /// How much of the cradle is drawn, from 0 to 1.
+    var cradleProgress: Double = 1
 
     var body: some View {
         let unit = size / 644
@@ -32,8 +36,10 @@ struct ReassuredMark: View {
             Circle()
                 .fill(Theme.sun)
                 .frame(width: 340 * unit, height: 340 * unit)
-                .offset(y: (500 - 580) * unit)
+                .offset(y: (500 - 580) * unit + (1 - sunProgress) * 260 * unit)
+                .opacity(sunProgress)
             CradleShape()
+                .trim(from: 0.5 - cradleProgress / 2, to: 0.5 + cradleProgress / 2)
                 .stroke(.white, style: StrokeStyle(lineWidth: 76 * unit, lineCap: .round))
         }
         .frame(width: size, height: size * 580 / 644)

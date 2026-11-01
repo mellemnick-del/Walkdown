@@ -5,8 +5,10 @@ struct RootView: View {
     @State private var router = AppRouter()
     @AppStorage(Branding.colorKey) private var brandHex = Branding.defaultHex
     @AppStorage(SettingsKeys.hasOnboarded) private var hasOnboarded = false
+    @State private var showingOpening = true
     #if DEBUG
     @Query private var allAudits: [Audit]
+    @State private var showingFontPreview = false
     #endif
 
     var body: some View {
@@ -30,8 +32,15 @@ struct RootView: View {
             .tag(AppRouter.Tab.library)
         }
         .environment(router)
+        .overlay {
+            if showingOpening && hasOnboarded {
+                OpeningView { withAnimation(.easeOut(duration: 0.45)) { showingOpening = false } }
+                    .transition(.opacity)
+            }
+        }
         #if DEBUG
         .onAppear(perform: openDemoScreen)
+        .fullScreenCover(isPresented: $showingFontPreview) { FontPreviewView() }
         #endif
         .tint(Color(uiColor: Branding.uiColor(hex: brandHex)))
         .fullScreenCover(isPresented: Binding(get: { !hasOnboarded }, set: { _ in })) {
@@ -43,8 +52,11 @@ struct RootView: View {
     #if DEBUG
     /// Jumps to a screen for demo screenshots (see DemoData).
     private func openDemoScreen() {
-        guard DemoData.isEnabled, let screen = DemoData.screen else { return }
+        guard DemoData.isEnabled else { return }
+        showingOpening = false
+        guard let screen = DemoData.screen else { return }
         switch screen {
+        case "fonts": showingFontPreview = true
         case "audits": router.tab = .audits
         case "tasks": router.tab = .tasks
         case "locker": router.tab = .locker
