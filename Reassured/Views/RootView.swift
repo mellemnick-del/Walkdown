@@ -6,6 +6,8 @@ struct RootView: View {
     @AppStorage(Branding.colorKey) private var brandHex = Branding.defaultHex
     @AppStorage(SettingsKeys.hasOnboarded) private var hasOnboarded = false
     @State private var showingOpening = true
+    @State private var lockerLock = LockerLock()
+    @Environment(\.scenePhase) private var scenePhase
     #if DEBUG
     @Query private var allAudits: [Audit]
     @State private var showingFontPreview = false
@@ -32,6 +34,10 @@ struct RootView: View {
             .tag(AppRouter.Tab.library)
         }
         .environment(router)
+        .environment(lockerLock)
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .background { lockerLock.lock() }
+        }
         .overlay {
             if showingOpening && hasOnboarded {
                 OpeningView { withAnimation(.easeOut(duration: 0.45)) { showingOpening = false } }

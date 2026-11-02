@@ -5,6 +5,7 @@ import VisionKit
 
 struct LockerView: View {
     @Environment(\.modelContext) private var context
+    @Environment(LockerLock.self) private var lock
     @Query(sort: \LockerItem.addedAt, order: .reverse) private var items: [LockerItem]
     @State private var searchText = ""
     @State private var topicFilter: EvidenceTopic?
@@ -30,6 +31,8 @@ struct LockerView: View {
 
     var body: some View {
         NavigationStack {
+            Group {
+            if lock.isOpen {
             List {
                 let expired = filtered.filter(\.isExpired)
                 let expiring = filtered.filter(\.isExpiringSoon)
@@ -41,7 +44,7 @@ struct LockerView: View {
                     } description: {
                         Text("Store policies, reports, screenshots, and certificates in one place. Link them to controls in any audit and get reminded before they expire.")
                     } actions: {
-                        addMenu.buttonStyle(.borderedProminent)
+                        addMenu(prominent: true)
                     }
                     .listRowBackground(Color.clear)
                 }
@@ -51,9 +54,14 @@ struct LockerView: View {
                 section(expired.isEmpty && expiring.isEmpty ? "All Evidence" : "Current", current)
             }
             .searchable(text: $searchText, prompt: "Search evidence")
+            } else {
+                LockerLockScreen()
+            }
+            }
             .calmBackground()
             .navigationTitle("Evidence Locker")
             .toolbar {
+                if lock.isOpen {
                 ToolbarItem(placement: .topBarLeading) {
                     Menu {
                         Picker("Topic", selection: $topicFilter) {
@@ -66,7 +74,13 @@ struct LockerView: View {
                               : "line.3.horizontal.decrease.circle.fill")
                     }
                 }
-                ToolbarItem(placement: .primaryAction) { addMenu }
+                ToolbarItem(placement: .primaryAction) { addMenu(prominent: false) }
+                if lock.isEnabled {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button { lock.lock() } label: { Label("Lock", systemImage: "lock") }
+                    }
+                }
+                }
             }
             .fileImporter(isPresented: $showingImporter, allowedContentTypes: [.pdf, .image, .plainText, .commaSeparatedText, .spreadsheet, .presentation, .data]) { result in
                 do {
@@ -105,7 +119,7 @@ struct LockerView: View {
         }
     }
 
-    private var addMenu: some View {
+    private func addMenu(prominent: Bool) -> some View {
         Menu {
             Button { showingImporter = true } label: { Label("Import File", systemImage: "folder") }
             if VNDocumentCameraViewController.isSupported {
@@ -115,7 +129,18 @@ struct LockerView: View {
                 Label("Choose Photo or Screenshot", systemImage: "photo")
             }
         } label: {
-            Label("Add Evidence", systemImage: "plus")
+            if prominent {
+                Label("Add Evidence", systemImage: "plus")
+                    .labelStyle(.titleAndIcon)
+                    .font(.headline)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(Color.accentColor, in: Capsule())
+                    .foregroundStyle(.white)
+                    .fixedSize()
+            } else {
+                Label("Add Evidence", systemImage: "plus")
+            }
         }
     }
 

@@ -6,6 +6,7 @@ struct ClientDetailView: View {
     @Environment(AppRouter.self) private var router
     @Environment(\.openURL) private var openURL
     @State private var editing = false
+    @Environment(LockerLock.self) private var lock
     @State private var startingAudit = false
 
     var body: some View {
@@ -63,7 +64,7 @@ struct ClientDetailView: View {
             }
 
             let evidence = (client.lockerItems ?? []).sorted { $0.title < $1.title }
-            if !evidence.isEmpty {
+            if !evidence.isEmpty && lock.isOpen {
                 Section("Evidence") {
                     ForEach(evidence) { item in
                         NavigationLink {

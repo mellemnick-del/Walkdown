@@ -6,6 +6,7 @@ import VisionKit
 struct ControlDetailView: View {
     @Bindable var control: ControlResult
     @Environment(\.modelContext) private var context
+    @Environment(LockerLock.self) private var lock
 
     @State private var photoItems: [PhotosPickerItem] = []
     @State private var showingCamera = false
@@ -75,6 +76,10 @@ struct ControlDetailView: View {
             }
 
             Section {
+                if !lock.isOpen {
+                    Label("\((control.lockerItems ?? []).count) linked, Locker is locked", systemImage: "lock")
+                        .foregroundStyle(.secondary)
+                } else {
                 ForEach(control.lockerItems ?? []) { item in
                     NavigationLink {
                         LockerItemDetailView(item: item)
@@ -82,8 +87,9 @@ struct ControlDetailView: View {
                         LockerRow(item: item)
                     }
                 }
+                }
                 Button { showingLockerPicker = true } label: {
-                    Label("Attach from Locker", systemImage: "lock.doc")
+                    Label(lock.isOpen ? "Attach from Locker" : "Unlock to Attach", systemImage: "lock.doc")
                 }
             } header: {
                 Text("Evidence Locker")

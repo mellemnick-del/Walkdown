@@ -12,6 +12,10 @@ struct LockerItemDetailView: View {
     @State private var confirmingDelete = false
 
     var body: some View {
+        LockerGate { detail }
+    }
+
+    private var detail: some View {
         List {
             Section {
                 VStack(alignment: .leading, spacing: 10) {

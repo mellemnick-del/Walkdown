@@ -19,6 +19,7 @@ struct LockerPickerView: View {
 
     var body: some View {
         NavigationStack {
+            LockerGate {
             List {
                 let suggested = visible.filter { !$0.topics.isDisjoint(with: suggestedTopics) }
                 let others = visible.filter { $0.topics.isDisjoint(with: suggestedTopics) }
@@ -48,6 +49,7 @@ struct LockerPickerView: View {
                 }
             }
             .searchable(text: $searchText)
+            }
             .calmBackground()
             .navigationTitle("Attach Evidence")
             .navigationBarTitleDisplayMode(.inline)

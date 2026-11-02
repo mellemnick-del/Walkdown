@@ -7,6 +7,24 @@ struct SettingsView: View {
     @AppStorage(SettingsKeys.requireFaceID) private var requireFaceID = false
     @AppStorage(SettingsKeys.helpEmail) private var helpEmail = ""
     @AppStorage(SettingsKeys.userRole) private var roleRaw = UserRole.organization.rawValue
+    @Environment(LockerLock.self) private var lock
+    @State private var settingPasscode = false
+    @State private var confirmingRemove = false
+
+    private var biometry: String { LockerLock.biometryName ?? "Face ID" }
+
+    private var lockerToggle: Binding<Bool> {
+        Binding(
+            get: { lock.isEnabled },
+            set: { on in
+                if on {
+                    if lock.hasPasscode { lock.isEnabled = true } else { settingPasscode = true }
+                } else {
+                    lock.isEnabled = false
+                }
+            }
+        )
+    }
 
     private var version: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -41,11 +59,23 @@ struct SettingsView: View {
                     Text("Where \"Email for Help\" requests go. Leave blank to show official resources only.")
                 }
                 Section {
-                    Toggle("Require Face ID", isOn: $requireFaceID)
+                    Toggle("Lock the App with \(biometry)", isOn: $requireFaceID)
                 } header: {
                     Text("Security")
                 } footer: {
-                    Text("Locks Reassured whenever it goes to the background. All audit data stays on this device.")
+                    Text("Asks for \(biometry) or your device passcode whenever Reassured opens. All audit data stays on this device.")
+                }
+                Section {
+                    Toggle("Lock Evidence Locker", isOn: lockerToggle)
+                    if lock.isEnabled {
+                        if LockerLock.biometryName != nil {
+                            Toggle("Unlock with \(biometry)", isOn: Binding(get: { lock.useBiometrics }, set: { lock.useBiometrics = $0 }))
+                        }
+                        Button("Change Locker Passcode") { settingPasscode = true }
+                        Button("Turn Off and Remove Passcode", role: .destructive) { confirmingRemove = true }
+                    }
+                } footer: {
+                    Text("A separate 6-digit passcode for your most sensitive documents. The Locker locks again every time you leave the app.")
                 }
                 Section {
                     NavigationLink {
@@ -70,6 +100,16 @@ struct SettingsView: View {
                 }
             }
             .calmBackground()
+            .sheet(isPresented: $settingPasscode) {
+                SetPasscodeView { saved in
+                    if saved { lock.isEnabled = true }
+                }
+            }
+            .confirmationDialog("Remove the Locker passcode?", isPresented: $confirmingRemove, titleVisibility: .visible) {
+                Button("Remove Passcode", role: .destructive) { lock.removePasscode() }
+            } message: {
+                Text("The Evidence Locker will open without a passcode.")
+            }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
