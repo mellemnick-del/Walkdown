@@ -49,7 +49,7 @@ struct FontPreviewView: View {
                     }
                     .padding(16)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .background(Theme.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                 }
             }
             .padding()

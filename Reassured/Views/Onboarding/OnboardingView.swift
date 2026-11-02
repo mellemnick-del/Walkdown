@@ -78,7 +78,7 @@ struct OnboardingView: View {
                         Spacer(minLength: 0)
                     }
                     .padding(16)
-                    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .background(Theme.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                     .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous)
                         .stroke(roleRaw == role.rawValue ? Color.accentColor : .clear, lineWidth: 2))
                 }

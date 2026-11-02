@@ -85,6 +85,16 @@ extension Theme {
     static let calmPlum = adaptive(light: rgb(0x8A5FBF), dark: rgb(0xB592E0))
     static let calmBlue = adaptive(light: rgb(0x2F7FA6), dark: rgb(0x6CC3D6))
 
+    /// Card surfaces: white by day, a lifted navy by night so cards belong to the night sky.
+    static let card = adaptive(light: .white, dark: rgb(0x14284A))
+
+    /// The brand gradient for big titles: navy to teal to ember by day, sunrise to teal by night.
+    static let brandStart = adaptive(light: rgb(0x0F2C5C), dark: rgb(0xFFF1CC))
+    static let brandMiddle = adaptive(light: rgb(0x1F6F8B), dark: rgb(0xFFD98A))
+    static let brandEnd = adaptive(light: rgb(0xC98A4B), dark: rgb(0x6CC3D6))
+    static let brandGradient = LinearGradient(colors: [brandStart, brandMiddle, brandEnd],
+                                              startPoint: .leading, endPoint: .trailing)
+
     /// Navy titles by day, white by night.
     static let titleUIColor = UIColor { $0.userInterfaceStyle == .dark ? .white : rgb(0x0F2C5C) }
 

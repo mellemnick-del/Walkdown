@@ -20,7 +20,7 @@ targets:
       properties:
         UILaunchScreen:
           UIColorName: LaunchBackground
-          UIImageName: LaunchMark
+          UIImageName: LaunchArt
     entitlements:
       path: Reassured/Reassured.entitlements
       properties:

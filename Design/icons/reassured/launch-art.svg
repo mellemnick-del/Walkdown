@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1400" width="2800" height="2800">
+  <!-- Full-color launch art, 1400 x 1400 points at 2x. Shown unscaled and centered by iOS,
+       so it fills phones and iPads alike. The mark sits at the exact center, 170 points wide,
+       matching the first frame of the opening animation. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0F2C5C"/>
+      <stop offset=".18" stop-color="#0F2C5C"/>
+      <stop offset=".62" stop-color="#245F7F"/>
+      <stop offset=".86" stop-color="#C98A4B"/>
+      <stop offset="1" stop-color="#C98A4B"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="700" cy="660" r="260" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFD98A" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#FFD98A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFF1CC"/><stop offset="1" stop-color="#FFD98A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="1400" fill="url(#sky)"/>
+  <circle cx="700" cy="660" r="260" fill="url(#glow)"/>
+  <!-- Mark: artwork box 644 x 580 scaled to 170 points wide, centered on (700, 700). -->
+  <g transform="translate(615 623.45) scale(0.263975) translate(-190 -290)">
+    <circle cx="512" cy="500" r="170" fill="url(#sun)"/>
+    <path d="M230 470 C 230 730 380 830 512 830 C 644 830 794 730 794 470" fill="none" stroke="#FFFFFF" stroke-width="76" stroke-linecap="round"/>
+  </g>
+</svg>

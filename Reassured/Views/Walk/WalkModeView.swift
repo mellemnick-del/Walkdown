@@ -101,7 +101,7 @@ private struct WalkCard: View {
                 }
                 .padding(20)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                .background(Theme.card, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
 
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
                     ForEach(ControlStatus.answerable) { option in
@@ -114,7 +114,7 @@ private struct WalkCard: View {
                         .lineLimit(2...6)
                         .focused($notesFocused)
                         .padding(14)
-                        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .background(Theme.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                     HStack(spacing: 12) {
                         if UIImagePickerController.isSourceTypeAvailable(.camera) {
                             Button { showingCamera = true } label: {
@@ -186,7 +186,7 @@ private struct WalkCard: View {
                 Text(option.label).font(.headline)
             }
             .frame(maxWidth: .infinity, minHeight: 84)
-            .background(selected ? option.color.opacity(0.2) : Color(.secondarySystemGroupedBackground),
+            .background(selected ? option.color.opacity(0.2) : Theme.card,
                         in: RoundedRectangle(cornerRadius: 18, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous).stroke(selected ? option.color : .clear, lineWidth: 2.5))
             .foregroundStyle(selected ? option.color : .primary)

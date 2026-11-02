@@ -48,6 +48,10 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
+                    Text("Reassured")
+                        .font(.system(size: 42, weight: .bold, design: .rounded))
+                        .foregroundStyle(Theme.brandGradient)
+                        .accessibilityAddTraits(.isHeader)
                     VStack(alignment: .leading, spacing: 2) {
                         Label(greeting, systemImage: greetingSymbol)
                             .font(.headline)
@@ -131,7 +135,8 @@ struct HomeView: View {
                 .padding()
             }
             .calmBackground()
-            .navigationTitle("Reassured")
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button { showingSettings = true } label: { Label("Settings", systemImage: "gearshape") }
@@ -226,24 +231,30 @@ private struct StatsRow: View {
         let overdue = openTasks.filter(\.isOverdue).count
         let remaining = audits.reduce(0) { $0 + ($1.totalCount - $1.answeredCount) }
         HStack(spacing: 12) {
-            Stat(value: openTasks.count, label: "Open Tasks", color: .accentColor)
-            Stat(value: overdue, label: "Overdue", color: overdue > 0 ? Theme.calmCoral : .secondary)
-            Stat(value: remaining, label: "Controls Left", color: .secondary)
+            Stat(value: openTasks.count, label: "Open Tasks", symbol: "wrench.and.screwdriver.fill", color: Theme.calmBlue)
+            Stat(value: overdue, label: "Overdue", symbol: "clock.badge.exclamationmark.fill", color: overdue > 0 ? Theme.calmCoral : Theme.calmGreen)
+            Stat(value: remaining, label: "Controls Left", symbol: "checklist", color: Theme.calmAmber)
         }
     }
 
     private struct Stat: View {
         let value: Int
         let label: String
+        let symbol: String
         let color: Color
 
         var body: some View {
             Card {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("\(value)")
-                        .font(.title2.bold())
-                        .monospacedDigit()
+                VStack(alignment: .leading, spacing: 6) {
+                    Image(systemName: symbol)
+                        .font(.subheadline.weight(.semibold))
                         .foregroundStyle(color)
+                        .frame(width: 32, height: 32)
+                        .background(color.opacity(0.16), in: Circle())
+                    Text("\(value)")
+                        .font(.system(.title, design: .rounded).weight(.bold))
+                        .monospacedDigit()
+                        .contentTransition(.numericText())
                     Text(label)
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -280,9 +291,13 @@ private struct QuickAction: View {
     var body: some View {
         Button(action: action) {
             Card {
-                VStack(spacing: 8) {
-                    Image(systemName: symbol).font(.title2).foregroundStyle(.tint)
-                    Text(title).font(.caption.bold()).lineLimit(1).minimumScaleFactor(0.8)
+                VStack(spacing: 10) {
+                    Image(systemName: symbol)
+                        .font(.title3.weight(.semibold))
+                        .foregroundStyle(Theme.sunrise)
+                        .frame(width: 48, height: 48)
+                        .background(Theme.dusk, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    Text(title).font(.subheadline.bold()).lineLimit(1).minimumScaleFactor(0.8)
                 }
                 .frame(maxWidth: .infinity)
             }
