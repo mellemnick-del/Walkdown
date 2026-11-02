@@ -36,8 +36,6 @@ struct RootView: View {
             .tabItem { Label("Library", systemImage: "books.vertical") }
             .tag(AppRouter.Tab.library)
         }
-        .environment(router)
-        .environment(lockerLock)
         .onChange(of: scenePhase) { _, phase in
             if phase == .background { lockerLock.lock() }
         }
@@ -61,6 +59,8 @@ struct RootView: View {
             OnboardingView()
                 .tint(Color(uiColor: Branding.uiColor(hex: brandHex)))
         }
+        .environment(router)
+        .environment(lockerLock)
     }
 
     #if DEBUG

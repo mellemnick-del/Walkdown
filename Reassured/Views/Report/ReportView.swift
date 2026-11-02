@@ -45,7 +45,7 @@ struct ReportView: View {
                 } header: {
                     Text("Executive Summary")
                 } footer: {
-                    Text("Appears at the top of the report summary. Written on this iPhone; review it before sharing.")
+                    Text("Appears at the top of the report summary. Written on this device; review it before sharing.")
                 }
             }
 

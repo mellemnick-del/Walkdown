@@ -47,7 +47,7 @@ struct FindingEditorView: View {
                         }
                         .disabled(drafting)
                     } footer: {
-                        Text("Drafts the finding from this control and your notes, on this iPhone. Nothing is sent anywhere. Review it before sharing.")
+                        Text("Drafts the finding from this control and your notes, on this device. Nothing is sent anywhere. Review it before sharing.")
                     }
                 }
                 Section("Details") {
