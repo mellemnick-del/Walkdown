@@ -12,8 +12,22 @@ struct Card<Content: View>: View {
         content
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Theme.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-            .shadow(color: Theme.navy.opacity(0.06), radius: 8, y: 3)
+            .cardSurface(cornerRadius: 18)
+    }
+}
+
+extension View {
+    /// Frosted Liquid Glass over the sky on iOS 26, a soft solid card on earlier versions.
+    @ViewBuilder
+    func cardSurface(cornerRadius: CGFloat) -> some View {
+        let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        if #available(iOS 26.0, *) {
+            self.glassEffect(.regular, in: shape)
+        } else {
+            self
+                .background(Theme.card, in: shape)
+                .shadow(color: Theme.navy.opacity(0.06), radius: 8, y: 3)
+        }
     }
 }
 
@@ -24,7 +38,7 @@ struct SectionTitle: View {
 
     var body: some View {
         HStack {
-            Text(title).font(.title3.bold())
+            Text(title).font(.system(.title3, design: .serif).weight(.semibold))
             Spacer()
             if let actionLabel, let action {
                 Button(actionLabel, action: action).font(.subheadline)
@@ -43,6 +57,8 @@ struct ScoreRing: View {
     var onDark = false
 
     @State private var shown: Double = 0
+    @State private var glowing = false
+    @State private var crossed = 0
 
     private var color: Color {
         guard let score else { return .secondary }
@@ -72,13 +88,36 @@ struct ScoreRing: View {
             .foregroundStyle(onDark ? Color.white : Color.primary)
         }
         .frame(width: size, height: size)
+        .background {
+            Circle()
+                .fill(Theme.sunrise)
+                .blur(radius: size * 0.18)
+                .opacity(glowing ? 0.55 : 0)
+                .scaleEffect(glowing ? 1.1 : 0.9)
+        }
+        .sensoryFeedback(.success, trigger: crossed)
         .onAppear {
             withAnimation(.easeOut(duration: 0.9).delay(0.1)) { shown = score ?? 0 }
+            if (score ?? 0) >= 0.8 { pulse(after: 0.9) }
         }
-        .onChange(of: score) { _, newValue in
+        .onChange(of: score) { oldValue, newValue in
             withAnimation(.easeOut(duration: 0.5)) { shown = newValue ?? 0 }
+            if (oldValue ?? 0) < 0.8 && (newValue ?? 0) >= 0.8 {
+                crossed += 1
+                pulse(after: 0.4)
+            }
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(score.map { "Score \(Int(($0 * 100).rounded())) percent" } ?? "No score yet")
+    }
+
+    /// One soft gold glow: a small celebration for a strong score.
+    private func pulse(after delay: Double) {
+        Task {
+            try? await Task.sleep(for: .seconds(delay))
+            withAnimation(.easeOut(duration: 0.6)) { glowing = true }
+            try? await Task.sleep(for: .seconds(1.2))
+            withAnimation(.easeIn(duration: 0.9)) { glowing = false }
+        }
     }
 }

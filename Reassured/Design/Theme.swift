@@ -106,8 +106,15 @@ extension Theme {
             guard let descriptor = font.fontDescriptor.withDesign(.rounded) else { return font }
             return UIFont(descriptor: descriptor, size: base.pointSize)
         }
+        func serif(_ style: UIFont.TextStyle, weight: UIFont.Weight) -> UIFont {
+            let base = UIFont.preferredFont(forTextStyle: style)
+            let font = UIFont.systemFont(ofSize: base.pointSize, weight: weight)
+            guard let descriptor = font.fontDescriptor.withDesign(.serif) else { return font }
+            return UIFont(descriptor: descriptor, size: base.pointSize)
+        }
         let appearance = UINavigationBar.appearance()
-        appearance.largeTitleTextAttributes = [.font: rounded(.largeTitle, weight: .bold), .foregroundColor: titleUIColor]
+        // Headlines in New York serif, smaller titles in SF Rounded.
+        appearance.largeTitleTextAttributes = [.font: serif(.largeTitle, weight: .semibold), .foregroundColor: titleUIColor]
         appearance.titleTextAttributes = [.font: rounded(.headline, weight: .semibold), .foregroundColor: titleUIColor]
     }
 }

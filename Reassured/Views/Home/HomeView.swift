@@ -49,7 +49,7 @@ struct HomeView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Reassured")
-                        .font(.system(size: 42, weight: .bold, design: .rounded))
+                        .font(.system(size: 42, weight: .semibold, design: .serif))
                         .foregroundStyle(Theme.brandGradient)
                         .accessibilityAddTraits(.isHeader)
                     VStack(alignment: .leading, spacing: 2) {
@@ -134,7 +134,8 @@ struct HomeView: View {
                 }
                 .padding()
             }
-            .calmBackground()
+            .scrollContentBackground(.hidden)
+            .background(SkyBackground())
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -168,7 +169,7 @@ private struct FocusCard: View {
                         .tracking(0.8)
                         .foregroundStyle(.white.opacity(0.7))
                     Text(audit.displayName)
-                        .font(.title3.bold())
+                        .font(.system(.title3, design: .serif).weight(.semibold))
                         .foregroundStyle(.white)
                         .lineLimit(2)
                     Text(audit.checklistName)
@@ -200,7 +201,7 @@ private struct WelcomeCard: View {
         VStack(alignment: .leading, spacing: 10) {
             ReassuredMark(size: 64)
             Text(role == .organization ? "Know where you stand" : "Your next audit starts here")
-                .font(.title3.bold())
+                .font(.system(.title2, design: .serif).weight(.semibold))
                 .foregroundStyle(.white)
             Text(role == .organization
                  ? "Self-assess against CMMC, HIPAA, PCI, SOC 2, NIST, and more. Reassured scores it and turns every gap into a task."
