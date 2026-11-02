@@ -35,8 +35,8 @@ function page(device, imgPath, [title, sub]) {
     }
     .text { position: absolute; top: ${d.pad}px; left: ${d.pad}px; right: ${d.pad}px; text-align: center; }
     h1 { font-family: 'Bitstream Charter', serif; font-weight: 700; font-size: ${d.title}px;
-         line-height: 1.08; margin: 0 0 ${Math.round(d.sub * 0.6)}px; letter-spacing: -1px; }
-    p { font-size: ${d.sub}px; line-height: 1.3; margin: 0; color: rgba(255,255,255,.82); font-weight: 500; }
+         line-height: 1.08; margin: 0 0 ${Math.round(d.sub * 0.6)}px; letter-spacing: -1px; text-wrap: balance; }
+    p { font-size: ${d.sub}px; line-height: 1.3; margin: 0; color: rgba(255,255,255,.82); font-weight: 500; text-wrap: balance; }
     .sun { position: absolute; left: 50%; top: ${d.top - 120}px; width: ${d.shotWidth * 0.9}px; height: 300px;
            transform: translateX(-50%); background: radial-gradient(ellipse at center, rgba(255,217,138,.35), transparent 70%); }
     .device { position: absolute; left: 50%; top: ${d.top}px; width: ${d.shotWidth}px; transform: translateX(-50%);
