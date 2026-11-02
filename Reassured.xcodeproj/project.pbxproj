@@ -12,6 +12,8 @@
 		0DBFE04BE352618B26AC0F58 /* LockerPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648194689CFF03E926828AB1 /* LockerPickerView.swift */; };
 		0F1DF5B3E7C0B73C02B17D55 /* DemoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D061D3FBCEC554E79E2F2DC0 /* DemoData.swift */; };
 		13098744D9CABAC9DBF62642 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F0F31C00A8588F71ABF97F /* Card.swift */; };
+		1315E10085B4AC312581293D /* LockerLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13DF922399E96EB2BB0BBB63 /* LockerLock.swift */; };
+		159EC7E1F4EDE03D3872E561 /* LockerLockViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22856E8E93CBCD9FCEA6B06 /* LockerLockViews.swift */; };
 		188A056F3C0EFFB8D2A49088 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17A6D0CEE7EB4330A149997 /* SettingsView.swift */; };
 		191745FF473D78E4A236A765 /* AuditWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E9D3F1EAF16555E9B63BB5 /* AuditWriter.swift */; };
 		1A3C765186481485F0868E4C /* RemediationPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C35C3C559BF812B3D44D3BF /* RemediationPlanner.swift */; };
@@ -77,6 +79,7 @@
 		F274CCC9D0177AD8620BCB38 /* NIST80053.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938BCAD1D4CFB50D44B5FCB7 /* NIST80053.swift */; };
 		F28AD287742389956AD6B468 /* FrameworkGuides.swift in Sources */ = {isa = PBXBuildFile; fileRef = F013576AD5CA95AC12A270A9 /* FrameworkGuides.swift */; };
 		F4698F206D65D71BAB692EE3 /* EvidenceViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750D419A90A3D68E4AA4B8F0 /* EvidenceViews.swift */; };
+		FE7C46FE721A39CDFD2C1676 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE2EE7DA3E0244B4E4C9739 /* Keychain.swift */; };
 		FF400355EDEEBA9646CCCEFE /* GetHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B33CE21DFA360E1FCFC8683 /* GetHelpView.swift */; };
 /* End PBXBuildFile section */
 
@@ -94,6 +97,7 @@
 		019E1DBAF41F73EB0CC1FC63 /* BrandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandingView.swift; sourceTree = "<group>"; };
 		08FDDDEED10FF4B0B076DD6E /* AuditListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuditListView.swift; sourceTree = "<group>"; };
 		09E9D3F1EAF16555E9B63BB5 /* AuditWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuditWriter.swift; sourceTree = "<group>"; };
+		13DF922399E96EB2BB0BBB63 /* LockerLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockerLock.swift; sourceTree = "<group>"; };
 		1517EA66FD5A54DB735DE21E /* ReassuredTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ReassuredTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		19054FF4232C2F50A3767C65 /* Finding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finding.swift; sourceTree = "<group>"; };
 		1979E6CF27A5E11C2BC157C4 /* Reassured.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Reassured.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,6 +105,7 @@
 		26F0F31C00A8588F71ABF97F /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		2C1F202798A2C91DE23D38DB /* NISTCSF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NISTCSF.swift; sourceTree = "<group>"; };
 		3747231435EFBB3714A845FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3DE2EE7DA3E0244B4E4C9739 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		426E23C425D055959639AD12 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		492D4986719B2841BF74E0FF /* Audit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audit.swift; sourceTree = "<group>"; };
 		49F58C3D54D4B6FDFF072988 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -157,6 +162,7 @@
 		DD1E98CE55304515A0916BC7 /* CaptureControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureControllers.swift; sourceTree = "<group>"; };
 		DF2C2EC219831859F8CFBC82 /* PCIDSS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCIDSS.swift; sourceTree = "<group>"; };
 		E1E38AD2A8C21DDAAAC7DCA1 /* AuditInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuditInfoView.swift; sourceTree = "<group>"; };
+		E22856E8E93CBCD9FCEA6B06 /* LockerLockViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockerLockViews.swift; sourceTree = "<group>"; };
 		E58968A298B0BDD155A270A2 /* ChecklistLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistLibraryView.swift; sourceTree = "<group>"; };
 		E7CF7AD5BC0B7070D30F0C92 /* ClientDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientDetailView.swift; sourceTree = "<group>"; };
 		EA7C6E44D9B5712FC142D316 /* GDPR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GDPR.swift; sourceTree = "<group>"; };
@@ -189,6 +195,8 @@
 				4E6DCAA5CB796A79A98C4DAC /* Branding.swift */,
 				DA9D6C258EEF0D23FD10D3D4 /* EvidenceImporter.swift */,
 				CAF2B4A214AE733C12EF92BC /* ImageTools.swift */,
+				3DE2EE7DA3E0244B4E4C9739 /* Keychain.swift */,
+				13DF922399E96EB2BB0BBB63 /* LockerLock.swift */,
 				D334CCD4BF39026D641BCABD /* LockGate.swift */,
 				8C35C3C559BF812B3D44D3BF /* RemediationPlanner.swift */,
 				F875A8D5C06060A178A6A868 /* ReminderScheduler.swift */,
@@ -366,6 +374,7 @@
 			children = (
 				8C30350A8D0079D398F5F4D3 /* LockerItemDetailView.swift */,
 				7B5FA029442D1214F2550398 /* LockerItemEditor.swift */,
+				E22856E8E93CBCD9FCEA6B06 /* LockerLockViews.swift */,
 				648194689CFF03E926828AB1 /* LockerPickerView.swift */,
 				6ABC3FDB59FFE1737E8D078A /* LockerView.swift */,
 			);
@@ -577,10 +586,13 @@
 				44E184AD0383F40C4A7E08CB /* HomeView.swift in Sources */,
 				32A0C0F1B6C27818055772CE /* ITGeneralControls.swift in Sources */,
 				325A87B3875F2498E8FB9501 /* ImageTools.swift in Sources */,
+				FE7C46FE721A39CDFD2C1676 /* Keychain.swift in Sources */,
 				D4E0968A3B76867AB21A1170 /* LockGate.swift in Sources */,
 				891ED9E4AE5B18D28609BC42 /* LockerItem.swift in Sources */,
 				BED9A9D21E6FF86A8679EC7A /* LockerItemDetailView.swift in Sources */,
 				23D0B7DF7E1B74FBAB84B807 /* LockerItemEditor.swift in Sources */,
+				1315E10085B4AC312581293D /* LockerLock.swift in Sources */,
+				159EC7E1F4EDE03D3872E561 /* LockerLockViews.swift in Sources */,
 				0DBFE04BE352618B26AC0F58 /* LockerPickerView.swift in Sources */,
 				355730AC0027F391CB945896 /* LockerView.swift in Sources */,
 				A703C02CAC5A57B33BC193C8 /* MarkupView.swift in Sources */,
