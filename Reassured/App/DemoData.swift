@@ -15,6 +15,13 @@ enum DemoData {
         return args[index + 1]
     }
 
+    /// Fixes Home's sky for screenshots: -sky dawn|day|dusk|night.
+    static var sky: String? {
+        let args = ProcessInfo.processInfo.arguments
+        guard let index = args.firstIndex(of: "-sky"), index + 1 < args.count else { return nil }
+        return args[index + 1]
+    }
+
     static func seed(_ context: ModelContext) {
         let defaults = UserDefaults.standard
         defaults.set(true, forKey: SettingsKeys.hasOnboarded)
@@ -78,6 +85,16 @@ enum DemoData {
                     expiresIn: 300, client: clinic, link: [hipaa], ids: ["164.308(b)(1)"], context: context)
         addEvidence("Cyber Insurance Certificate", kind: .certificate, topics: [.continuity],
                     expiresIn: 26, client: nil, link: [], ids: [], context: context)
+
+        AuditWriter.saveSummary("""
+            Lone Star Machining has a solid foundation for protecting Controlled Unclassified Information, \
+            scoring 77% across the 79 requirements reviewed so far. Access control, configuration management, \
+            and malware protection are largely in place.
+
+            The most urgent gap is multifactor authentication: remote access still accepts password-only \
+            logins for some users. Fixing that first, then escorting visitors on the shop floor and wiping \
+            retired drives, will close the highest risks ahead of a CMMC Level 2 assessment.
+            """, for: cmmc)
 
         // Make the CMMC audit the most recent activity so Home features it.
         for (index, control) in cmmc.sortedControls.enumerated() where control.status != .notStarted {

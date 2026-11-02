@@ -11,6 +11,9 @@ struct RootView: View {
     #if DEBUG
     @Query private var allAudits: [Audit]
     @State private var showingFontPreview = false
+    @State private var demoWalk: Audit?
+    @State private var demoReport: Audit?
+    @State private var showingDemoGuide = false
     #endif
 
     var body: some View {
@@ -47,6 +50,11 @@ struct RootView: View {
         #if DEBUG
         .onAppear(perform: openDemoScreen)
         .fullScreenCover(isPresented: $showingFontPreview) { FontPreviewView() }
+        .fullScreenCover(item: $demoWalk) { WalkModeView(audit: $0) }
+        .fullScreenCover(item: $demoReport) { audit in NavigationStack { ReportView(audit: audit) } }
+        .fullScreenCover(isPresented: $showingDemoGuide) {
+            NavigationStack { TemplatePreviewView(template: TemplateLibrary.cmmcLevel2) }
+        }
         #endif
         .tint(Color(uiColor: Branding.uiColor(hex: brandHex)))
         .fullScreenCover(isPresented: Binding(get: { !hasOnboarded }, set: { _ in })) {
@@ -56,6 +64,10 @@ struct RootView: View {
     }
 
     #if DEBUG
+    private var demoAudit: Audit? {
+        allAudits.first { $0.checklistName.hasPrefix("CMMC Level 2") }
+    }
+
     /// Jumps to a screen for demo screenshots (see DemoData).
     private func openDemoScreen() {
         guard DemoData.isEnabled else { return }
@@ -68,7 +80,10 @@ struct RootView: View {
         case "locker": router.tab = .locker
         case "library": router.tab = .library
         case "workspace":
-            if let audit = allAudits.first(where: { $0.checklistName.hasPrefix("CMMC Level 2") }) { router.open(audit) }
+            if let audit = demoAudit { router.open(audit) }
+        case "walk": demoWalk = demoAudit
+        case "report": demoReport = demoAudit
+        case "guide": showingDemoGuide = true
         default: router.tab = .home
         }
     }

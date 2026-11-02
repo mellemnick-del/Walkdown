@@ -21,7 +21,7 @@ struct SkyBackground: View {
     var body: some View {
         // Re-check the time every few minutes so the sky changes while the app is open.
         TimelineView(.periodic(from: .now, by: 300)) { context in
-            let phase = Phase(date: context.date)
+            let phase = Self.demoPhase ?? Phase(date: context.date)
             ZStack {
                 LinearGradient(colors: colors(for: phase), startPoint: .top, endPoint: .bottom)
                 if phase == .dawn || phase == .dusk {
@@ -36,6 +36,21 @@ struct SkyBackground: View {
             .animation(.easeInOut(duration: 2), value: phase)
         }
         .ignoresSafeArea()
+    }
+
+    /// Screenshot override (debug builds only), so marketing shots don't depend on the time they're taken.
+    private static var demoPhase: Phase? {
+        #if DEBUG
+        switch DemoData.sky {
+        case "dawn": return .dawn
+        case "day": return .day
+        case "dusk": return .dusk
+        case "night": return .night
+        default: return nil
+        }
+        #else
+        return nil
+        #endif
     }
 
     private func colors(for phase: Phase) -> [Color] {

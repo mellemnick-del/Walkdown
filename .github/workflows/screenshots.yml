@@ -1,7 +1,8 @@
 name: Screenshots
 
-# Runs the app with demo data in an iPhone simulator, captures each main screen,
-# and pushes the images to the "screenshots" branch.
+# Runs the app with demo data on an iPhone Pro Max and a 13-inch iPad Pro simulator,
+# captures each App Store screen, and pushes the images to the "screenshots" branch
+# (iphone/ and ipad/ folders).
 on:
   workflow_dispatch:
 
@@ -11,58 +12,60 @@ permissions:
 jobs:
   screenshots:
     runs-on: macos-latest
-    timeout-minutes: 40
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v5
-
-      - name: Install XcodeGen and generate project
-        run: |
-          brew install xcodegen
-          xcodegen generate
 
       - name: Build for simulator
         run: |
           set -o pipefail
           xcodebuild build -project Reassured.xcodeproj -target Reassured -sdk iphonesimulator \
-            -configuration Debug CODE_SIGNING_ALLOWED=NO 2>&1 | tail -5
+            -configuration Debug CODE_SIGNING_ALLOWED=NO 2>&1 | tail -3
 
-      - name: Boot an iPhone simulator
+      - name: Capture iPhone and iPad screens
         run: |
-          UDID=$(xcrun simctl list devices available -j | python3 -c '
+          pick() {
+            xcrun simctl list devices available -j | python3 -c '
           import json, sys
+          want = sys.argv[1]
           devices = json.load(sys.stdin)["devices"]
-          phones = [d for runtime, ds in devices.items() if "iOS" in runtime for d in ds
-                    if d["name"].startswith("iPhone") and "Pro" in d["name"] and "Max" not in d["name"]]
-          phones = phones or [d for runtime, ds in devices.items() if "iOS" in runtime for d in ds if d["name"].startswith("iPhone")]
-          print(phones[-1]["udid"])
-          ')
-          echo "UDID=$UDID" >> "$GITHUB_ENV"
-          xcrun simctl boot "$UDID"
-          xcrun simctl bootstatus "$UDID" -b
-          xcrun simctl status_bar "$UDID" override --time "9:41" --batteryState charged --batteryLevel 100 --cellularBars 4 --wifiBars 3
-          xcrun simctl install "$UDID" build/Debug-iphonesimulator/Reassured.app
-          xcrun simctl list devices | grep "$UDID"
-
-      - name: Capture screens
-        run: |
-          mkdir -p shots
-          capture() {
-            xcrun simctl terminate "$UDID" com.nickmellem.reassured || true
-            xcrun simctl launch "$UDID" com.nickmellem.reassured -demo -screen "$2"
-            sleep 8
-            xcrun simctl io "$UDID" screenshot "shots/$1.png"
+          found = [d for runtime, ds in devices.items() if "iOS" in runtime for d in ds if want in d["name"]]
+          print(found[-1]["udid"] if found else "")
+          ' "$1"
           }
-          xcrun simctl ui "$UDID" appearance light
-          capture 1-home home
-          capture 2-workspace workspace
-          capture 3-tasks tasks
-          capture 4-locker locker
-          capture 5-audits audits
-          capture 6-library library
-          capture 8-fonts fonts
-          xcrun simctl ui "$UDID" appearance dark
-          capture 7-home-dark home
-          ls -la shots
+          capture_device() {
+            folder="$1"; UDID="$2"
+            echo "Capturing $folder on $(xcrun simctl list devices | grep "$UDID" | head -1)"
+            xcrun simctl boot "$UDID"
+            xcrun simctl bootstatus "$UDID" -b
+            xcrun simctl status_bar "$UDID" override --time "9:41" --batteryState charged --batteryLevel 100 --cellularBars 4 --wifiBars 3
+            xcrun simctl install "$UDID" build/Debug-iphonesimulator/Reassured.app
+            mkdir -p "shots/$folder"
+            shot() {
+              name="$1"; screen="$2"; appearance="$3"; sky="$4"
+              xcrun simctl ui "$UDID" appearance "$appearance"
+              xcrun simctl terminate "$UDID" com.nickmellem.reassured || true
+              xcrun simctl launch "$UDID" com.nickmellem.reassured -demo -screen "$screen" -sky "$sky"
+              sleep 9
+              xcrun simctl io "$UDID" screenshot "shots/$folder/$name.png"
+            }
+            shot 01-home home light dusk
+            shot 02-walk walk light dusk
+            shot 03-workspace workspace light dusk
+            shot 04-tasks tasks light dusk
+            shot 05-locker locker light dusk
+            shot 06-report report light dusk
+            shot 07-guide guide light dusk
+            shot 08-home-dark home dark night
+            shot 09-library library light dusk
+            xcrun simctl shutdown "$UDID"
+          }
+          IPHONE=$(pick "Pro Max")
+          IPAD=$(pick "iPad Pro 13")
+          [ -z "$IPAD" ] && IPAD=$(pick "iPad Pro")
+          capture_device iphone "$IPHONE"
+          capture_device ipad "$IPAD"
+          ls -la shots/*
 
       - name: Push screenshots branch
         run: |
@@ -72,7 +75,7 @@ jobs:
           git checkout --orphan screenshots
           git rm -rf --quiet .
           git clean -fdx --quiet
-          cp /tmp/shots/*.png .
-          git add *.png
+          cp -R /tmp/shots/* .
+          git add iphone ipad
           git commit -m "Screenshots from ${GITHUB_SHA::7}"
           git push -f origin screenshots
