@@ -61,7 +61,7 @@ struct LockerView: View {
             .calmBackground()
             .navigationTitle("Evidence Locker")
             .toolbar {
-                if lock.isOpen {
+                if lock.isOpen && !items.isEmpty {
                 ToolbarItem(placement: .topBarLeading) {
                     Menu {
                         Picker("Topic", selection: $topicFilter) {
@@ -75,11 +75,11 @@ struct LockerView: View {
                     }
                 }
                 ToolbarItem(placement: .primaryAction) { addMenu(prominent: false) }
-                if lock.isEnabled {
+                }
+                if lock.isOpen && lock.isEnabled {
                     ToolbarItem(placement: .primaryAction) {
                         Button { lock.lock() } label: { Label("Lock", systemImage: "lock") }
                     }
-                }
                 }
             }
             .fileImporter(isPresented: $showingImporter, allowedContentTypes: [.pdf, .image, .plainText, .commaSeparatedText, .spreadsheet, .presentation, .data]) { result in

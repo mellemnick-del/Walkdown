@@ -42,8 +42,10 @@ struct ClientsView: View {
         .calmBackground()
         .navigationTitle("Clients")
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button { showingNew = true } label: { Label("Add Client", systemImage: "plus") }
+            if !clients.isEmpty {
+                ToolbarItem(placement: .primaryAction) {
+                    Button { showingNew = true } label: { Label("Add Client", systemImage: "plus") }
+                }
             }
         }
         .sheet(isPresented: $showingNew) {

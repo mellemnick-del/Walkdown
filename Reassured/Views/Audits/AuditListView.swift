@@ -60,8 +60,10 @@ struct AuditListView: View {
                         Label("Clients", systemImage: "person.2")
                     }
                 }
-                ToolbarItem(placement: .primaryAction) {
-                    Button { showingNewAudit = true } label: { Label("New Audit", systemImage: "plus") }
+                if !audits.isEmpty {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button { showingNewAudit = true } label: { Label("New Audit", systemImage: "plus") }
+                    }
                 }
             }
             .sheet(isPresented: $showingNewAudit) {
@@ -101,8 +103,10 @@ struct AuditListView: View {
             } description: {
                 Text("Start an audit, pick a checklist, and work through it on site.")
             } actions: {
-                Button("New Audit") { showingNewAudit = true }
-                    .buttonStyle(.borderedProminent)
+                if audits.isEmpty {
+                    Button("New Audit") { showingNewAudit = true }
+                        .buttonStyle(.borderedProminent)
+                }
             }
         case .complete:
             ContentUnavailableView("No Completed Audits", systemImage: "checkmark.seal",
