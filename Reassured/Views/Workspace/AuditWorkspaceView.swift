@@ -4,6 +4,7 @@ import SwiftData
 struct AuditWorkspaceView: View {
     @Bindable var audit: Audit
     @State private var filter: ControlFilter = .all
+    @State private var searchText = ""
     @State private var showingInfo = false
     @State private var showingHelp = false
     @State private var planMessage: String?
@@ -42,7 +43,7 @@ struct AuditWorkspaceView: View {
 
     private var groups: [ControlGroup] {
         var result: [ControlGroup] = []
-        for control in audit.sortedControls where filter.includes(control) {
+        for control in audit.sortedControls where filter.includes(control) && matchesSearch(control) {
             if result.last?.name == control.groupName {
                 result[result.count - 1].controls.append(control)
             } else {
@@ -70,7 +71,7 @@ struct AuditWorkspaceView: View {
 
             if groups.isEmpty {
                 ContentUnavailableView("Nothing Here", systemImage: "line.3.horizontal.decrease.circle",
-                                       description: Text("No controls match \"\(filter.label)\"."))
+                                       description: Text(searchText.isEmpty ? "No controls match \"\(filter.label)\"." : "No controls match \"\(searchText)\"."))
                     .listRowBackground(Color.clear)
             }
 
@@ -82,12 +83,35 @@ struct AuditWorkspaceView: View {
                         } label: {
                             ControlRow(control: control)
                         }
+                        // Swipe right for Pass, left for Fail or N/A. Swiping the current result clears it.
+                        .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                            Button { setStatus(.pass, on: control) } label: {
+                                Label(control.status == .pass ? "Clear" : "Pass", systemImage: "checkmark.circle.fill")
+                            }
+                            .tint(Theme.calmGreen)
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button { setStatus(.fail, on: control) } label: {
+                                Label(control.status == .fail ? "Clear" : "Fail", systemImage: "xmark.circle.fill")
+                            }
+                            .tint(Theme.calmCoral)
+                            Button { setStatus(.notApplicable, on: control) } label: {
+                                Label("N/A", systemImage: "minus.circle.fill")
+                            }
+                            .tint(.gray)
+                            Button { setStatus(.partial, on: control) } label: {
+                                Label("Partial", systemImage: "circle.lefthalf.filled")
+                            }
+                            .tint(Theme.calmAmber)
+                        }
                     }
                 } header: {
                     AreaHeader(name: group.name, controls: audit.sortedControls.filter { $0.groupName == group.name })
                 }
             }
         }
+        .searchable(text: $searchText, prompt: "Search controls, IDs, or notes")
+        .sensoryFeedback(trigger: audit.answeredCount) { _, _ in .selection }
         .calmBackground()
         .navigationTitle(audit.displayName)
         .navigationBarTitleDisplayMode(.inline)
@@ -165,6 +189,20 @@ struct AuditWorkspaceView: View {
         } message: {
             Text(planMessage ?? "")
         }
+    }
+
+    private func matchesSearch(_ control: ControlResult) -> Bool {
+        let query = searchText.trimmingCharacters(in: .whitespaces)
+        guard !query.isEmpty else { return true }
+        return control.controlID.localizedCaseInsensitiveContains(query)
+            || control.title.localizedCaseInsensitiveContains(query)
+            || control.guidance.localizedCaseInsensitiveContains(query)
+            || control.notes.localizedCaseInsensitiveContains(query)
+            || control.groupName.localizedCaseInsensitiveContains(query)
+    }
+
+    private func setStatus(_ status: ControlStatus, on control: ControlResult) {
+        withAnimation { control.status = control.status == status ? .notStarted : status }
     }
 
     private func exportAudit() {

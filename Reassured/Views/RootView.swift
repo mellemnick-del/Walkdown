@@ -84,6 +84,13 @@ struct RootView: View {
         case "walk": demoWalk = demoAudit
         case "report": demoReport = demoAudit
         case "guide": showingDemoGuide = true
+        case "pdf":
+            // Writes the report for review; the screenshot workflow copies it off the simulator.
+            if let audit = demoAudit {
+                let data = ReportBuilder.makePDFData(for: audit, companyName: "Northline Advisory",
+                                                     summary: AuditWriter.savedSummary(for: audit))
+                try? data.write(to: URL.documentsDirectory.appendingPathComponent("report.pdf"))
+            }
         default: router.tab = .home
         }
     }

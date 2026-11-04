@@ -58,6 +58,13 @@ jobs:
             shot 07-guide guide light dusk
             shot 08-home-dark home dark night
             shot 09-library library light dusk
+            if [ "$folder" = "iphone" ]; then
+              xcrun simctl terminate "$UDID" com.nickmellem.reassured || true
+              xcrun simctl launch "$UDID" com.nickmellem.reassured -demo -screen pdf
+              sleep 8
+              DATA=$(xcrun simctl get_app_container "$UDID" com.nickmellem.reassured data)
+              cp "$DATA/Documents/report.pdf" shots/report.pdf || echo "No report written"
+            fi
             xcrun simctl shutdown "$UDID"
           }
           IPHONE=$(pick "Pro Max")
@@ -77,5 +84,6 @@ jobs:
           git clean -fdx --quiet
           cp -R /tmp/shots/* .
           git add iphone ipad
+          [ -f report.pdf ] && git add report.pdf
           git commit -m "Screenshots from ${GITHUB_SHA::7}"
           git push -f origin screenshots

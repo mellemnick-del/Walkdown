@@ -2,6 +2,7 @@ import Foundation
 import SwiftData
 import Testing
 import UniformTypeIdentifiers
+import PDFKit
 @testable import Reassured
 
 @MainActor
@@ -164,5 +165,35 @@ struct BackupTests {
         backup.version = BackupService.currentVersion + 1
         let data = try BackupService.encode(backup)
         #expect(throws: BackupService.BackupError.self) { try BackupService.decode(data) }
+    }
+}
+
+@MainActor
+struct ReportTests {
+    @Test func reportBuildsAllSections() throws {
+        ReminderScheduler.isEnabled = false
+        let container = try ReassuredStore.makeContainer(inMemory: true)
+        let context = container.mainContext
+        let audit = AuditFactory.create(from: TemplateLibrary.cmmcLevel1, clientName: "Test Co", siteName: "HQ",
+                                        location: "Houston, TX", auditorName: "Tester", date: .now,
+                                        scopeNotes: "All systems that handle FCI.", kind: .onSite, in: context)
+        for (index, control) in audit.sortedControls.enumerated() {
+            control.status = [.pass, .partial, .fail, .notApplicable][index % 4]
+            control.notes = index % 3 == 0 ? "Observed on site." : ""
+        }
+        let finding = Finding(title: "No MFA on VPN", detail: "Password-only logins.", recommendation: "Require MFA.", severity: .critical)
+        context.insert(finding)
+        finding.audit = audit
+        finding.control = audit.sortedControls.first { $0.status == .fail }
+        RemediationPlanner.buildPlan(for: audit, in: context)
+
+        let data = ReportBuilder.makePDFData(for: audit, companyName: "Northline Advisory", summary: "Solid start.")
+        let document = try #require(PDFDocument(data: data))
+        // Cover, summary, findings, remediation plan, and at least one page of control results.
+        #expect(document.pageCount >= 5)
+        let text = document.string ?? ""
+        #expect(text.contains("Executive Summary"))
+        #expect(text.contains("Remediation Plan"))
+        #expect(text.contains("No MFA on VPN"))
     }
 }
