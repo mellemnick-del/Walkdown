@@ -54,10 +54,22 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Reassured")
-                        .font(.system(size: 42, weight: .semibold, design: .serif))
-                        .foregroundStyle(Theme.brandGradient)
-                        .accessibilityAddTraits(.isHeader)
+                    // Title and Settings share one row, right under the status bar.
+                    HStack(alignment: .center) {
+                        Text("Reassured")
+                            .font(.system(size: 42, weight: .semibold, design: .serif))
+                            .foregroundStyle(Theme.brandGradient)
+                            .accessibilityAddTraits(.isHeader)
+                        Spacer()
+                        Button { showingSettings = true } label: {
+                            Image(systemName: "gearshape")
+                                .font(.title3.weight(.medium))
+                                .frame(width: 44, height: 44)
+                                .cardSurface(cornerRadius: 22)
+                        }
+                        .buttonStyle(PressableButtonStyle())
+                        .accessibilityLabel("Settings")
+                    }
                     VStack(alignment: .leading, spacing: 2) {
                         Label(greeting, systemImage: greetingSymbol)
                             .font(.headline)
@@ -149,13 +161,8 @@ struct HomeView: View {
             }
             .scrollContentBackground(.hidden)
             .background(SkyBackground())
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button { showingSettings = true } label: { Label("Settings", systemImage: "gearshape") }
-                }
-            }
+            .navigationTitle("Home")
+            .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $showingNewAudit) {
                 NewAuditView { audit in router.open(audit) }
             }
