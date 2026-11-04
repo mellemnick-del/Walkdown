@@ -34,12 +34,14 @@
 		346463F99D3BE5E8E373AB4F /* ControlDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04C74137073DE429FD0BE97 /* ControlDetailView.swift */; };
 		3517B1E7C38763EBF7FD363A /* ReportBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25270F870362892A1A045D1 /* ReportBuilder.swift */; };
 		355730AC0027F391CB945896 /* LockerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABC3FDB59FFE1737E8D078A /* LockerView.swift */; };
+		3F0FC66CDCF48073CCE16540 /* RecentlyDeletedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2388022C4362F11AE55A5F9F /* RecentlyDeletedView.swift */; };
 		3FBFB41314DFC924E2E462D7 /* Audit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492D4986719B2841BF74E0FF /* Audit.swift */; };
 		44E184AD0383F40C4A7E08CB /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059D19BB35326C5F23EE785 /* HomeView.swift */; };
 		46841D866D83F3E3DADB4798 /* CertificateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C1898B9FDD21582B47B50 /* CertificateBuilder.swift */; };
 		46D9CFDEA40FE37E6B224C49 /* AuditInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E38AD2A8C21DDAAAC7DCA1 /* AuditInfoView.swift */; };
 		484ED03E7269C87DE722FFDD /* CaptureControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1E98CE55304515A0916BC7 /* CaptureControllers.swift */; };
 		4BC0CA38910CFD4E9988B932 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8346B6260CE4DF2B4C8E23D3 /* OnboardingView.swift */; };
+		502D997D3683FD445DDD6290 /* RecentlyDeleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4AD5B4C1A2A71CAF050163 /* RecentlyDeleted.swift */; };
 		5765E09F5AD0E665310C5052 /* FontPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E9DFC09DBD7C0F2B58D21A /* FontPreviewView.swift */; };
 		5D71D121ADD31CDA9678FD5E /* WalkModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14DEC0C58586B5C8B2DE34C /* WalkModeView.swift */; };
 		639C4932708DCB85A0A02F8F /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960046AC26B2665C99B6E273 /* Client.swift */; };
@@ -109,10 +111,12 @@
 		19054FF4232C2F50A3767C65 /* Finding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finding.swift; sourceTree = "<group>"; };
 		1979E6CF27A5E11C2BC157C4 /* Reassured.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Reassured.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F01D906844BE563A9D59734 /* Evidence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Evidence.swift; sourceTree = "<group>"; };
+		2388022C4362F11AE55A5F9F /* RecentlyDeletedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyDeletedView.swift; sourceTree = "<group>"; };
 		26F0F31C00A8588F71ABF97F /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		2C1F202798A2C91DE23D38DB /* NISTCSF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NISTCSF.swift; sourceTree = "<group>"; };
 		3747231435EFBB3714A845FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3DE2EE7DA3E0244B4E4C9739 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		3E4AD5B4C1A2A71CAF050163 /* RecentlyDeleted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyDeleted.swift; sourceTree = "<group>"; };
 		41D9C516112BA58DFA090D61 /* SkyBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyBackground.swift; sourceTree = "<group>"; };
 		426E23C425D055959639AD12 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		462072694B338B3C2BEBB536 /* CertificateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateView.swift; sourceTree = "<group>"; };
@@ -212,6 +216,7 @@
 				13DF922399E96EB2BB0BBB63 /* LockerLock.swift */,
 				D334CCD4BF39026D641BCABD /* LockGate.swift */,
 				6CE809616216B2510A4BE4CA /* Milestones.swift */,
+				3E4AD5B4C1A2A71CAF050163 /* RecentlyDeleted.swift */,
 				8C35C3C559BF812B3D44D3BF /* RemediationPlanner.swift */,
 				F875A8D5C06060A178A6A868 /* ReminderScheduler.swift */,
 				B25270F870362892A1A045D1 /* ReportBuilder.swift */,
@@ -446,6 +451,7 @@
 				E1E38AD2A8C21DDAAAC7DCA1 /* AuditInfoView.swift */,
 				08FDDDEED10FF4B0B076DD6E /* AuditListView.swift */,
 				C4BDC15308BC99FB83542F71 /* NewAuditView.swift */,
+				2388022C4362F11AE55A5F9F /* RecentlyDeletedView.swift */,
 			);
 			path = Audits;
 			sourceTree = "<group>";
@@ -636,6 +642,8 @@
 				1EFFB063F8841DDA90BBC83B /* PhysicalWalkdown.swift in Sources */,
 				6CEB2FCE5C6199AEFDA7CE6A /* ProgressRing.swift in Sources */,
 				2B2DE7A8D042129B0C34361E /* ReassuredApp.swift in Sources */,
+				502D997D3683FD445DDD6290 /* RecentlyDeleted.swift in Sources */,
+				3F0FC66CDCF48073CCE16540 /* RecentlyDeletedView.swift in Sources */,
 				1A3C765186481485F0868E4C /* RemediationPlanner.swift in Sources */,
 				648D986CF9790F18238C31C9 /* RemediationTask.swift in Sources */,
 				7659A2EEFF27F0178E20E25C /* ReminderScheduler.swift in Sources */,
