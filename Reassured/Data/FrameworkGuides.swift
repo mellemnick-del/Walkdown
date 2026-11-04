@@ -102,6 +102,16 @@ enum FrameworkGuides {
                 "Run this readiness check, fix the gaps, then engage a CPA firm.",
             ]
         ),
+        "cyber-insurance": FrameworkGuide(
+            whatItIs: "Cyber insurance helps pay for the costs of an attack or breach: recovery, legal help, notification, and lost income. Before quoting or renewing, carriers check which security controls you have.",
+            whoNeedsIt: "Any business buying or renewing cyber coverage, and MSPs helping clients get insurable. Carriers increasingly decline or raise premiums for businesses without MFA, EDR, and protected backups.",
+            howAssessed: "Through the carrier's application or questionnaire, sometimes with an outside scan of your internet-facing systems. Answer accurately: a wrong answer on an application can put a claim at risk.",
+            firstSteps: [
+                "Turn on MFA for email, remote access, and admin accounts. It's the question carriers care about most.",
+                "Make sure one backup copy is offline or immutable, and test a restore.",
+                "Run this checklist before the renewal application arrives, fix the gaps, and keep the evidence in the Locker.",
+            ]
+        ),
         "gdpr": FrameworkGuide(
             whatItIs: "The EU General Data Protection Regulation governs how personal data of people in the EU is collected and used.",
             whoNeedsIt: "Organizations in the EU, and organizations elsewhere that offer goods or services to people in the EU or monitor their behavior.",

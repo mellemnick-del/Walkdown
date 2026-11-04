@@ -2,13 +2,14 @@ import Foundation
 
 /// The audit areas checklists are grouped under in the library.
 enum ChecklistArea: String, CaseIterable, Identifiable {
-    case general, defense, federal, lawEnforcement, tax, healthcare, payments, serviceOrgs, privacy
+    case general, insurance, defense, federal, lawEnforcement, tax, healthcare, payments, serviceOrgs, privacy
 
     var id: String { rawValue }
 
     var label: String {
         switch self {
         case .general: "General and IT Controls"
+        case .insurance: "Cyber Insurance"
         case .defense: "Defense Contractors"
         case .federal: "Federal Systems"
         case .lawEnforcement: "Law Enforcement"
@@ -23,6 +24,7 @@ enum ChecklistArea: String, CaseIterable, Identifiable {
     var symbol: String {
         switch self {
         case .general: "building.2"
+        case .insurance: "umbrella"
         case .defense: "shield.lefthalf.filled"
         case .federal: "building.columns"
         case .lawEnforcement: "star.circle"
@@ -74,6 +76,7 @@ struct TemplateItem: Hashable {
 enum TemplateLibrary {
     static let all: [ChecklistTemplate] = [
         physicalWalkdown, itGeneralControls, nistCSF,
+        cyberInsurance,
         cmmcLevel1, cmmcLevel2,
         nist80053,
         hipaaSecurity,
