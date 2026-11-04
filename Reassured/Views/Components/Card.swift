@@ -77,10 +77,11 @@ struct ScoreRing: View {
                 .stroke(color.gradient, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                 .rotationEffect(.degrees(-90))
             VStack(spacing: 0) {
-                Text(score.map { "\(Int(($0 * 100).rounded()))" } ?? "--")
-                    .font(.system(size: size * 0.3, weight: .bold, design: .rounded))
-                    .monospacedDigit()
-                    .contentTransition(.numericText())
+                if score != nil {
+                    CountingText(value: shown * 100, font: .system(size: size * 0.3, weight: .bold, design: .rounded))
+                } else {
+                    Text("--").font(.system(size: size * 0.3, weight: .bold, design: .rounded))
+                }
                 Text("score")
                     .font(.caption)
                     .foregroundStyle(onDark ? Color.white.opacity(0.75) : Color.secondary)

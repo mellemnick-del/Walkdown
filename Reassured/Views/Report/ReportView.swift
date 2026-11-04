@@ -109,6 +109,9 @@ struct ReportView: View {
         .calmBackground()
         .navigationTitle("Report")
         .task {
+            if audit.status == .complete || audit.answeredCount == audit.totalCount {
+                Milestones.increment(Milestones.reportsOpenedKey)
+            }
             summary = AuditWriter.savedSummary(for: audit)
             build()
         }

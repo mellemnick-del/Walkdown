@@ -206,7 +206,7 @@ private struct StatusPicker: View {
                         .stroke(selected ? option.color : .clear, lineWidth: 2))
                     .foregroundStyle(selected ? option.color : .secondary)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(PressableButtonStyle())
                 .accessibilityAddTraits(selected ? .isSelected : [])
             }
         }

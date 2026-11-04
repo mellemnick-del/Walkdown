@@ -175,7 +175,6 @@ struct AuditWorkspaceView: View {
             }
         }
         .animation(.easeInOut(duration: 0.3), value: celebrating)
-        .sensoryFeedback(.success, trigger: celebrating) { _, new in new }
         .sheet(isPresented: $showingHelp) { GetHelpView(topic: audit.checklistName) }
         .sheet(item: Binding(get: { exportURL.map(ExportedFile.init) }, set: { if $0 == nil { exportURL = nil } })) { file in
             ExportSheet(url: file.url)
@@ -326,23 +325,29 @@ private struct CompletionCelebration: View {
     let score: Double?
     let dismiss: () -> Void
     @State private var rise = false
+    @State private var counted: Double = 0
 
     var body: some View {
         ZStack {
             Theme.dusk.opacity(0.96).ignoresSafeArea()
+            LightMotes(count: 60).ignoresSafeArea()
             VStack(spacing: 18) {
-                ReassuredMark(size: 140)
+                ReassuredMark(size: 140, sunProgress: rise ? 1.12 : 0.4)
                     .offset(y: rise ? 0 : 40)
                     .opacity(rise ? 1 : 0)
                 Text("Audit complete")
-                    .font(.title.bold())
+                    .font(.system(size: 32, weight: .semibold, design: .serif))
                     .foregroundStyle(.white)
-                if let score {
-                    Text("Final score \(Int((score * 100).rounded()))%")
-                        .font(.headline)
-                        .foregroundStyle(Theme.sunrise)
+                if score != nil {
+                    HStack(alignment: .firstTextBaseline, spacing: 2) {
+                        Text("Final score ")
+                        CountingText(value: counted, font: .system(.title, design: .rounded).weight(.bold))
+                        Text("%")
+                    }
+                    .font(.headline)
+                    .foregroundStyle(Theme.sunrise)
                 }
-                Text("Build the remediation plan and share the report when you're ready.")
+                Text("Take a breath. Build the remediation plan and share the report when you're ready.")
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.white.opacity(0.8))
@@ -352,10 +357,12 @@ private struct CompletionCelebration: View {
         .contentShape(Rectangle())
         .onTapGesture(perform: dismiss)
         .onAppear {
-            withAnimation(.spring(response: 0.8, dampingFraction: 0.75)) { rise = true }
+            Haptics.drumroll()
+            withAnimation(.spring(response: 0.9, dampingFraction: 0.75)) { rise = true }
+            withAnimation(.easeOut(duration: 1.4).delay(0.3)) { counted = (score ?? 0) * 100 }
         }
         .task {
-            try? await Task.sleep(for: .seconds(2.6))
+            try? await Task.sleep(for: .seconds(3.6))
             dismiss()
         }
         .accessibilityAddTraits(.isModal)

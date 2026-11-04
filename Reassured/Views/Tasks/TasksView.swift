@@ -47,11 +47,13 @@ struct TasksView: View {
 
                 if sections.isEmpty {
                     ContentUnavailableView {
-                        Label(showDone ? "Nothing Finished Yet" : "No Open Tasks", systemImage: "wrench.and.screwdriver")
+                        Label(showDone ? "Nothing Finished Yet" : "Nothing to Fix", systemImage: showDone ? "checkmark.seal" : "sun.horizon")
                     } description: {
                         Text(showDone
-                             ? "Completed tasks show up here."
-                             : "Open an audit and choose Build Remediation Plan to turn failed controls into tasks.")
+                             ? "Finished fixes land here. The first one always feels good."
+                             : tasks.isEmpty
+                                ? "Open an audit and choose Build Remediation Plan to turn failed controls into tasks."
+                                : "Every gap is closed. Enjoy it.")
                     }
                     .listRowBackground(Color.clear)
                 }
@@ -66,7 +68,9 @@ struct TasksView: View {
                             }
                             .swipeActions(edge: .leading) {
                                 Button {
-                                    task.state = task.isDone ? .open : .done
+                                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                                        task.state = task.isDone ? .open : .done
+                                    }
                                     ReminderScheduler.schedule(task)
                                 } label: {
                                     Label(task.isDone ? "Reopen" : "Done",
@@ -115,6 +119,7 @@ struct TaskRow: View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: task.isDone ? "checkmark.circle.fill" : "circle")
                 .font(.title3)
+                .contentTransition(.symbolEffect(.replace))
                 .foregroundStyle(task.isDone ? Theme.calmGreen : task.priority.color)
             VStack(alignment: .leading, spacing: 3) {
                 Text(task.title.isEmpty ? "Untitled task" : task.title)

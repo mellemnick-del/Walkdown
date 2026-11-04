@@ -173,6 +173,7 @@ private struct WalkCard: View {
         let selected = control.status == option
         return Button {
             control.status = selected ? .notStarted : option
+            if !selected { Milestones.increment(Milestones.walkAnswersKey) }
             // Pass and N/A usually need nothing else, so move along. Fail and Partial stay for notes and photos.
             if !selected && (option == .pass || option == .notApplicable) {
                 Task {
@@ -191,7 +192,7 @@ private struct WalkCard: View {
             .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous).stroke(selected ? option.color : .clear, lineWidth: 2.5))
             .foregroundStyle(selected ? option.color : .primary)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressableButtonStyle())
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 

@@ -7,6 +7,8 @@ struct StatusIcon: View {
         Image(systemName: status.symbol)
             .foregroundStyle(status.color)
             .font(.title3)
+            .contentTransition(.symbolEffect(.replace))
+            .symbolEffect(.bounce, value: status)
             .accessibilityLabel(status.label)
     }
 }

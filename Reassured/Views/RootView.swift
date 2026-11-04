@@ -7,6 +7,11 @@ struct RootView: View {
     @AppStorage(SettingsKeys.hasOnboarded) private var hasOnboarded = false
     @State private var showingOpening = true
     @State private var lockerLock = LockerLock()
+    @State private var milestoneQueue: [Milestone] = []
+    @Query private var milestoneAudits: [Audit]
+    @Query private var milestoneTasks: [RemediationTask]
+    @Query private var milestoneLocker: [LockerItem]
+    @Query private var milestoneClients: [Client]
     @Environment(\.scenePhase) private var scenePhase
     #if DEBUG
     @Query private var allAudits: [Audit]
@@ -39,6 +44,17 @@ struct RootView: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .background { lockerLock.lock() }
         }
+        .overlay {
+            if let milestone = milestoneQueue.first, hasOnboarded, !showingOpening {
+                MilestoneMoment(milestone: milestone) {
+                    withAnimation(.easeOut(duration: 0.4)) { _ = milestoneQueue.removeFirst() }
+                }
+                .id(milestone.id)
+                .transition(.opacity)
+            }
+        }
+        .onAppear { checkMilestones(firstLook: true) }
+        .onChange(of: milestoneStats) { _, _ in checkMilestones(firstLook: false) }
         .overlay {
             if showingOpening && hasOnboarded {
                 OpeningView { withAnimation(.easeOut(duration: 0.45)) { showingOpening = false } }
@@ -95,4 +111,22 @@ struct RootView: View {
         }
     }
     #endif
+
+    private var milestoneStats: MilestoneStats {
+        MilestoneStats(audits: milestoneAudits, tasks: milestoneTasks, lockerItems: milestoneLocker,
+                       clients: milestoneClients,
+                       walkAnswers: UserDefaults.standard.integer(forKey: Milestones.walkAnswersKey),
+                       reportsOpened: UserDefaults.standard.integer(forKey: Milestones.reportsOpenedKey))
+    }
+
+    private func checkMilestones(firstLook: Bool) {
+        #if DEBUG
+        let quietly = DemoData.isEnabled
+        #else
+        let quietly = false
+        #endif
+        let fresh = Milestones.newlyEarned(milestoneStats, quietly: quietly)
+        guard !fresh.isEmpty else { return }
+        withAnimation(.easeIn(duration: 0.4)) { milestoneQueue.append(contentsOf: fresh) }
+    }
 }

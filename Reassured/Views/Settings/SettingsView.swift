@@ -79,6 +79,13 @@ struct SettingsView: View {
                 }
                 Section {
                     NavigationLink {
+                        MilestonesView()
+                    } label: {
+                        Label("Milestones", systemImage: "rosette")
+                    }
+                }
+                Section {
+                    NavigationLink {
                         BackupView()
                     } label: {
                         Label("Backup and Restore", systemImage: "externaldrive")

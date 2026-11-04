@@ -6,6 +6,8 @@ struct HomeView: View {
     @Query private var audits: [Audit]
     @Query(filter: #Predicate<RemediationTask> { $0.stateRaw != "done" }) private var openTasks: [RemediationTask]
     @Query private var lockerItems: [LockerItem]
+    @Query private var allTasks: [RemediationTask]
+    @Query private var clients: [Client]
     @AppStorage(SettingsKeys.auditorName) private var name = ""
     @AppStorage(SettingsKeys.userRole) private var roleRaw = UserRole.organization.rawValue
 
@@ -95,7 +97,9 @@ struct HomeView: View {
                     SectionTitle(title: "Next Up", actionLabel: openTasks.isEmpty ? nil : "See All") { router.tab = .tasks }
                     if nextUp.isEmpty {
                         Card {
-                            Label("Nothing to fix right now. Failed controls become tasks when you build a remediation plan.",
+                            Label(allTasks.isEmpty
+                                  ? "Nothing to fix yet. Failed controls become tasks when you build a remediation plan."
+                                  : "Every gap is closed. Enjoy it.",
                                   systemImage: "checkmark.seal")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
@@ -123,6 +127,11 @@ struct HomeView: View {
                             }
                         }
                     }
+
+                    MilestonesCard(stats: MilestoneStats(
+                        audits: audits, tasks: allTasks, lockerItems: lockerItems, clients: clients,
+                        walkAnswers: UserDefaults.standard.integer(forKey: Milestones.walkAnswersKey),
+                        reportsOpened: UserDefaults.standard.integer(forKey: Milestones.reportsOpenedKey)))
 
                     SectionTitle(title: "Start Something")
                     HStack(spacing: 12) {
@@ -303,6 +312,51 @@ private struct QuickAction: View {
                 .frame(maxWidth: .infinity)
             }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressableButtonStyle())
+    }
+}
+
+/// A small Home card: milestones earned and the closest one to go.
+private struct MilestonesCard: View {
+    let stats: MilestoneStats
+
+    var body: some View {
+        let earned = Milestones.earned(stats)
+        let next = Milestones.all
+            .filter { Milestones.progress($0, stats) < $0.goal }
+            .max { fraction($0) < fraction($1) }
+        NavigationLink {
+            MilestonesView()
+        } label: {
+            Card {
+                HStack(spacing: 14) {
+                    MilestoneMedal(symbol: earned.last?.symbol ?? "sunrise.fill", earned: !earned.isEmpty, size: 48)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("\(earned.count) of \(Milestones.all.count) milestones")
+                            .font(.system(.headline, design: .serif))
+                        if let next {
+                            Text("Next: \(next.title). \(next.detail)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(2)
+                            if next.goal > 1 {
+                                ProgressView(value: fraction(next)).tint(Theme.calmAmber)
+                            }
+                        } else {
+                            Text("Every milestone earned. Remarkable work.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    Spacer(minLength: 0)
+                    Image(systemName: "chevron.right").foregroundStyle(.tertiary)
+                }
+            }
+        }
+        .buttonStyle(PressableButtonStyle())
+    }
+
+    private func fraction(_ milestone: Milestone) -> Double {
+        Double(Milestones.progress(milestone, stats)) / Double(milestone.goal)
     }
 }

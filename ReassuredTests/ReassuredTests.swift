@@ -197,3 +197,52 @@ struct ReportTests {
         #expect(text.contains("No MFA on VPN"))
     }
 }
+
+struct MilestoneTests {
+    @Test func nothingEarnedAtTheStart() {
+        #expect(Milestones.earned(MilestoneStats()).isEmpty)
+    }
+
+    @Test func progressCountsTowardGoalsAndCaps() {
+        var stats = MilestoneStats()
+        stats.answeredControls = 140
+        let centurion = try! #require(Milestones.all.first { $0.id == "centurion" })
+        let thousand = try! #require(Milestones.all.first { $0.id == "thousand-checks" })
+        #expect(Milestones.progress(centurion, stats) == 100)
+        #expect(Milestones.progress(thousand, stats) == 140)
+        let earned = Set(Milestones.earned(stats).map(\.id))
+        #expect(earned == ["first-steps", "centurion"])
+    }
+
+    @Test func scoreMilestones() {
+        var stats = MilestoneStats()
+        stats.bestScore = 0.82
+        stats.bestCompleteScore = 0.96
+        let earned = Set(Milestones.earned(stats).map(\.id))
+        #expect(earned.contains("strong-score"))
+        #expect(earned.contains("gold-standard"))
+    }
+
+    @Test func milestoneIDsAreUnique() {
+        let ids = Milestones.all.map(\.id)
+        #expect(Set(ids).count == ids.count)
+    }
+
+    @MainActor
+    @Test func statsFromRealData() throws {
+        ReminderScheduler.isEnabled = false
+        let container = try ReassuredStore.makeContainer(inMemory: true)
+        let context = container.mainContext
+        let audit = AuditFactory.create(from: TemplateLibrary.cmmcLevel1, clientName: "Test", siteName: "", location: "",
+                                        auditorName: "", date: .now, scopeNotes: "", kind: .onSite, in: context)
+        for control in audit.sortedControls { control.status = .pass }
+        audit.status = .complete
+        let stats = MilestoneStats(audits: [audit], tasks: [], lockerItems: [], clients: [], walkAnswers: 0, reportsOpened: 0)
+        #expect(stats.answeredControls == 17)
+        #expect(stats.completedAudits == 1)
+        #expect(stats.cmmcCompleted)
+        #expect(stats.bestCompleteScore == 1)
+        let earned = Set(Milestones.earned(stats).map(\.id))
+        #expect(earned.isSuperset(of: ["first-steps", "first-light", "strong-score", "defense-ready", "gold-standard"]))
+    }
+}
