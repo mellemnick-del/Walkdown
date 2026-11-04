@@ -7,6 +7,7 @@ struct TasksView: View {
 
     private var tasks: [RemediationTask] { storedTasks.filter { !($0.audit?.isInTrash ?? false) } }
     @State private var showDone = false
+    @Environment(AppRouter.self) private var router
     @State private var newTask: RemediationTask?
 
     private struct TaskSection: Identifiable {
@@ -93,6 +94,7 @@ struct TasksView: View {
                 }
             }
             .calmBackground()
+            .onChange(of: router.showOpenTasks) { _, _ in showDone = false }
             .navigationTitle("Tasks")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {

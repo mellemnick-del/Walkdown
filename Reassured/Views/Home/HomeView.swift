@@ -92,7 +92,15 @@ struct HomeView: View {
                         WelcomeCard(role: role) { showingNewAudit = true }
                     }
 
-                    StatsRow(openTasks: openTasks, audits: activeAudits)
+                    StatsRow(openTasks: openTasks, audits: activeAudits,
+                             showTasks: { router.openTasks() },
+                             showUnanswered: {
+                                 if let focus = activeAudits.first(where: { $0.answeredCount < $0.totalCount }) ?? activeAudits.first {
+                                     router.open(focus, unansweredOnly: true)
+                                 } else {
+                                     router.tab = .audits
+                                 }
+                             })
 
                     let needsAttention = lockerItems.filter { $0.isExpired || $0.isExpiringSoon }
                     if !needsAttention.isEmpty {
@@ -254,14 +262,19 @@ private struct WelcomeCard: View {
 private struct StatsRow: View {
     let openTasks: [RemediationTask]
     let audits: [Audit]
+    let showTasks: () -> Void
+    let showUnanswered: () -> Void
 
     var body: some View {
         let overdue = openTasks.filter(\.isOverdue).count
         let remaining = audits.reduce(0) { $0 + ($1.totalCount - $1.answeredCount) }
         HStack(spacing: 12) {
-            Stat(value: openTasks.count, label: "Open Tasks", symbol: "wrench.and.screwdriver.fill", color: Theme.calmBlue)
-            Stat(value: overdue, label: "Overdue", symbol: "clock.badge.exclamationmark.fill", color: overdue > 0 ? Theme.calmCoral : Theme.calmGreen)
-            Stat(value: remaining, label: "Controls Left", symbol: "checklist", color: Theme.calmAmber)
+            Stat(value: openTasks.count, label: "Open Tasks", symbol: "wrench.and.screwdriver.fill",
+                 color: Theme.calmBlue, action: showTasks)
+            Stat(value: overdue, label: "Overdue", symbol: "clock.badge.exclamationmark.fill",
+                 color: overdue > 0 ? Theme.calmCoral : Theme.calmGreen, action: showTasks)
+            Stat(value: remaining, label: "Controls Left", symbol: "checklist",
+                 color: Theme.calmAmber, action: showUnanswered)
         }
     }
 
@@ -270,15 +283,23 @@ private struct StatsRow: View {
         let label: String
         let symbol: String
         let color: Color
+        let action: () -> Void
 
         var body: some View {
-            Card {
-                VStack(alignment: .leading, spacing: 6) {
-                    Image(systemName: symbol)
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(color)
-                        .frame(width: 32, height: 32)
-                        .background(color.opacity(0.16), in: Circle())
+            Button(action: action) {
+                Card {
+                    VStack(alignment: .leading, spacing: 6) {
+                    HStack(alignment: .top) {
+                        Image(systemName: symbol)
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(color)
+                            .frame(width: 32, height: 32)
+                            .background(color.opacity(0.16), in: Circle())
+                        Spacer(minLength: 0)
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.tertiary)
+                    }
                     Text("\(value)")
                         .font(.system(.title, design: .rounded).weight(.bold))
                         .monospacedDigit()
@@ -288,8 +309,12 @@ private struct StatsRow: View {
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
+                    }
                 }
             }
+            .buttonStyle(PressableButtonStyle())
+            .accessibilityLabel("\(value) \(label)")
+            .accessibilityHint(label == "Controls Left" ? "Opens your current audit's unanswered controls" : "Opens Tasks")
         }
     }
 }

@@ -13,6 +13,7 @@ struct AuditWorkspaceView: View {
     @State private var walking = false
     @State private var showingCertificate = false
     @Environment(\.modelContext) private var context
+    @Environment(AppRouter.self) private var router
 
     enum ControlFilter: String, CaseIterable, Identifiable {
         case all, open, issues
@@ -112,6 +113,12 @@ struct AuditWorkspaceView: View {
             }
         }
         .searchable(text: $searchText, prompt: "Search controls, IDs, or notes")
+        .onAppear {
+            if router.openToUnanswered {
+                filter = .open
+                router.openToUnanswered = false
+            }
+        }
         .sensoryFeedback(trigger: audit.answeredCount) { _, _ in .selection }
         .calmBackground()
         .navigationTitle(audit.displayName)
