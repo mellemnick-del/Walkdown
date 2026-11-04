@@ -3,7 +3,9 @@ import SwiftData
 
 struct TasksView: View {
     @Environment(\.modelContext) private var context
-    @Query private var tasks: [RemediationTask]
+    @Query private var storedTasks: [RemediationTask]
+
+    private var tasks: [RemediationTask] { storedTasks.filter { !($0.audit?.isInTrash ?? false) } }
     @State private var showDone = false
     @State private var newTask: RemediationTask?
 

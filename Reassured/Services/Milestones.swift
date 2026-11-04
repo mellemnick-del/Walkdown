@@ -29,6 +29,8 @@ struct MilestoneStats: Equatable {
 
     init(audits: [Audit], tasks: [RemediationTask], lockerItems: [LockerItem], clients: [Client],
          walkAnswers: Int, reportsOpened: Int) {
+        let audits = audits.filter { !$0.isInTrash }
+        let tasks = tasks.filter { !($0.audit?.isInTrash ?? false) }
         answeredControls = audits.reduce(0) { $0 + $1.answeredCount }
         let completed = audits.filter { $0.status == .complete }
         completedAudits = completed.count

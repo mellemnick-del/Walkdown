@@ -6,7 +6,6 @@ struct ClientsView: View {
     @Query(sort: \Client.name) private var clients: [Client]
     @State private var showingNew = false
     @State private var searchText = ""
-    @State private var clientToDelete: Client?
     @State private var deleteRequest: DeleteRequest?
     @Environment(LockerLock.self) private var lock
 
@@ -54,23 +53,9 @@ struct ClientsView: View {
             NavigationStack { ClientEditorView(client: nil) }
         }
         .sheet(item: $deleteRequest) { ConfirmDeleteView(request: $0) }
-        .confirmationDialog("Delete this client?", isPresented: Binding(
-            get: { clientToDelete != nil }, set: { if !$0 { clientToDelete = nil } }
-        ), titleVisibility: .visible) {
-            Button("Delete Client", role: .destructive) {
-                if let clientToDelete { context.delete(clientToDelete) }
-                clientToDelete = nil
-            }
-        } message: {
-            Text("The client is removed, but its audits and evidence are kept and become unassigned.")
-        }
     }
 
     private func requestDelete(_ client: Client) {
-        guard lock.protectsDeletes else {
-            clientToDelete = client
-            return
-        }
         deleteRequest = DeleteRequest(
             title: "Delete \"\(client.name)\"?",
             message: "The client is removed. Their audits and evidence are kept and become unassigned.",

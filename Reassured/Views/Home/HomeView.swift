@@ -3,10 +3,10 @@ import SwiftData
 
 struct HomeView: View {
     @Environment(AppRouter.self) private var router
-    @Query private var audits: [Audit]
-    @Query(filter: #Predicate<RemediationTask> { $0.stateRaw != "done" }) private var openTasks: [RemediationTask]
+    @Query private var storedAudits: [Audit]
+    @Query(filter: #Predicate<RemediationTask> { $0.stateRaw != "done" }) private var storedOpenTasks: [RemediationTask]
     @Query private var lockerItems: [LockerItem]
-    @Query private var allTasks: [RemediationTask]
+    @Query private var storedTasks: [RemediationTask]
     @Query private var clients: [Client]
     @AppStorage(SettingsKeys.auditorName) private var name = ""
     @AppStorage(SettingsKeys.userRole) private var roleRaw = UserRole.organization.rawValue
@@ -21,6 +21,10 @@ struct HomeView: View {
     private var activeAudits: [Audit] {
         audits.filter { $0.status == .inProgress }.sorted { $0.lastActivity > $1.lastActivity }
     }
+
+    private var audits: [Audit] { storedAudits.filter { !$0.isInTrash } }
+    private var openTasks: [RemediationTask] { storedOpenTasks.filter { !($0.audit?.isInTrash ?? false) } }
+    private var allTasks: [RemediationTask] { storedTasks.filter { !($0.audit?.isInTrash ?? false) } }
 
     private var nextUp: [RemediationTask] {
         Array(openTasks.sorted(by: RemediationTask.nextUp).prefix(3))

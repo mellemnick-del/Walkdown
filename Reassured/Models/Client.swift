@@ -26,11 +26,11 @@ final class Client {
     }
 
     var sortedAudits: [Audit] {
-        (audits ?? []).sorted { $0.date > $1.date }
+        (audits ?? []).filter { !$0.isInTrash }.sorted { $0.date > $1.date }
     }
 
     var openTaskCount: Int {
-        (audits ?? []).reduce(0) { $0 + $1.openTasks.count }
+        sortedAudits.reduce(0) { $0 + $1.openTasks.count }
     }
 
     /// Score of the most recent audit that has results.

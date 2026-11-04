@@ -9,7 +9,6 @@ struct AuditListView: View {
     @State private var path = NavigationPath()
     @State private var showingNewAudit = false
     @State private var showingSettings = false
-    @State private var auditToDelete: Audit?
     @State private var deleteRequest: DeleteRequest?
     @Environment(LockerLock.self) private var lock
 
@@ -19,7 +18,7 @@ struct AuditListView: View {
         NavigationStack(path: $path) {
             List {
                 Picker("Status", selection: $filter) {
-                    ForEach(AuditStatus.allCases) { Text($0.label).tag($0) }
+                    ForEach(AuditStatus.listed) { Text($0.label).tag($0) }
                 }
                 .pickerStyle(.segmented)
                 .listRowBackground(Color.clear)
@@ -47,6 +46,21 @@ struct AuditListView: View {
                                     Label("Archive", systemImage: "archivebox")
                                 }
                                 .tint(.gray)
+                            }
+                        }
+                    }
+                }
+
+                let trashCount = audits.filter(\.isInTrash).count
+                if trashCount > 0 {
+                    Section {
+                        NavigationLink {
+                            RecentlyDeletedView()
+                        } label: {
+                            LabeledContent {
+                                Text("\(trashCount)").monospacedDigit()
+                            } label: {
+                                Label("Recently Deleted", systemImage: "trash")
                             }
                         }
                     }
@@ -83,31 +97,15 @@ struct AuditListView: View {
                 path.append(audit)
                 router.auditToOpen = nil
             }
-            .confirmationDialog("Delete this audit?", isPresented: Binding(
-                get: { auditToDelete != nil },
-                set: { if !$0 { auditToDelete = nil } }
-            ), titleVisibility: .visible) {
-                Button("Delete Audit", role: .destructive) {
-                    if let auditToDelete { context.delete(auditToDelete) }
-                    auditToDelete = nil
-                }
-            } message: {
-                Text("All results, evidence photos, and findings in this audit will be deleted. This can't be undone.")
-            }
             .sheet(item: $deleteRequest) { ConfirmDeleteView(request: $0) }
         }
     }
 
     private func requestDelete(_ audit: Audit) {
-        guard lock.protectsDeletes else {
-            auditToDelete = audit
-            return
-        }
-        let count = audit.totalCount
         deleteRequest = DeleteRequest(
             title: "Delete \"\(audit.displayName)\"?",
-            message: "This deletes the \(audit.checklistName) audit: all \(count) results, notes, photos, findings, and tasks. Evidence in the Locker is kept. This can't be undone.",
-            perform: { [context] in context.delete(audit) }
+            message: "This moves the \(audit.checklistName) audit, with all \(audit.totalCount) results, notes, photos, findings, and tasks, to Recently Deleted. You can restore it for \(RecentlyDeleted.keepDays) days.",
+            perform: { withAnimation { RecentlyDeleted.delete(audit) } }
         )
     }
 
@@ -128,6 +126,8 @@ struct AuditListView: View {
         case .complete:
             ContentUnavailableView("No Completed Audits", systemImage: "checkmark.seal",
                                    description: Text("Audits you mark complete show up here."))
+        case .deleted:
+            EmptyView()
         case .archived:
             ContentUnavailableView("No Archived Audits", systemImage: "archivebox",
                                    description: Text("Swipe an audit to archive it."))

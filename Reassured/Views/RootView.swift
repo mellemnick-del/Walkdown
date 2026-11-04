@@ -13,6 +13,7 @@ struct RootView: View {
     @Query private var milestoneLocker: [LockerItem]
     @Query private var milestoneClients: [Client]
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.modelContext) private var modelContext
     #if DEBUG
     @Query private var allAudits: [Audit]
     @State private var showingFontPreview = false
@@ -53,7 +54,10 @@ struct RootView: View {
                 .transition(.opacity)
             }
         }
-        .onAppear { checkMilestones(firstLook: true) }
+        .onAppear {
+            RecentlyDeleted.purge(in: modelContext)
+            checkMilestones(firstLook: true)
+        }
         .onChange(of: milestoneStats) { _, _ in checkMilestones(firstLook: false) }
         .overlay {
             if showingOpening && hasOnboarded {

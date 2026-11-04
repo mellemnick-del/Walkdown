@@ -29,7 +29,7 @@ final class LockerLock {
         didSet { UserDefaults.standard.set(useBiometrics, forKey: Self.biometricsKey) }
     }
 
-    /// Deleting audits and clients asks for the PIN (or Face ID / device passcode when there's no PIN).
+    /// When on (and a PIN is set), deletes ask for the PIN instead of typing DELETE.
     var protectsDeletes: Bool {
         didSet { UserDefaults.standard.set(protectsDeletes, forKey: Self.deletesKey) }
     }
@@ -37,7 +37,7 @@ final class LockerLock {
     init() {
         isEnabled = UserDefaults.standard.bool(forKey: Self.enabledKey)
         useBiometrics = UserDefaults.standard.object(forKey: Self.biometricsKey) as? Bool ?? true
-        protectsDeletes = UserDefaults.standard.object(forKey: Self.deletesKey) as? Bool ?? true
+        protectsDeletes = UserDefaults.standard.object(forKey: Self.deletesKey) as? Bool ?? false
     }
 
     /// True when the Locker's contents can be shown.

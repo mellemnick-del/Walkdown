@@ -79,14 +79,20 @@ enum Severity: String, Codable, CaseIterable, Identifiable {
 /// Where an audit sits in its lifecycle.
 enum AuditStatus: String, Codable, CaseIterable, Identifiable {
     case inProgress, complete, archived
+    /// In Recently Deleted. Hidden everywhere, removed for good after 30 days.
+    case deleted
 
     var id: String { rawValue }
+
+    /// The statuses shown as filters on the Audits list.
+    static let listed: [AuditStatus] = [.inProgress, .complete, .archived]
 
     var label: String {
         switch self {
         case .inProgress: "In Progress"
         case .complete: "Complete"
         case .archived: "Archived"
+        case .deleted: "Recently Deleted"
         }
     }
 }

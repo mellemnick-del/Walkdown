@@ -132,7 +132,7 @@ enum BackupService {
 
     /// Everything on the device.
     static func makeBackup(in context: ModelContext) throws -> BackupFile {
-        let audits = try context.fetch(FetchDescriptor<Audit>())
+        let audits = try context.fetch(FetchDescriptor<Audit>()).filter { !$0.isInTrash }
         let clients = try context.fetch(FetchDescriptor<Client>())
         let locker = try context.fetch(FetchDescriptor<LockerItem>())
         return BackupFile(version: currentVersion, exportedAt: .now,

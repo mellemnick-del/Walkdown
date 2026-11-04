@@ -281,3 +281,58 @@ struct CertificateTests {
         #expect(text.contains("self-assessment"))
     }
 }
+
+@MainActor
+struct RecentlyDeletedTests {
+    private func makeAudit(_ context: ModelContext, status: AuditStatus = .complete) -> Audit {
+        let audit = AuditFactory.create(from: TemplateLibrary.cmmcLevel1, clientName: "Trash Test", siteName: "", location: "",
+                                        auditorName: "", date: .now, scopeNotes: "", kind: .onSite, in: context)
+        audit.sortedControls.first?.status = .fail
+        audit.status = status
+        return audit
+    }
+
+    @Test func deleteHidesAndRestoreBringsItBack() throws {
+        ReminderScheduler.isEnabled = false
+        let container = try ReassuredStore.makeContainer(inMemory: true)
+        let audit = makeAudit(container.mainContext, status: .complete)
+
+        RecentlyDeleted.delete(audit)
+        #expect(audit.isInTrash)
+        #expect(RecentlyDeleted.daysLeft(audit) == RecentlyDeleted.keepDays)
+        #expect(MilestoneStats(audits: [audit], tasks: [], lockerItems: [], clients: [], walkAnswers: 0, reportsOpened: 0).answeredControls == 0)
+
+        RecentlyDeleted.restore(audit)
+        #expect(!audit.isInTrash)
+        #expect(audit.status == .complete)
+        #expect(audit.sortedControls.first?.status == .fail)
+    }
+
+    @Test func purgeOnlyRemovesAuditsOlderThan30Days() throws {
+        ReminderScheduler.isEnabled = false
+        let container = try ReassuredStore.makeContainer(inMemory: true)
+        let context = container.mainContext
+        let old = makeAudit(context)
+        let recent = makeAudit(context)
+        let now = Date.now
+        RecentlyDeleted.delete(old, now: now.addingTimeInterval(-31 * 86_400))
+        RecentlyDeleted.delete(recent, now: now.addingTimeInterval(-5 * 86_400))
+
+        #expect(RecentlyDeleted.purge(in: context, now: now) == 1)
+        let remaining = try context.fetch(FetchDescriptor<Audit>()).map(\.id)
+        #expect(remaining.contains(recent.id))
+        #expect(!remaining.contains(old.id))
+        #expect(RecentlyDeleted.daysLeft(recent, now: now) == 25)
+    }
+
+    @Test func backupsLeaveOutDeletedAudits() throws {
+        ReminderScheduler.isEnabled = false
+        let container = try ReassuredStore.makeContainer(inMemory: true)
+        let context = container.mainContext
+        let kept = makeAudit(context)
+        let trashed = makeAudit(context)
+        RecentlyDeleted.delete(trashed)
+        let backup = try BackupService.makeBackup(in: context)
+        #expect(backup.audits.map(\.id) == [kept.id])
+    }
+}

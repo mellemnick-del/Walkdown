@@ -247,16 +247,20 @@ struct DeleteRequest: Identifiable {
     let perform: () -> Void
 }
 
-/// Confirms a delete with the Reassured PIN, or with Face ID / device passcode when no PIN is set.
+/// Confirms a delete by typing DELETE, or with the Reassured PIN when Use PIN for Deletes is on.
 struct ConfirmDeleteView: View {
     let request: DeleteRequest
 
     @Environment(LockerLock.self) private var lock
     @Environment(\.dismiss) private var dismiss
     @State private var code = ""
+    @State private var typed = ""
     @State private var message: String?
     @State private var shake = false
     @FocusState private var focused: Bool
+
+    private var usesPIN: Bool { lock.hasPasscode && lock.protectsDeletes }
+    private var typedMatches: Bool { typed.trimmingCharacters(in: .whitespaces).uppercased() == "DELETE" }
 
     var body: some View {
         NavigationStack {
@@ -277,7 +281,7 @@ struct ConfirmDeleteView: View {
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
 
-                    if lock.hasPasscode {
+                    if usesPIN {
                         Text("Enter your Reassured PIN to delete.")
                             .font(.subheadline.weight(.semibold))
                             .padding(.top, 6)
@@ -296,22 +300,30 @@ struct ConfirmDeleteView: View {
                                 if digits.count == LockerLock.passcodeLength { submit(digits) }
                             }
                     } else {
-                        Button {
-                            Task {
-                                if await lock.confirmOwner(reason: "Confirm this delete") { confirmed() }
-                            }
-                        } label: {
-                            Label("Confirm and Delete", systemImage: "faceid")
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Type DELETE to confirm.")
+                                .font(.subheadline.weight(.semibold))
+                            TextField("DELETE", text: $typed)
+                                .textInputAutocapitalization(.characters)
+                                .autocorrectionDisabled()
+                                .focused($focused)
+                                .submitLabel(.done)
+                                .onSubmit { if typedMatches { confirmed() } }
+                                .padding(12)
+                                .background(Theme.card, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                    .stroke(typedMatches ? Theme.calmCoral : Color.secondary.opacity(0.3), lineWidth: 1.5))
+                        }
+                        .padding(.top, 6)
+                        Button(action: confirmed) {
+                            Text("Delete")
                                 .font(.headline)
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 12)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 6)
                         }
                         .buttonStyle(.borderedProminent)
                         .tint(Theme.calmCoral)
-                        Text("Tip: set up a Reassured PIN in Settings > Security to protect deletes with your own code.")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.center)
+                        .disabled(!typedMatches)
                     }
 
                     if let message {
@@ -329,7 +341,7 @@ struct ConfirmDeleteView: View {
                     Button("Cancel") { dismiss() }
                 }
             }
-            .onAppear { if lock.hasPasscode { focused = true } }
+            .onAppear { focused = true }
         }
         .presentationDetents([.large])
     }

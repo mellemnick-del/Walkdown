@@ -59,7 +59,7 @@ struct LockerItemDetailView: View {
             }
 
             Section("Linked Controls") {
-                let controls = item.controls ?? []
+                let controls = (item.controls ?? []).filter { !($0.audit?.isInTrash ?? false) }
                 if controls.isEmpty {
                     Text("Not linked yet. Open a control in any audit and choose Attach from Locker.")
                         .font(.subheadline)

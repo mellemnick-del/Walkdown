@@ -79,7 +79,9 @@ struct SettingsView: View {
                             Label("Set Up Reassured PIN", systemImage: "lock.shield")
                         }
                     }
-                    Toggle("Protect Deletes", isOn: Binding(get: { lock.protectsDeletes }, set: { lock.protectsDeletes = $0 }))
+                    if lock.hasPasscode {
+                        Toggle("Use PIN for Deletes", isOn: Binding(get: { lock.protectsDeletes }, set: { lock.protectsDeletes = $0 }))
+                    }
                     Toggle("Lock Evidence Locker", isOn: lockerToggle)
                     if lock.isEnabled, LockerLock.biometryName != nil {
                         Toggle("Unlock Locker with \(biometry)", isOn: Binding(get: { lock.useBiometrics }, set: { lock.useBiometrics = $0 }))
@@ -90,7 +92,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Reassured PIN")
                 } footer: {
-                    Text("One 6-digit PIN. Protect Deletes asks for it before an audit or client is deleted (or for \(biometry) and your device passcode if no PIN is set). It can also lock the Evidence Locker, which locks again every time you leave the app.")
+                    Text("One 6-digit PIN. It can lock the Evidence Locker, which locks again every time you leave the app. Deletes always need you to type DELETE; turn on Use PIN for Deletes to ask for the PIN instead.")
                 }
                 Section {
                     NavigationLink {
@@ -131,7 +133,7 @@ struct SettingsView: View {
             .confirmationDialog("Remove your Reassured PIN?", isPresented: $confirmingRemove, titleVisibility: .visible) {
                 Button("Remove PIN", role: .destructive) { lock.removePasscode() }
             } message: {
-                Text("The Evidence Locker will open without a PIN, and deletes will ask for \(biometry) or your device passcode instead.")
+                Text("The Evidence Locker will open without a PIN, and deletes will ask you to type DELETE.")
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
