@@ -81,9 +81,18 @@ final class Audit {
         (controls ?? []).filter { $0.status == status }.count
     }
 
+    /// How many scored answers (Pass, Partial, or Fail) an audit needs before it shows a score.
+    static let minimumScoredAnswers = 5
+
     /// Compliance score from 0 to 1. Pass counts fully, partial counts half, N/A and unanswered are left out.
+    /// Nil until enough controls are answered for the number to mean something
+    /// (5, or every scorable control on a very short checklist).
     var score: Double? {
-        ComplianceScore.score(for: controls ?? [])
+        let controls = controls ?? []
+        let scored = controls.filter { [.pass, .partial, .fail].contains($0.status) }.count
+        let scorable = controls.filter { $0.status != .notApplicable }.count
+        guard scored > 0, scored >= min(Self.minimumScoredAnswers, scorable) else { return nil }
+        return ComplianceScore.score(for: controls)
     }
 }
 

@@ -82,7 +82,7 @@ struct ScoreRing: View {
                 } else {
                     Text("--").font(.system(size: size * 0.3, weight: .bold, design: .rounded))
                 }
-                Text("score")
+                Text(score == nil ? "too early" : "score")
                     .font(.caption)
                     .foregroundStyle(onDark ? Color.white.opacity(0.75) : Color.secondary)
             }

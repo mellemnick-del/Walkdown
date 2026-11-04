@@ -46,6 +46,13 @@ struct HomeView: View {
         let overdue = openTasks.filter(\.isOverdue).count
         if activeAudits.isEmpty && openTasks.isEmpty { return "Let's see where you stand." }
         if overdue > 0 { return "A few things need you today. You've got this." }
+        if let focus = activeAudits.first, focus.answeredCount < focus.totalCount {
+            let left = focus.totalCount - focus.answeredCount
+            let controls = left == 1 ? "1 control" : "\(left) controls"
+            if focus.answeredCount < Audit.minimumScoredAnswers { return "Good start. \(controls) to go." }
+            if focus.progress < 0.75 { return "Making progress. \(controls) to go." }
+            return "Almost there. \(controls) to go."
+        }
         if openTasks.isEmpty { return "Everything's on track. Nice work." }
         return "Here's where you stand today."
     }

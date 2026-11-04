@@ -336,3 +336,32 @@ struct RecentlyDeletedTests {
         #expect(backup.audits.map(\.id) == [kept.id])
     }
 }
+
+@MainActor
+struct EarlyScoreTests {
+    @Test func noScoreUntilFiveAnswers() throws {
+        ReminderScheduler.isEnabled = false
+        let container = try ReassuredStore.makeContainer(inMemory: true)
+        let audit = AuditFactory.create(from: TemplateLibrary.soc2Readiness, clientName: "Early", siteName: "", location: "",
+                                        auditorName: "", date: .now, scopeNotes: "", kind: .selfAssessment, in: container.mainContext)
+        let controls = audit.sortedControls
+        controls[0].status = .pass
+        controls[1].status = .pass
+        controls[2].status = .notApplicable
+        #expect(audit.score == nil)
+        for control in controls[3..<6] { control.status = .pass }
+        #expect(audit.score == 1)
+    }
+
+    @Test func shortChecklistsScoreWhenEverythingIsAnswered() throws {
+        ReminderScheduler.isEnabled = false
+        let container = try ReassuredStore.makeContainer(inMemory: true)
+        let audit = AuditFactory.create(from: TemplateLibrary.cmmcLevel1, clientName: "Short", siteName: "", location: "",
+                                        auditorName: "", date: .now, scopeNotes: "", kind: .onSite, in: container.mainContext)
+        // Mark all but three as N/A, then answer those three: every scorable control is answered.
+        let controls = audit.sortedControls
+        for control in controls.dropLast(3) { control.status = .notApplicable }
+        for control in controls.suffix(3) { control.status = .pass }
+        #expect(audit.score == 1)
+    }
+}
