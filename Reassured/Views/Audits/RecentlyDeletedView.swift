@@ -35,9 +35,11 @@ struct RecentlyDeletedView: View {
                             .controlSize(.small)
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                            Button(role: .destructive) { requestPermanentDelete(audit) } label: {
+                            // Not role: .destructive, which hides the row before the delete is confirmed.
+                            Button { requestPermanentDelete(audit) } label: {
                                 Label("Delete Now", systemImage: "trash")
                             }
+                            .tint(.red)
                         }
                     }
                 } footer: {

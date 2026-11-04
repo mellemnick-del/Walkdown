@@ -34,11 +34,14 @@ struct AuditListView: View {
                         }
                         // No full swipe: deleting always takes a deliberate tap.
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                            Button(role: .destructive) {
+                            // Not role: .destructive. That role makes the list hide the row right away,
+                            // before the delete is confirmed, so a canceled delete looked like a real one.
+                            Button {
                                 requestDelete(audit)
                             } label: {
                                 Label("Delete", systemImage: "trash")
                             }
+                            .tint(.red)
                             if audit.status != .archived {
                                 Button {
                                     audit.status = .archived

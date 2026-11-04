@@ -14,6 +14,7 @@ struct LockerView: View {
     @State private var photoItem: PhotosPickerItem?
     @State private var pending: PendingImport?
     @State private var importError: String?
+    @State private var deleteRequest: DeleteRequest?
 
     struct PendingImport: Identifiable {
         let id = UUID()
@@ -109,6 +110,7 @@ struct LockerView: View {
             .sheet(item: $pending) { pending in
                 NavigationStack { LockerItemEditor(newImport: pending.imported) }
             }
+            .sheet(item: $deleteRequest) { ConfirmDeleteView(request: $0) }
             .alert("Couldn't Import File", isPresented: Binding(
                 get: { importError != nil }, set: { if !$0 { importError = nil } }
             )) {
@@ -117,6 +119,20 @@ struct LockerView: View {
                 Text(importError ?? "")
             }
         }
+    }
+
+    private func requestDelete(_ item: LockerItem) {
+        let linked = (item.controls ?? []).count
+        deleteRequest = DeleteRequest(
+            title: "Delete \"\(item.title.isEmpty ? item.fileName : item.title)\"?",
+            message: linked == 0
+                ? "The document is removed from the Evidence Locker. This can't be undone."
+                : "The document is removed from the Evidence Locker and unlinked from \(linked) control\(linked == 1 ? "" : "s"). This can't be undone.",
+            perform: { [context] in
+                ReminderScheduler.cancel(item)
+                context.delete(item)
+            }
+        )
     }
 
     private func addMenu(prominent: Bool) -> some View {
@@ -154,11 +170,11 @@ struct LockerView: View {
                     } label: {
                         LockerRow(item: item)
                     }
-                }
-                .onDelete { offsets in
-                    for index in offsets {
-                        ReminderScheduler.cancel(list[index])
-                        context.delete(list[index])
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        Button { requestDelete(item) } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                        .tint(.red)
                     }
                 }
             }

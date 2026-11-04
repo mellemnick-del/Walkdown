@@ -33,9 +33,11 @@ struct ClientsView: View {
                     ClientRow(client: client)
                 }
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                    Button(role: .destructive) { requestDelete(client) } label: {
+                    // Not role: .destructive, which hides the row before the delete is confirmed.
+                    Button { requestDelete(client) } label: {
                         Label("Delete", systemImage: "trash")
                     }
+                    .tint(.red)
                 }
             }
         }
