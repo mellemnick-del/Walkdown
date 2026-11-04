@@ -11,6 +11,8 @@ struct NewAuditView: View {
     @Environment(\.modelContext) private var context
     @AppStorage(SettingsKeys.auditorName) private var defaultAuditor = ""
     @AppStorage(SettingsKeys.userRole) private var roleRaw = UserRole.organization.rawValue
+    @AppStorage(SettingsKeys.companyName) private var companyName = ""
+    @FocusState private var nameFocused: Bool
 
     @State private var clientName = ""
     @State private var siteName = ""
@@ -31,6 +33,11 @@ struct NewAuditView: View {
 
     private var canCreate: Bool { !clientName.trimmingCharacters(in: .whitespaces).isEmpty }
 
+    private var startTitle: String {
+        guard canCreate else { return kind == .onSite ? "Add a client name to start" : "Add a name to start" }
+        return kind == .onSite ? "Start Audit" : "Start Self-Assessment"
+    }
+
     var body: some View {
         NavigationStack {
             Form {
@@ -44,21 +51,32 @@ struct NewAuditView: View {
                          ? "Walk the site and record what you see."
                          : "Answer the checklist for your own organization or a client's.")
                 }
-                Section(kind == .onSite ? "Client" : "Organization") {
+                Section {
+                    TextField(kind == .onSite ? "Client name" : "Organization name", text: $clientName)
+                        .textInputAutocapitalization(.words)
+                        .focused($nameFocused)
+                        .submitLabel(.done)
+                    if kind == .onSite {
+                        TextField("Site (optional)", text: $siteName)
+                        TextField("Location (optional)", text: $location)
+                    }
                     if !clients.isEmpty {
-                        Picker("Client", selection: $clientID) {
+                        Picker(kind == .onSite ? "Saved client" : "For a client", selection: $clientID) {
                             Text("None").tag(UUID?.none)
                             ForEach(clients) { Text($0.name).tag(UUID?.some($0.id)) }
                         }
                     }
-                    Button { showingNewClient = true } label: {
-                        Label("New Client", systemImage: "person.badge.plus")
-                    }
-                    TextField(kind == .onSite ? "Client name" : "Organization name", text: $clientName)
-                        .textInputAutocapitalization(.words)
                     if kind == .onSite {
-                        TextField("Site (optional)", text: $siteName)
-                        TextField("Location (optional)", text: $location)
+                        Button { showingNewClient = true } label: {
+                            Label("Save as a New Client", systemImage: "person.badge.plus")
+                        }
+                    }
+                } header: {
+                    Text(kind == .onSite ? "Who are you auditing?" : "Who is this assessment for?")
+                } footer: {
+                    if !canCreate {
+                        Text("Required. This name appears on the report.")
+                            .foregroundStyle(Theme.calmCoral)
                     }
                 }
                 Section("Checklist") {
@@ -79,9 +97,24 @@ struct NewAuditView: View {
                     TextField(kind == .onSite ? "Auditor" : "Completed by", text: $auditorName)
                     DatePicker("Date", selection: $date, displayedComponents: .date)
                 }
-                Section("Scope") {
+                Section("Scope (optional)") {
                     TextField("What's in and out of scope?", text: $scopeNotes, axis: .vertical)
                         .lineLimit(3...8)
+                }
+
+                Section {
+                    Button {
+                        if canCreate { create() } else { nameFocused = true }
+                    } label: {
+                        Text(startTitle)
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 6)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(canCreate ? Color.accentColor : .gray)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
                 }
             }
             .calmBackground()
@@ -92,7 +125,7 @@ struct NewAuditView: View {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Create", action: create).disabled(!canCreate)
+                    Button("Start", action: create).disabled(!canCreate)
                 }
             }
             .onChange(of: clientID) { _, _ in
@@ -114,6 +147,19 @@ struct NewAuditView: View {
                     clientName = initialClient.name
                 }
                 kind = initialKind ?? (UserRole(rawValue: roleRaw) ?? .organization).defaultAuditKind
+                // A self-assessment is usually for your own organization, so start with its name.
+                if clientName.isEmpty && kind == .selfAssessment && initialClient == nil {
+                    clientName = companyName
+                }
+                if clientName.isEmpty {
+                    Task {
+                        try? await Task.sleep(for: .milliseconds(500))
+                        nameFocused = true
+                    }
+                }
+            }
+            .onChange(of: kind) { _, newKind in
+                if newKind == .selfAssessment && clientName.isEmpty && selectedClient == nil { clientName = companyName }
             }
         }
     }
