@@ -10,6 +10,8 @@ struct AuditListView: View {
     @State private var showingNewAudit = false
     @State private var showingSettings = false
     @State private var auditToDelete: Audit?
+    @State private var deleteRequest: DeleteRequest?
+    @Environment(LockerLock.self) private var lock
 
     private var filtered: [Audit] { audits.filter { $0.status == filter } }
 
@@ -31,9 +33,10 @@ struct AuditListView: View {
                         NavigationLink(value: audit) {
                             AuditRow(audit: audit)
                         }
-                        .swipeActions {
+                        // No full swipe: deleting always takes a deliberate tap.
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             Button(role: .destructive) {
-                                auditToDelete = audit
+                                requestDelete(audit)
                             } label: {
                                 Label("Delete", systemImage: "trash")
                             }
@@ -91,7 +94,21 @@ struct AuditListView: View {
             } message: {
                 Text("All results, evidence photos, and findings in this audit will be deleted. This can't be undone.")
             }
+            .sheet(item: $deleteRequest) { ConfirmDeleteView(request: $0) }
         }
+    }
+
+    private func requestDelete(_ audit: Audit) {
+        guard lock.protectsDeletes else {
+            auditToDelete = audit
+            return
+        }
+        let count = audit.totalCount
+        deleteRequest = DeleteRequest(
+            title: "Delete \"\(audit.displayName)\"?",
+            message: "This deletes the \(audit.checklistName) audit: all \(count) results, notes, photos, findings, and tasks. Evidence in the Locker is kept. This can't be undone.",
+            perform: { [context] in context.delete(audit) }
+        )
     }
 
     @ViewBuilder

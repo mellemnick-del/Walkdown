@@ -246,3 +246,38 @@ struct MilestoneTests {
         #expect(earned.isSuperset(of: ["first-steps", "first-light", "strong-score", "defense-ready", "gold-standard"]))
     }
 }
+
+@MainActor
+struct CertificateTests {
+    @Test func certificateIsOneLandscapePageWithTheOrganization() throws {
+        ReminderScheduler.isEnabled = false
+        let container = try ReassuredStore.makeContainer(inMemory: true)
+        let audit = AuditFactory.create(from: TemplateLibrary.hipaaSecurity, clientName: "Woodlands Family Clinic",
+                                        siteName: "", location: "", auditorName: "Tester", date: .now, scopeNotes: "",
+                                        kind: .onSite, in: container.mainContext)
+        for control in audit.sortedControls { control.status = .pass }
+        audit.status = .complete
+
+        let data = CertificateBuilder.makePDFData(for: audit, companyName: "Northline Advisory", options: .init())
+        let document = try #require(PDFDocument(data: data))
+        #expect(document.pageCount == 1)
+        let bounds = try #require(document.page(at: 0)).bounds(for: .mediaBox)
+        #expect(bounds.width > bounds.height)
+        let text = document.string ?? ""
+        #expect(text.contains("Woodlands Family Clinic"))
+        #expect(text.contains("100%"))
+        #expect(text.contains(CertificateBuilder.certificateID(for: audit)))
+    }
+
+    @Test func scoreCanBeLeftOff() throws {
+        ReminderScheduler.isEnabled = false
+        let container = try ReassuredStore.makeContainer(inMemory: true)
+        let audit = AuditFactory.create(from: TemplateLibrary.cmmcLevel1, clientName: "Test Co", siteName: "", location: "",
+                                        auditorName: "", date: .now, scopeNotes: "", kind: .selfAssessment, in: container.mainContext)
+        for control in audit.sortedControls { control.status = .pass }
+        let data = CertificateBuilder.makePDFData(for: audit, companyName: "", options: .init(includeScore: false))
+        let text = PDFDocument(data: data)?.string ?? ""
+        #expect(!text.contains("overall score"))
+        #expect(text.contains("self-assessment"))
+    }
+}

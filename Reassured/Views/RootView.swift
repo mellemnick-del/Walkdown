@@ -107,6 +107,12 @@ struct RootView: View {
                                                      summary: AuditWriter.savedSummary(for: audit))
                 try? data.write(to: URL.documentsDirectory.appendingPathComponent("report.pdf"))
             }
+            if let finished = allAudits.first(where: { $0.status == .complete }) {
+                let certificate = CertificateBuilder.makePDFData(
+                    for: finished, companyName: "Northline Advisory",
+                    options: .init(includeScore: true, signerName: "Nick Mellem", signerTitle: "Lead Assessor"))
+                try? certificate.write(to: URL.documentsDirectory.appendingPathComponent("certificate.pdf"))
+            }
         default: router.tab = .home
         }
     }

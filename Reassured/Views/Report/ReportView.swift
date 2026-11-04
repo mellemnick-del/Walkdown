@@ -8,9 +8,24 @@ struct ReportView: View {
     @State private var errorMessage: String?
     @State private var summary = ""
     @State private var writingSummary = false
+    @State private var showingCertificate = false
 
     var body: some View {
         List {
+            if audit.status == .complete {
+                Section {
+                    Button { showingCertificate = true } label: {
+                        HStack(spacing: 12) {
+                            MilestoneMedal(symbol: "rosette", earned: true, size: 40)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Certificate of Completion").font(.system(.headline, design: .serif))
+                                Text("Print it or send it to your client.").font(.caption).foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
+            }
+
             Section("Overview") {
                 LabeledContent("Client", value: audit.displayName)
                 LabeledContent("Checklist", value: audit.checklistName)
@@ -107,6 +122,7 @@ struct ReportView: View {
             }
         }
         .calmBackground()
+        .sheet(isPresented: $showingCertificate) { CertificateView(audit: audit) }
         .navigationTitle("Report")
         .task {
             if audit.status == .complete || audit.answeredCount == audit.totalCount {

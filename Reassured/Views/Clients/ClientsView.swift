@@ -7,6 +7,8 @@ struct ClientsView: View {
     @State private var showingNew = false
     @State private var searchText = ""
     @State private var clientToDelete: Client?
+    @State private var deleteRequest: DeleteRequest?
+    @Environment(LockerLock.self) private var lock
 
     private var filtered: [Client] {
         searchText.isEmpty ? clients : clients.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
@@ -31,8 +33,8 @@ struct ClientsView: View {
                 } label: {
                     ClientRow(client: client)
                 }
-                .swipeActions {
-                    Button(role: .destructive) { clientToDelete = client } label: {
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    Button(role: .destructive) { requestDelete(client) } label: {
                         Label("Delete", systemImage: "trash")
                     }
                 }
@@ -51,6 +53,7 @@ struct ClientsView: View {
         .sheet(isPresented: $showingNew) {
             NavigationStack { ClientEditorView(client: nil) }
         }
+        .sheet(item: $deleteRequest) { ConfirmDeleteView(request: $0) }
         .confirmationDialog("Delete this client?", isPresented: Binding(
             get: { clientToDelete != nil }, set: { if !$0 { clientToDelete = nil } }
         ), titleVisibility: .visible) {
@@ -61,6 +64,18 @@ struct ClientsView: View {
         } message: {
             Text("The client is removed, but its audits and evidence are kept and become unassigned.")
         }
+    }
+
+    private func requestDelete(_ client: Client) {
+        guard lock.protectsDeletes else {
+            clientToDelete = client
+            return
+        }
+        deleteRequest = DeleteRequest(
+            title: "Delete \"\(client.name)\"?",
+            message: "The client is removed. Their audits and evidence are kept and become unassigned.",
+            perform: { [context] in context.delete(client) }
+        )
     }
 }
 

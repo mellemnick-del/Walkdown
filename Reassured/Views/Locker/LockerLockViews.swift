@@ -41,7 +41,7 @@ struct LockerLockScreen: View {
                 VStack(spacing: 6) {
                     Text("Evidence Locker is locked")
                         .font(.system(.title2, design: .serif).weight(.semibold))
-                    Text("Enter your Locker passcode to open it.")
+                    Text("Enter your Reassured PIN to open it.")
                         .foregroundStyle(.secondary)
                 }
 
@@ -82,7 +82,7 @@ struct LockerLockScreen: View {
                     }
                 }
 
-                Button("Forgot Passcode?") { resetting = true }
+                Button("Forgot PIN?") { resetting = true }
                     .font(.subheadline)
             }
             .frame(maxWidth: .infinity)
@@ -105,7 +105,7 @@ struct LockerLockScreen: View {
             message = nil
             return
         } else {
-            message = lock.isLockedOut ? "Too many tries. Wait 30 seconds and try again." : "That passcode didn't match."
+            message = lock.isLockedOut ? "Too many tries. Wait 30 seconds and try again." : "That PIN didn't match."
         }
         shake.toggle()
         code = ""
@@ -149,7 +149,7 @@ struct SetPasscodeView: View {
                     .font(.system(size: 48))
                     .foregroundStyle(.tint)
                     .padding(.top, 30)
-                Text(first.isEmpty ? "Choose a 6-digit Locker passcode" : "Enter it again to confirm")
+                Text(first.isEmpty ? "Choose a 6-digit Reassured PIN" : "Enter it again to confirm")
                     .font(.system(.title3, design: .serif).weight(.semibold))
                     .multilineTextAlignment(.center)
                 PasscodeDots(count: code.count)
@@ -176,7 +176,7 @@ struct SetPasscodeView: View {
             }
             .frame(maxWidth: .infinity)
             .calmBackground()
-            .navigationTitle("Locker Passcode")
+            .navigationTitle("Reassured PIN")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -221,8 +221,8 @@ private struct ResetPasscodeSheet: View {
             } else {
                 VStack(spacing: 18) {
                     Image(systemName: "key.fill").font(.system(size: 44)).foregroundStyle(.tint)
-                    Text("Reset Locker Passcode").font(.title3.bold())
-                    Text("Confirm it's you with your device's Face ID, Touch ID, or passcode, then choose a new Locker passcode.")
+                    Text("Reset Reassured PIN").font(.title3.bold())
+                    Text("Confirm it's you with your device's Face ID, Touch ID, or passcode, then choose a new PIN.")
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
                     Button("Verify It's Me") {
@@ -234,6 +234,126 @@ private struct ResetPasscodeSheet: View {
                 .padding(30)
                 .presentationDetents([.medium])
             }
+        }
+    }
+}
+
+/// Something destructive waiting for confirmation. Holds plain text only, so the sheet never
+/// reads a record that's about to be deleted.
+struct DeleteRequest: Identifiable {
+    let id = UUID()
+    let title: String
+    let message: String
+    let perform: () -> Void
+}
+
+/// Confirms a delete with the Reassured PIN, or with Face ID / device passcode when no PIN is set.
+struct ConfirmDeleteView: View {
+    let request: DeleteRequest
+
+    @Environment(LockerLock.self) private var lock
+    @Environment(\.dismiss) private var dismiss
+    @State private var code = ""
+    @State private var message: String?
+    @State private var shake = false
+    @FocusState private var focused: Bool
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 18) {
+                    ZStack {
+                        Circle().fill(Theme.calmCoral.opacity(0.15)).frame(width: 84, height: 84)
+                        Image(systemName: "trash.fill")
+                            .font(.system(size: 32, weight: .semibold))
+                            .foregroundStyle(Theme.calmCoral)
+                    }
+                    .padding(.top, 24)
+                    Text(request.title)
+                        .font(.system(.title3, design: .serif).weight(.semibold))
+                        .multilineTextAlignment(.center)
+                    Text(request.message)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+
+                    if lock.hasPasscode {
+                        Text("Enter your Reassured PIN to delete.")
+                            .font(.subheadline.weight(.semibold))
+                            .padding(.top, 6)
+                        PasscodeDots(count: code.count)
+                            .offset(x: shake ? -10 : 0)
+                            .animation(.spring(response: 0.2, dampingFraction: 0.2), value: shake)
+                            .onTapGesture { focused = true }
+                        SecureField("", text: $code)
+                            .keyboardType(.numberPad)
+                            .focused($focused)
+                            .frame(width: 1, height: 1)
+                            .opacity(0.01)
+                            .onChange(of: code) { _, newValue in
+                                let digits = String(newValue.filter(\.isNumber).prefix(LockerLock.passcodeLength))
+                                if digits != newValue { code = digits }
+                                if digits.count == LockerLock.passcodeLength { submit(digits) }
+                            }
+                    } else {
+                        Button {
+                            Task {
+                                if await lock.confirmOwner(reason: "Confirm this delete") { confirmed() }
+                            }
+                        } label: {
+                            Label("Confirm and Delete", systemImage: "faceid")
+                                .font(.headline)
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 12)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(Theme.calmCoral)
+                        Text("Tip: set up a Reassured PIN in Settings > Security to protect deletes with your own code.")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+
+                    if let message {
+                        Text(message).font(.subheadline).foregroundStyle(Theme.calmCoral)
+                    }
+                }
+                .padding(.horizontal, 28)
+                .frame(maxWidth: .infinity)
+            }
+            .calmBackground()
+            .navigationTitle("Confirm Delete")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+            }
+            .onAppear { if lock.hasPasscode { focused = true } }
+        }
+        .presentationDetents([.large])
+    }
+
+    private func submit(_ digits: String) {
+        if lock.isLockedOut {
+            message = "Too many tries. Wait 30 seconds and try again."
+        } else if lock.check(digits) {
+            confirmed()
+            return
+        } else {
+            message = lock.isLockedOut ? "Too many tries. Wait 30 seconds and try again." : "That PIN didn't match. Nothing was deleted."
+        }
+        shake.toggle()
+        code = ""
+    }
+
+    private func confirmed() {
+        let perform = request.perform
+        dismiss()
+        // Delete after the sheet has gone, so nothing on screen is showing the deleted record.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+            perform()
         }
     }
 }

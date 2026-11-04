@@ -10,6 +10,7 @@ struct SettingsView: View {
     @Environment(LockerLock.self) private var lock
     @State private var settingPasscode = false
     @State private var confirmingRemove = false
+    @State private var enableLockerAfterPIN = false
 
     private var biometry: String { LockerLock.biometryName ?? "Face ID" }
 
@@ -18,7 +19,12 @@ struct SettingsView: View {
             get: { lock.isEnabled },
             set: { on in
                 if on {
-                    if lock.hasPasscode { lock.isEnabled = true } else { settingPasscode = true }
+                    if lock.hasPasscode {
+                        lock.isEnabled = true
+                    } else {
+                        enableLockerAfterPIN = true
+                        settingPasscode = true
+                    }
                 } else {
                     lock.isEnabled = false
                 }
@@ -66,16 +72,25 @@ struct SettingsView: View {
                     Text("Asks for \(biometry) or your device passcode whenever Reassured opens. All audit data stays on this device.")
                 }
                 Section {
-                    Toggle("Lock Evidence Locker", isOn: lockerToggle)
-                    if lock.isEnabled {
-                        if LockerLock.biometryName != nil {
-                            Toggle("Unlock with \(biometry)", isOn: Binding(get: { lock.useBiometrics }, set: { lock.useBiometrics = $0 }))
+                    if lock.hasPasscode {
+                        Button("Change PIN") { settingPasscode = true }
+                    } else {
+                        Button { settingPasscode = true } label: {
+                            Label("Set Up Reassured PIN", systemImage: "lock.shield")
                         }
-                        Button("Change Locker Passcode") { settingPasscode = true }
-                        Button("Turn Off and Remove Passcode", role: .destructive) { confirmingRemove = true }
                     }
+                    Toggle("Protect Deletes", isOn: Binding(get: { lock.protectsDeletes }, set: { lock.protectsDeletes = $0 }))
+                    Toggle("Lock Evidence Locker", isOn: lockerToggle)
+                    if lock.isEnabled, LockerLock.biometryName != nil {
+                        Toggle("Unlock Locker with \(biometry)", isOn: Binding(get: { lock.useBiometrics }, set: { lock.useBiometrics = $0 }))
+                    }
+                    if lock.hasPasscode {
+                        Button("Remove PIN", role: .destructive) { confirmingRemove = true }
+                    }
+                } header: {
+                    Text("Reassured PIN")
                 } footer: {
-                    Text("A separate 6-digit passcode for your most sensitive documents. The Locker locks again every time you leave the app.")
+                    Text("One 6-digit PIN. Protect Deletes asks for it before an audit or client is deleted (or for \(biometry) and your device passcode if no PIN is set). It can also lock the Evidence Locker, which locks again every time you leave the app.")
                 }
                 Section {
                     NavigationLink {
@@ -109,13 +124,14 @@ struct SettingsView: View {
             .calmBackground()
             .sheet(isPresented: $settingPasscode) {
                 SetPasscodeView { saved in
-                    if saved { lock.isEnabled = true }
+                    if saved && enableLockerAfterPIN { lock.isEnabled = true }
+                    enableLockerAfterPIN = false
                 }
             }
-            .confirmationDialog("Remove the Locker passcode?", isPresented: $confirmingRemove, titleVisibility: .visible) {
-                Button("Remove Passcode", role: .destructive) { lock.removePasscode() }
+            .confirmationDialog("Remove your Reassured PIN?", isPresented: $confirmingRemove, titleVisibility: .visible) {
+                Button("Remove PIN", role: .destructive) { lock.removePasscode() }
             } message: {
-                Text("The Evidence Locker will open without a passcode.")
+                Text("The Evidence Locker will open without a PIN, and deletes will ask for \(biometry) or your device passcode instead.")
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)

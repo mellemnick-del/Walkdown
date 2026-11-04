@@ -64,6 +64,7 @@ jobs:
               sleep 8
               DATA=$(xcrun simctl get_app_container "$UDID" com.nickmellem.reassured data)
               cp "$DATA/Documents/report.pdf" shots/report.pdf || echo "No report written"
+              cp "$DATA/Documents/certificate.pdf" shots/certificate.pdf || echo "No certificate written"
             fi
             xcrun simctl shutdown "$UDID"
           }
@@ -85,5 +86,6 @@ jobs:
           cp -R /tmp/shots/* .
           git add iphone ipad
           [ -f report.pdf ] && git add report.pdf
+          [ -f certificate.pdf ] && git add certificate.pdf
           git commit -m "Screenshots from ${GITHUB_SHA::7}"
           git push -f origin screenshots

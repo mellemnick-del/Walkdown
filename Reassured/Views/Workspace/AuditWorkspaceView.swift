@@ -11,6 +11,7 @@ struct AuditWorkspaceView: View {
     @State private var celebrating = false
     @State private var exportURL: URL?
     @State private var walking = false
+    @State private var showingCertificate = false
     @Environment(\.modelContext) private var context
 
     enum ControlFilter: String, CaseIterable, Identifiable {
@@ -131,6 +132,11 @@ struct AuditWorkspaceView: View {
                         Label("Build Remediation Plan", systemImage: "wrench.and.screwdriver")
                     }
                     Button { showingHelp = true } label: { Label("Get Help", systemImage: "person.wave.2") }
+                    if audit.status == .complete {
+                        Button { showingCertificate = true } label: {
+                            Label("Certificate of Completion", systemImage: "rosette")
+                        }
+                    }
                     Button(action: exportAudit) { Label("Export Audit", systemImage: "square.and.arrow.up") }
                     Divider()
                     Button { showingInfo = true } label: { Label("Audit Details", systemImage: "info.circle") }
@@ -168,6 +174,7 @@ struct AuditWorkspaceView: View {
         }
         .sheet(isPresented: $showingInfo) { AuditInfoView(audit: audit) }
         .fullScreenCover(isPresented: $walking) { WalkModeView(audit: audit) }
+        .sheet(isPresented: $showingCertificate) { CertificateView(audit: audit) }
         .overlay {
             if celebrating {
                 CompletionCelebration(score: audit.score) { celebrating = false }
@@ -347,7 +354,7 @@ private struct CompletionCelebration: View {
                     .font(.headline)
                     .foregroundStyle(Theme.sunrise)
                 }
-                Text("Take a breath. Build the remediation plan and share the report when you're ready.")
+                Text("Take a breath. Your report and a Certificate of Completion are in the audit's ••• menu when you're ready.")
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.white.opacity(0.8))
