@@ -23,6 +23,7 @@
 		21486D80887347A1432D7BE1 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD91F5088E95CF927A46D57 /* RootView.swift */; };
 		2387E97A7042233D067D97B7 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F26FC4509C9A7D2027A34C /* Theme.swift */; };
 		23D0B7DF7E1B74FBAB84B807 /* LockerItemEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5FA029442D1214F2550398 /* LockerItemEditor.swift */; };
+		25C8B1CD133EC3FB4770CA4C /* CertificateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462072694B338B3C2BEBB536 /* CertificateView.swift */; };
 		25E2825E8AD59CFDDF140111 /* Evidence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F01D906844BE563A9D59734 /* Evidence.swift */; };
 		26710540E8AD9C32B2FB0A54 /* Delight.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9F76188D1E61F4D0C8D9A0 /* Delight.swift */; };
 		27FEAA431CD88240E6004B9A /* ChecklistTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B393650016B3EF6CA5E14D /* ChecklistTemplate.swift */; };
@@ -35,6 +36,7 @@
 		355730AC0027F391CB945896 /* LockerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABC3FDB59FFE1737E8D078A /* LockerView.swift */; };
 		3FBFB41314DFC924E2E462D7 /* Audit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492D4986719B2841BF74E0FF /* Audit.swift */; };
 		44E184AD0383F40C4A7E08CB /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059D19BB35326C5F23EE785 /* HomeView.swift */; };
+		46841D866D83F3E3DADB4798 /* CertificateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495C1898B9FDD21582B47B50 /* CertificateBuilder.swift */; };
 		46D9CFDEA40FE37E6B224C49 /* AuditInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E38AD2A8C21DDAAAC7DCA1 /* AuditInfoView.swift */; };
 		484ED03E7269C87DE722FFDD /* CaptureControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1E98CE55304515A0916BC7 /* CaptureControllers.swift */; };
 		4BC0CA38910CFD4E9988B932 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8346B6260CE4DF2B4C8E23D3 /* OnboardingView.swift */; };
@@ -113,7 +115,9 @@
 		3DE2EE7DA3E0244B4E4C9739 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		41D9C516112BA58DFA090D61 /* SkyBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyBackground.swift; sourceTree = "<group>"; };
 		426E23C425D055959639AD12 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		462072694B338B3C2BEBB536 /* CertificateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateView.swift; sourceTree = "<group>"; };
 		492D4986719B2841BF74E0FF /* Audit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audit.swift; sourceTree = "<group>"; };
+		495C1898B9FDD21582B47B50 /* CertificateBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateBuilder.swift; sourceTree = "<group>"; };
 		49F58C3D54D4B6FDFF072988 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		4D87AD862F32AAF1CC271C6B /* ReassuredApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReassuredApp.swift; sourceTree = "<group>"; };
 		4E6DCAA5CB796A79A98C4DAC /* Branding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Branding.swift; sourceTree = "<group>"; };
@@ -201,6 +205,7 @@
 				09E9D3F1EAF16555E9B63BB5 /* AuditWriter.swift */,
 				FB2DFF6E409B6E1E8A909CAC /* BackupService.swift */,
 				4E6DCAA5CB796A79A98C4DAC /* Branding.swift */,
+				495C1898B9FDD21582B47B50 /* CertificateBuilder.swift */,
 				DA9D6C258EEF0D23FD10D3D4 /* EvidenceImporter.swift */,
 				CAF2B4A214AE733C12EF92BC /* ImageTools.swift */,
 				3DE2EE7DA3E0244B4E4C9739 /* Keychain.swift */,
@@ -301,6 +306,7 @@
 		475BD3612CBBBA5EE8297121 /* Report */ = {
 			isa = PBXGroup;
 			children = (
+				462072694B338B3C2BEBB536 /* CertificateView.swift */,
 				512BDDDA4D46EE644563D9AE /* ReportView.swift */,
 			);
 			path = Report;
@@ -583,6 +589,8 @@
 				D6FD3AFEA41999879DF90272 /* CMMC.swift in Sources */,
 				484ED03E7269C87DE722FFDD /* CaptureControllers.swift in Sources */,
 				13098744D9CABAC9DBF62642 /* Card.swift in Sources */,
+				46841D866D83F3E3DADB4798 /* CertificateBuilder.swift in Sources */,
+				25C8B1CD133EC3FB4770CA4C /* CertificateView.swift in Sources */,
 				647228CD3FD78327B3CD3402 /* ChecklistLibraryView.swift in Sources */,
 				27FEAA431CD88240E6004B9A /* ChecklistTemplate.swift in Sources */,
 				639C4932708DCB85A0A02F8F /* Client.swift in Sources */,
