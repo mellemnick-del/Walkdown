@@ -42,7 +42,11 @@ enum RecentlyDeleted {
     /// Whole days left before the audit is removed for good.
     static func daysLeft(_ audit: Audit, now: Date = .now) -> Int {
         guard let deleted = deletedAt(audit) else { return keepDays }
-        let elapsed = Calendar.current.dateComponents([.day], from: deleted, to: now).day ?? 0
+        // Count calendar days, which is how "deletes in 3 days" reads, and which isn't thrown off
+        // by the tiny rounding in the stored time.
+        let calendar = Calendar.current
+        let elapsed = calendar.dateComponents([.day], from: calendar.startOfDay(for: deleted),
+                                              to: calendar.startOfDay(for: now)).day ?? 0
         return max(0, keepDays - elapsed)
     }
 
