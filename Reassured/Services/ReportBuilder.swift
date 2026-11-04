@@ -357,6 +357,8 @@ final class PDFWriter {
     private var context: UIGraphicsPDFRendererContext?
     private var pageNumber = 0
     private var leftInset: CGFloat = 0
+    /// The table in progress, so its header repeats when rows continue on a new page.
+    private var currentTable: (titles: [String], widths: [CGFloat])?
     private let drawOptions: NSStringDrawingOptions = [.usesLineFragmentOrigin, .usesFontLeading]
 
     init(header: String, accent: UIColor) {
@@ -433,6 +435,7 @@ final class PDFWriter {
     }
 
     func title(_ string: String) {
+        currentTable = nil
         text(string, font: .serif(24, weight: .semibold), color: Palette.ink, after: 4)
         fill(CGRect(x: left, y: y + 2, width: 44, height: 3), color: accent, radius: 1.5)
         y += 18
@@ -589,6 +592,7 @@ final class PDFWriter {
     // MARK: Tables
 
     func tableHeader(_ titles: [String], widths: [CGFloat]) {
+        currentTable = (titles, widths)
         keepTogether(40)
         fill(CGRect(x: left, y: y, width: contentWidth, height: 20), color: accent.withAlphaComponent(0.1), radius: 4)
         var x = left + 8
@@ -617,7 +621,10 @@ final class PDFWriter {
             }
         }
         let rowHeight = (heights.max() ?? 16) + padding * 2
-        keepTogether(rowHeight)
+        if y + rowHeight > bottom {
+            newPage()
+            if let table = currentTable { tableHeader(table.titles, widths: table.widths) }
+        }
         if striped { fill(CGRect(x: left, y: y, width: contentWidth, height: rowHeight), color: Palette.stripe, radius: 3) }
         var x = left + 8
         for (cell, width) in zip(cells, widths) {
