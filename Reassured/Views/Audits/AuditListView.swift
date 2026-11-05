@@ -14,9 +14,94 @@ struct AuditListView: View {
 
     private var filtered: [Audit] { audits.filter { $0.status == filter } }
 
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    @State private var selectedAudit: Audit?
+
+    /// iPad (and other wide layouts): the list stays on the left and the audit fills the right.
+    private var isSplit: Bool { sizeClass == .regular }
+
     var body: some View {
-        NavigationStack(path: $path) {
-            List {
+        Group {
+            if isSplit {
+                NavigationSplitView {
+                    auditList(selectable: true)
+                } detail: {
+                    NavigationStack {
+                        if let selectedAudit, !selectedAudit.isInTrash {
+                            AuditWorkspaceView(audit: selectedAudit)
+                                .id(selectedAudit.persistentModelID)
+                        } else {
+                            ContentUnavailableView {
+                                Label("Choose an Audit", systemImage: "checklist")
+                            } description: {
+                                Text("Pick an audit from the list to see its controls, or start a new one.")
+                            }
+                            .calmBackground()
+                        }
+                    }
+                }
+                .navigationSplitViewStyle(.balanced)
+            } else {
+                NavigationStack(path: $path) {
+                    auditList(selectable: false)
+                        .navigationDestination(for: Audit.self) { AuditWorkspaceView(audit: $0) }
+                }
+            }
+        }
+        .sheet(isPresented: $showingNewAudit) {
+            NewAuditView { audit in
+                filter = .inProgress
+                show(audit)
+            }
+        }
+        .sheet(isPresented: $showingSettings) { SettingsView() }
+        .sheet(item: $deleteRequest) { ConfirmDeleteView(request: $0) }
+        .onChange(of: router.auditToOpen, initial: true) { _, audit in
+            guard let audit else { return }
+            filter = audit.status
+            show(audit)
+            router.auditToOpen = nil
+        }
+    }
+
+    /// Opens an audit: selects it beside the list on iPad, or pushes it on iPhone.
+    private func show(_ audit: Audit) {
+        if isSplit {
+            selectedAudit = audit
+        } else {
+            path = NavigationPath()
+            path.append(audit)
+        }
+    }
+
+    private func auditList(selectable: Bool) -> some View {
+        Group {
+            if selectable {
+                List(selection: $selectedAudit) { listRows }
+            } else {
+                List { listRows }
+            }
+        }
+        .calmBackground()
+        .navigationTitle(isSplit ? "Audits" : "Reassured")
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    NavigationLink {
+                        ClientsView()
+                    } label: {
+                        Label("Clients", systemImage: "person.2")
+                    }
+                }
+                if !audits.isEmpty {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button { showingNewAudit = true } label: { Label("New Audit", systemImage: "plus") }
+                    }
+                }
+            }
+    }
+
+    @ViewBuilder
+    private var listRows: some View {
                 Picker("Status", selection: $filter) {
                     ForEach(AuditStatus.listed) { Text($0.label).tag($0) }
                 }
@@ -68,40 +153,6 @@ struct AuditListView: View {
                         }
                     }
                 }
-            }
-            .calmBackground()
-            .navigationTitle("Reassured")
-            .navigationDestination(for: Audit.self) { AuditWorkspaceView(audit: $0) }
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    NavigationLink {
-                        ClientsView()
-                    } label: {
-                        Label("Clients", systemImage: "person.2")
-                    }
-                }
-                if !audits.isEmpty {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button { showingNewAudit = true } label: { Label("New Audit", systemImage: "plus") }
-                    }
-                }
-            }
-            .sheet(isPresented: $showingNewAudit) {
-                NewAuditView { audit in
-                    filter = .inProgress
-                    path.append(audit)
-                }
-            }
-            .sheet(isPresented: $showingSettings) { SettingsView() }
-            .onChange(of: router.auditToOpen, initial: true) { _, audit in
-                guard let audit else { return }
-                filter = audit.status
-                path = NavigationPath()
-                path.append(audit)
-                router.auditToOpen = nil
-            }
-            .sheet(item: $deleteRequest) { ConfirmDeleteView(request: $0) }
-        }
     }
 
     private func requestDelete(_ audit: Audit) {

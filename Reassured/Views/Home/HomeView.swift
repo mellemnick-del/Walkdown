@@ -12,6 +12,7 @@ struct HomeView: View {
     @AppStorage(SettingsKeys.userRole) private var roleRaw = UserRole.organization.rawValue
 
     private var role: UserRole { UserRole(rawValue: roleRaw) ?? .organization }
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     @State private var showingNewAudit = false
     @State private var showingSettings = false
@@ -57,10 +58,8 @@ struct HomeView: View {
         return "Here's where you stand today."
     }
 
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
+    @ViewBuilder
+    private var headerSection: some View {
                     // Title and Settings share one row, right under the status bar.
                     HStack(alignment: .center) {
                         Text("Reassured")
@@ -85,13 +84,19 @@ struct HomeView: View {
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
+    }
 
+    @ViewBuilder
+    private var focusSection: some View {
                     if let focus = activeAudits.first {
                         FocusCard(audit: focus) { router.open(focus) }
                     } else {
                         WelcomeCard(role: role) { showingNewAudit = true }
                     }
+    }
 
+    @ViewBuilder
+    private var statsSection: some View {
                     StatsRow(openTasks: openTasks, audits: activeAudits,
                              showTasks: { router.openTasks() },
                              showUnanswered: {
@@ -101,7 +106,10 @@ struct HomeView: View {
                                      router.tab = .audits
                                  }
                              })
+    }
 
+    @ViewBuilder
+    private var attentionSection: some View {
                     let needsAttention = lockerItems.filter { $0.isExpired || $0.isExpiringSoon }
                     if !needsAttention.isEmpty {
                         Button { router.tab = .locker } label: {
@@ -124,7 +132,10 @@ struct HomeView: View {
                         }
                         .buttonStyle(.plain)
                     }
+    }
 
+    @ViewBuilder
+    private var nextUpSection: some View {
                     SectionTitle(title: "Next Up", actionLabel: openTasks.isEmpty ? nil : "See All") { router.tab = .tasks }
                     if nextUp.isEmpty {
                         Card {
@@ -146,7 +157,10 @@ struct HomeView: View {
                             }
                         }
                     }
+    }
 
+    @ViewBuilder
+    private var inProgressSection: some View {
                     if activeAudits.count > 1 {
                         SectionTitle(title: "In Progress")
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -158,12 +172,18 @@ struct HomeView: View {
                             }
                         }
                     }
+    }
 
+    @ViewBuilder
+    private var milestonesSection: some View {
                     MilestonesCard(stats: MilestoneStats(
                         audits: audits, tasks: allTasks, lockerItems: lockerItems, clients: clients,
                         walkAnswers: UserDefaults.standard.integer(forKey: Milestones.walkAnswersKey),
                         reportsOpened: UserDefaults.standard.integer(forKey: Milestones.reportsOpenedKey)))
+    }
 
+    @ViewBuilder
+    private var startSection: some View {
                     SectionTitle(title: "Start Something")
                     HStack(spacing: 12) {
                         QuickAction(title: role == .organization ? "Self-Assess" : "New Audit",
@@ -171,8 +191,43 @@ struct HomeView: View {
                         QuickAction(title: "Checklists", symbol: "books.vertical") { router.tab = .library }
                         QuickAction(title: "Get Help", symbol: "person.wave.2") { showingHelp = true }
                     }
+    }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    headerSection
+                    if sizeClass == .regular {
+                        // iPad: status on the left, what to do next on the right.
+                        HStack(alignment: .top, spacing: 20) {
+                            VStack(alignment: .leading, spacing: 16) {
+                                focusSection
+                                statsSection
+                                attentionSection
+                                milestonesSection
+                            }
+                            .frame(maxWidth: .infinity, alignment: .top)
+                            VStack(alignment: .leading, spacing: 16) {
+                                nextUpSection
+                                inProgressSection
+                                startSection
+                            }
+                            .frame(maxWidth: .infinity, alignment: .top)
+                        }
+                    } else {
+                        focusSection
+                        statsSection
+                        attentionSection
+                        nextUpSection
+                        inProgressSection
+                        milestonesSection
+                        startSection
+                    }
                 }
                 .padding()
+                .frame(maxWidth: 1200)
+                .frame(maxWidth: .infinity)
             }
             .scrollContentBackground(.hidden)
             .background(SkyBackground())

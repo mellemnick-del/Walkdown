@@ -22,26 +22,54 @@ struct RootView: View {
     @State private var showingDemoGuide = false
     #endif
 
-    var body: some View {
-        TabView(selection: $router.tab) {
-            HomeView()
-                .tabItem { Label("Home", systemImage: "gauge.with.dots.needle.67percent") }
-                .tag(AppRouter.Tab.home)
-            AuditListView()
-                .tabItem { Label("Audits", systemImage: "checklist") }
-                .tag(AppRouter.Tab.audits)
-            TasksView()
-                .tabItem { Label("Tasks", systemImage: "wrench.and.screwdriver") }
-                .tag(AppRouter.Tab.tasks)
-            LockerView()
-                .tabItem { Label("Locker", systemImage: "lock.doc") }
-                .tag(AppRouter.Tab.locker)
-            NavigationStack {
-                ChecklistLibraryView()
+    /// iOS 18 and later: tabs that become a sidebar on iPad (with a button to switch back to the
+    /// top tab bar). iOS 17: the classic tab bar everywhere.
+    @ViewBuilder
+    private var tabs: some View {
+        if #available(iOS 18.0, *) {
+            TabView(selection: $router.tab) {
+                Tab("Home", systemImage: "gauge.with.dots.needle.67percent", value: AppRouter.Tab.home) {
+                    HomeView()
+                }
+                Tab("Audits", systemImage: "checklist", value: AppRouter.Tab.audits) {
+                    AuditListView()
+                }
+                Tab("Tasks", systemImage: "wrench.and.screwdriver", value: AppRouter.Tab.tasks) {
+                    TasksView()
+                }
+                Tab("Locker", systemImage: "lock.doc", value: AppRouter.Tab.locker) {
+                    LockerView()
+                }
+                Tab("Library", systemImage: "books.vertical", value: AppRouter.Tab.library) {
+                    NavigationStack { ChecklistLibraryView() }
+                }
             }
-            .tabItem { Label("Library", systemImage: "books.vertical") }
-            .tag(AppRouter.Tab.library)
+            .tabViewStyle(.sidebarAdaptable)
+        } else {
+            TabView(selection: $router.tab) {
+                HomeView()
+                    .tabItem { Label("Home", systemImage: "gauge.with.dots.needle.67percent") }
+                    .tag(AppRouter.Tab.home)
+                AuditListView()
+                    .tabItem { Label("Audits", systemImage: "checklist") }
+                    .tag(AppRouter.Tab.audits)
+                TasksView()
+                    .tabItem { Label("Tasks", systemImage: "wrench.and.screwdriver") }
+                    .tag(AppRouter.Tab.tasks)
+                LockerView()
+                    .tabItem { Label("Locker", systemImage: "lock.doc") }
+                    .tag(AppRouter.Tab.locker)
+                NavigationStack {
+                    ChecklistLibraryView()
+                }
+                .tabItem { Label("Library", systemImage: "books.vertical") }
+                .tag(AppRouter.Tab.library)
+            }
         }
+    }
+
+    var body: some View {
+        tabs
         .onChange(of: scenePhase) { _, phase in
             if phase == .background {
                 lockerLock.lock()
