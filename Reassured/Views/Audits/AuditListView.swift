@@ -25,6 +25,8 @@ struct AuditListView: View {
             if isSplit {
                 NavigationSplitView {
                     auditList(selectable: true)
+                        // Wide enough that client and checklist names don't wrap onto three lines.
+                        .navigationSplitViewColumnWidth(min: 320, ideal: 380, max: 460)
                 } detail: {
                     NavigationStack {
                         if let selectedAudit, !selectedAudit.isInTrash {
