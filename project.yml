@@ -6,6 +6,9 @@ options:
     iOS: "17.0"
 settings:
   base:
+    # Nick Mellem's Apple Developer team, so signing works without picking a team in Xcode.
+    DEVELOPMENT_TEAM: LK5983778F
+    CODE_SIGN_STYLE: Automatic
     SWIFT_VERSION: "5.9"
     MARKETING_VERSION: "1.0.0"
     CURRENT_PROJECT_VERSION: "2"
@@ -15,6 +18,9 @@ targets:
     platform: iOS
     sources:
       - Reassured
+      - Shared
+    dependencies:
+      - target: ReassuredWidgets
     info:
       path: Reassured/Info.plist
       properties:
@@ -26,10 +32,12 @@ targets:
       properties:
         # Files are encrypted and unreadable while the device is locked.
         com.apple.developer.default-data-protection: NSFileProtectionComplete
+        # Shared with the widgets so they can show the score and next tasks.
+        com.apple.security.application-groups:
+          - group.com.nickmellem.reassured
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.nickmellem.reassured
-        DEVELOPMENT_TEAM: ""
         TARGETED_DEVICE_FAMILY: "1,2"
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Reassured
@@ -41,6 +49,29 @@ targets:
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+
+  ReassuredWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - ReassuredWidgets
+      - Shared
+    info:
+      path: ReassuredWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Reassured
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: ReassuredWidgets/ReassuredWidgets.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.nickmellem.reassured
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.nickmellem.reassured.widgets
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SKIP_INSTALL: YES
 
   ReassuredTests:
     type: bundle.unit-test

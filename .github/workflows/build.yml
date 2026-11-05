@@ -35,7 +35,8 @@ jobs:
       - name: Commit generated Xcode project
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          git add Reassured.xcodeproj Reassured/Info.plist Reassured/Reassured.entitlements
+          git add Reassured.xcodeproj Reassured/Info.plist Reassured/Reassured.entitlements \
+            ReassuredWidgets/Info.plist ReassuredWidgets/ReassuredWidgets.entitlements
           if git diff --cached --quiet; then
             echo "Xcode project already up to date."
           else

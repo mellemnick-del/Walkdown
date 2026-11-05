@@ -43,7 +43,10 @@ struct RootView: View {
             .tag(AppRouter.Tab.library)
         }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .background { lockerLock.lock() }
+            if phase == .background {
+                lockerLock.lock()
+                WidgetUpdater.update(audits: milestoneAudits, tasks: milestoneTasks)
+            }
         }
         .overlay {
             if let milestone = milestoneQueue.first, hasOnboarded, !showingOpening {
@@ -57,8 +60,12 @@ struct RootView: View {
         .onAppear {
             RecentlyDeleted.purge(in: modelContext)
             checkMilestones(firstLook: true)
+            WidgetUpdater.update(audits: milestoneAudits, tasks: milestoneTasks)
         }
-        .onChange(of: milestoneStats) { _, _ in checkMilestones(firstLook: false) }
+        .onChange(of: milestoneStats) { _, _ in
+            checkMilestones(firstLook: false)
+            WidgetUpdater.update(audits: milestoneAudits, tasks: milestoneTasks)
+        }
         .overlay {
             if showingOpening && hasOnboarded {
                 OpeningView { withAnimation(.easeOut(duration: 0.45)) { showingOpening = false } }
