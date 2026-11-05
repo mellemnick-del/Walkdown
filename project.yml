@@ -24,6 +24,9 @@ targets:
     info:
       path: Reassured/Info.plist
       properties:
+        # Always follow the project's version and build number, so the app and widget match.
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UILaunchScreen:
           UIColorName: LaunchBackground
           UIImageName: LaunchArt
@@ -60,6 +63,9 @@ targets:
       path: ReassuredWidgets/Info.plist
       properties:
         CFBundleDisplayName: Reassured
+        # Must match the app's version and build number, or App Store Connect rejects the upload.
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
     entitlements:
