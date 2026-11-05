@@ -19,7 +19,7 @@ const captions = {
 
 const devices = {
   iphone: { width: 1320, height: 2868, shotWidth: 1010, radius: 120, top: 600, title: 104, sub: 50, pad: 110 },
-  ipad: { width: 2064, height: 2752, shotWidth: 1600, radius: 70, top: 560, title: 118, sub: 56, pad: 160 },
+  ipad: { width: 2064, height: 2752, shotWidth: 1560, radius: 70, top: 640, title: 118, sub: 56, pad: 160 },
 };
 
 function page(device, imgPath, [title, sub]) {
